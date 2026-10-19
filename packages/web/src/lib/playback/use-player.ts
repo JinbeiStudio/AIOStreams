@@ -17,7 +17,7 @@ import type { Chapter } from './chapters';
 import {
   initialState,
   storedVolume,
-  trackLabel,
+  subtitleName,
   VOLUME_KEY,
   type PlayerController,
   type PlayerOptions,
@@ -52,7 +52,8 @@ function serverSubtitles(
             {
               id: `server:${stream.Index}`,
               url,
-              label: trackLabel(stream, i + 1),
+              label: subtitleName(stream, i + 1),
+              detail: t`External`,
               lang: stream.Language ?? undefined,
               stream,
             },
@@ -61,7 +62,12 @@ function serverSubtitles(
     });
 }
 
-const asTrack = ({ id, label, lang }: Track): Track => ({ id, label, lang });
+const asTrack = ({ id, label, lang, detail }: Track): Track => ({
+  id,
+  label,
+  lang,
+  detail,
+});
 
 /** The subtitle as the page names it: a server subtitle by its own id once loaded. */
 const shownSubtitle = (tracks: EngineTrack[], id: string | null) =>

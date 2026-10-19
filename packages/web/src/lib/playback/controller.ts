@@ -1,4 +1,5 @@
 import { t } from '@lingui/core/macro';
+import { tagLanguageName } from '../languages';
 import { storage } from '../storage';
 import type { JellyfinClient } from '../client';
 import type { Chapter } from './chapters';
@@ -13,6 +14,8 @@ export interface Track {
   id: string;
   label: string;
   lang?: string;
+  /** A second, quieter line under the label, such as where a subtitle comes from. */
+  detail?: string;
 }
 
 export interface PlayerState {
@@ -164,6 +167,21 @@ export function trackLabel(stream: MediaStream, n: number): string {
   return (
     stream.DisplayTitle || stream.Title || stream.Language || t`Track ${n}`
   );
+}
+
+/** A subtitle named by its language and kind; where it comes from goes in `detail`. */
+export function subtitleName(
+  stream: Pick<MediaStream, 'Language' | 'IsForced' | 'IsHearingImpaired'>,
+  n: number
+): string {
+  const language = tagLanguageName(stream.Language);
+  return [
+    language ?? t`Track ${n}`,
+    stream.IsForced ? t`Forced` : undefined,
+    stream.IsHearingImpaired ? t`SDH` : undefined,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 }
 
 /** A track as the player itself lists it. */
