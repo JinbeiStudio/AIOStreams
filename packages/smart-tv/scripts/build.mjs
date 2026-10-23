@@ -41,9 +41,11 @@ function stageApp(manifest, withVersion, scripts = []) {
   const file = join(stage, manifest);
   writeFileSync(file, withVersion(readFileSync(file, 'utf8')));
   const index = join(stage, 'index.html');
-  const tags = ['boot.js', ...scripts].map(
-    (src) => `<script src="${src}"></script>`
-  );
+  const tags = [
+    'boot.js',
+    ...(platform === 'webos' ? ['loader.js'] : []),
+    ...scripts,
+  ].map((src) => `<script src="${src}"></script>`);
   writeFileSync(
     index,
     readFileSync(index, 'utf8').replace('<head>', `<head>${tags.join('')}`)
