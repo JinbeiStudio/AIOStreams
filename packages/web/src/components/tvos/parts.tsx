@@ -4,6 +4,7 @@ import { BiMenu } from 'react-icons/bi';
 import { createPortal } from 'react-dom';
 import { currentHost } from '../../lib/hosts';
 import { easeLayers, GLIDE_LAYERS } from '../../lib/input/glide';
+import { formatLocale } from '../../lib/i18n';
 import { useSession } from '../../lib/session';
 import { useOwnAvatar } from '../../lib/queries';
 import {
@@ -71,7 +72,10 @@ export function TopBar({ hidden }: { hidden?: boolean }) {
           </button>
         )}
         <div className="tv-glass tv-pill">
-          {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {now.toLocaleTimeString(formatLocale(), {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
           <span className="tv-avatar">
             {avatar ? (
               <img src={avatar} alt="" />

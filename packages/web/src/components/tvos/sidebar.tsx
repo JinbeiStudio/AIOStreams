@@ -13,6 +13,7 @@ import {
   BiListUl,
   BiSearch,
 } from 'react-icons/bi';
+import { formatLocale } from '../../lib/i18n';
 import { useSession } from '../../lib/session';
 import { useOwnAvatar } from '../../lib/queries';
 import { navigate, to } from '../../lib/paths';
@@ -191,7 +192,10 @@ export function Sidebar({
           </span>
           <span className="tv-sidebar-name">{user.Name}</span>
           <span className="tv-sidebar-time">
-            {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {now.toLocaleTimeString(formatLocale(), {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
           </span>
         </button>
         {sections.map((s) => (
