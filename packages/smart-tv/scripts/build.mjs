@@ -15,10 +15,9 @@ import { zipSync } from 'fflate';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const platform = process.argv[2];
-// The tvOS style's releases name their own version for the TV apps.
-const version =
-  process.env.TV_VERSION ||
-  JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
+const { version } = JSON.parse(
+  readFileSync(join(root, 'package.json'), 'utf8')
+);
 const out = join(root, 'out');
 
 function run(command, args, options = {}) {
