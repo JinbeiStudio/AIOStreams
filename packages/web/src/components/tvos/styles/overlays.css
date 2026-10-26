@@ -269,3 +269,22 @@ html[data-tvos-build] [data-ui='player-scrub'] > div {
 html[data-tvos-build] [data-ui='player-scrub'] > div {
   border-radius: 1.52vw !important;
 }
+
+/* On a TV every pop-up takes the buttons' clear glass: a light blur, none of the heavy blur and saturation that reads as flat grey. */
+html[data-tvos-build][data-tv] :is(
+    .UI-ContextMenu__root,
+    .UI-DropdownMenu__root,
+    .UI-DropdownMenu__subContent,
+    .UI-Popover__root,
+    .UI-Drawer__content,
+    .UI-Modal__content,
+    .UI-Tooltip__root,
+    [data-sonner-toast],
+    [data-ui='next-episode-card'],
+    [data-ui='still-watching'],
+    .tv-sidebar
+  ) {
+  backdrop-filter: blur(16px) brightness(1.18) !important;
+  -webkit-backdrop-filter: blur(16px) brightness(1.18) !important;
+  background-color: rgba(118, 120, 130, 0.3) !important;
+}

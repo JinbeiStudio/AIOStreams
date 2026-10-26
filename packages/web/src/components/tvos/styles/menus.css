@@ -15,12 +15,6 @@ html[data-tvos-build] .UI-ContextMenu__root {
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     0 2vw 4vw rgba(0, 0, 0, 0.5);
 }
-/* A TV's browser renders the big blur and saturation as flat grey: the buttons' lighter glass instead. */
-html[data-tvos-build][data-tv] .UI-ContextMenu__root {
-  background: rgba(118, 120, 130, 0.3);
-  backdrop-filter: blur(16px) brightness(1.18);
-  -webkit-backdrop-filter: blur(16px) brightness(1.18);
-}
 html[data-tvos-build] .UI-ContextMenu__label {
   padding: 0.6vw 1.1vw 0.7vw;
   font-size: 1vw;
