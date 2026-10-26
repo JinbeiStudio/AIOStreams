@@ -32,7 +32,7 @@ android {
     namespace = "io.github.viren070.aiostreams"
 
     defaultConfig {
-        applicationId = "io.github.viren070.aiostreams"
+        applicationId = "com.jinbeistudio.aiostreams"
         // CI names nightlies and counts builds; release-please keeps version.txt.
         versionName = providers.gradleProperty("aiostreams.version")
             .orElse(providers.fileContents(rootProject.layout.projectDirectory.file("version.txt")).asText.map(String::trim))

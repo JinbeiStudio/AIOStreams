@@ -205,14 +205,14 @@ jobs:
           # The last release, for a delta; the first build of a channel has none.
           vpk download http --url $feed --channel $env:CHANNEL -o releases
           if ($LASTEXITCODE -ne 0) { Write-Host 'No earlier release to build a delta from' }
-          vpk pack --packId aiostreams-desktop --packVersion ${{ inputs.version }} `
+          vpk pack --packId jinbei-studio --packVersion ${{ inputs.version }} `
             --packDir stage --mainExe aiostreams-desktop.exe --packTitle 'Jinbei Studio' `
-            --packAuthors AIOStreams --icon packages/desktop/app/icons/aiostreams.ico `
+            --packAuthors 'Jinbei Studio' --icon packages/desktop/app/icons/aiostreams.ico `
             --channel $env:CHANNEL --runtime win-${{ matrix.arch }} --outputDir releases
           if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed' }
           $name = "aiostreams-desktop-$env:CHANNEL"
-          Move-Item "releases/aiostreams-desktop-$env:CHANNEL-Setup.exe" "releases/$name.exe" -Force
-          Move-Item "releases/aiostreams-desktop-$env:CHANNEL-Portable.zip" "releases/$name.zip" -Force
+          Move-Item "releases/jinbei-studio-$env:CHANNEL-Setup.exe" "releases/$name.exe" -Force
+          Move-Item "releases/jinbei-studio-$env:CHANNEL-Portable.zip" "releases/$name.zip" -Force
 
       - name: Publish to the feed
         run: |
@@ -329,9 +329,9 @@ jobs:
           # The last release, for a delta; the first build of a channel has none.
           vpk download http --url "$feed" --channel "$CHANNEL" -o releases \
             || echo 'No earlier release to build a delta from'
-          vpk pack --packId aiostreams-desktop --packVersion "$VERSION" \
+          vpk pack --packId jinbei-studio --packVersion "$VERSION" \
             --packDir stage/AIOStreams.app --mainExe aiostreams-desktop --packTitle 'Jinbei Studio' \
-            --packAuthors AIOStreams --channel "$CHANNEL" --runtime osx-${{ matrix.arch }} \
+            --packAuthors "Jinbei Studio" --channel "$CHANNEL" --runtime osx-${{ matrix.arch }} \
             --outputDir releases
           ls -l releases
           name="aiostreams-desktop-$CHANNEL"

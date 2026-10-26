@@ -35,7 +35,7 @@ use windows_sys::Win32::UI::WindowsAndMessaging::{
 
 /// The id on the Start menu shortcut Velopack makes, which gives the system's
 /// media controls the app's name and icon.
-const APP_ID: &str = "velopack.aiostreams-desktop";
+const APP_ID: &str = "velopack.jinbei-studio";
 
 /// Set before any window opens.
 pub fn claim_app_id() {
