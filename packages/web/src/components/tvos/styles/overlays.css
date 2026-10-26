@@ -155,21 +155,21 @@ html[data-tvos-build] [data-sonner-toast] {
   color: #fff !important;
   background-image: none !important;
   background-color: rgba(118, 120, 130, 0.38) !important;
-  backdrop-filter: blur(36px) saturate(1.8) !important brightness(1.18);
-  -webkit-backdrop-filter: blur(36px) saturate(1.8) !important brightness(1.18);
+  backdrop-filter: blur(36px) saturate(1.8) brightness(1.18);
+  -webkit-backdrop-filter: blur(36px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     0 1.08vw 2.6vw rgba(0, 0, 0, 0.45) !important;
 }
 html[data-tvos-build] [data-sonner-toast][data-type='success'] {
-  background-color: rgba(30, 60, 42, 0.66) !important;
+  background-color: rgba(52, 140, 92, 0.42) !important;
 }
 html[data-tvos-build] [data-sonner-toast][data-type='warning'] {
-  background-color: rgba(70, 55, 20, 0.66) !important;
+  background-color: rgba(176, 134, 40, 0.42) !important;
 }
 html[data-tvos-build] [data-sonner-toast][data-type='error'] {
-  background-color: rgba(75, 28, 30, 0.66) !important;
+  background-color: rgba(186, 62, 66, 0.42) !important;
 }
 html[data-tvos-build] [data-sonner-toast] [data-button] {
   border-radius: 999px !important;
@@ -218,9 +218,9 @@ html[data-tvos-build] [data-ui='next-episode-countdown'] {
   overflow: hidden;
 }
 html[data-tvos-build] [data-ui='still-watching'] {
-  background: rgba(0, 0, 0, 0.55) !important;
-  backdrop-filter: blur(30px) saturate(1.4) brightness(1.18);
-  -webkit-backdrop-filter: blur(30px) saturate(1.4) brightness(1.18);
+  background: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(30px) brightness(1.18);
+  -webkit-backdrop-filter: blur(30px) brightness(1.18);
 }
 html[data-tvos-build] [data-ui='still-watching'] > div {
   padding: 1.73vw;
@@ -268,23 +268,4 @@ html[data-tvos-build] [data-ui='player-scrub'] > div {
 }
 html[data-tvos-build] [data-ui='player-scrub'] > div {
   border-radius: 1.52vw !important;
-}
-
-/* On a TV every pop-up takes the buttons' clear glass: a light blur, none of the heavy blur and saturation that reads as flat grey. */
-html[data-tvos-build][data-tv] :is(
-    .UI-ContextMenu__root,
-    .UI-DropdownMenu__root,
-    .UI-DropdownMenu__subContent,
-    .UI-Popover__root,
-    .UI-Drawer__content,
-    .UI-Modal__content,
-    .UI-Tooltip__root,
-    [data-sonner-toast],
-    [data-ui='next-episode-card'],
-    [data-ui='still-watching'],
-    .tv-sidebar
-  ) {
-  backdrop-filter: blur(16px) brightness(1.18) !important;
-  -webkit-backdrop-filter: blur(16px) brightness(1.18) !important;
-  background-color: rgba(118, 120, 130, 0.3) !important;
 }
