@@ -81,7 +81,7 @@ html[data-tvos-build][data-tv] *::after {
   -webkit-backdrop-filter: none !important;
 }
 html[data-tvos-build][data-tv] {
-  --tv-glass: rgba(34, 34, 38, 0.72);
+  --tv-glass: rgba(96, 98, 108, 0.6);
 }
 html[data-tvos-build][data-tv] .tv-backdrop img {
   animation: none;
@@ -110,7 +110,7 @@ html[data-tvos-build][data-tv]
     [data-ui='next-episode-card'],
     [data-sonner-toast]
   ) {
-  background: rgba(30, 30, 34, 0.94) !important;
+  background: rgba(78, 80, 90, 0.9) !important;
 }
 html[data-tvos-build][data-tv] .tv-tag {
   background: rgba(255, 255, 255, 0.12);
