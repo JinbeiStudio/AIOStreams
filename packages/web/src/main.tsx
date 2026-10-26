@@ -15,9 +15,9 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import JellyfinWebApp from './app';
-import { persister } from './lib/cache';
+import { clearCategory, persister } from './lib/cache';
 import { followReachable } from './lib/connection';
-import { startI18n } from './lib/i18n';
+import { onLanguageSwitch, startI18n } from './lib/i18n';
 import { markTvosStyle } from './lib/tvos-style';
 import { setupTv } from './lib/tv';
 
@@ -36,6 +36,14 @@ const queryClient = new QueryClient({
       networkMode: 'offlineFirst',
     },
   },
+});
+
+// Titles and lists are the server's, written in the language it was asked for.
+onLanguageSwitch(async () => {
+  await Promise.all(
+    (['home', 'titles', 'history', 'search'] as const).map(clearCategory)
+  );
+  await queryClient.resetQueries();
 });
 
 const container = document.getElementById('root')!;
