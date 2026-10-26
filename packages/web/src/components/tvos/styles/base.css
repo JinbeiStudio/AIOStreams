@@ -149,6 +149,11 @@
   background: rgba(255, 255, 255, 0.55);
   transition: opacity 0.2s ease;
 }
+/* TVs crop the screen's edge, so the capsule floats a little off it. */
+html[data-tv] .tv-glass.tv-edge-capsule {
+  left: 0.8vw;
+  border-radius: 99px;
+}
 .tv-edge-capsule svg {
   position: absolute;
   font-size: 1.5vw;
