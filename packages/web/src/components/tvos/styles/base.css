@@ -110,54 +110,48 @@
   color: #fff;
   transform: scale(1.1);
 }
-/* A strip of glass running down the left edge once, when the app opens: the menu is that way. */
-.tv-edge-light {
+/* Three dots down the left edge, always there: the menu is that way. */
+.tv-edge-dots {
   position: fixed;
   left: 0;
-  top: 0;
+  top: 50%;
   z-index: 5;
-  width: 3.2vw;
-  height: 46vh;
-  border-radius: 0 2vw 2vw 0;
-  pointer-events: none;
-  /* Clear glass, not a white line: it bends and tints what passes behind it, with only a faint inner glow. */
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.03) 60%,
-    rgba(255, 255, 255, 0)
-  );
-  backdrop-filter: blur(0.7vw) saturate(2.1) brightness(1.18);
-  -webkit-backdrop-filter: blur(0.7vw) saturate(2.1) brightness(1.18);
-  box-shadow: inset 0.25vw 0 1vw rgba(255, 255, 255, 0.1);
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 35%, #000 65%, transparent),
-    linear-gradient(90deg, #000 55%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(180deg, transparent, #000 35%, #000 65%, transparent),
-    linear-gradient(90deg, #000 55%, transparent);
-  mask-composite: intersect;
-  opacity: 0;
-  transform: translateY(-100%);
-  animation: tv-edge-light 4s cubic-bezier(0.45, 0, 0.25, 1) 1 both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75vw;
+  /* A wider hit area than the dots, so a pointer finds it. */
+  width: 2.4vw;
+  height: 9vw;
+  padding: 0 0 0 0.2vw;
+  border: 0;
+  background: none;
+  outline: none;
+  transform: translateY(-50%);
 }
-@keyframes tv-edge-light {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-  15%,
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(230%);
-  }
+.tv-edge-dots i {
+  display: block;
+  width: 0.5vw;
+  height: 0.5vw;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  /* Glass, not paint: a soft light around each dot. */
+  box-shadow:
+    0 0 0.9vw rgba(255, 255, 255, 0.28),
+    inset 0 0.08vw 0 rgba(255, 255, 255, 0.6);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    background 0.25s ease,
+    box-shadow 0.25s ease;
 }
-@media (prefers-reduced-motion: reduce) {
-  .tv-edge-light {
-    animation: none;
-  }
+.tv-edge-dots[data-near] i,
+.tv-edge-dots:hover i {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 0 1.3vw rgba(255, 255, 255, 0.55),
+    inset 0 0.08vw 0 #fff;
+  transform: scale(1.35);
 }
 .tv-pill {
   display: flex;

@@ -64,20 +64,43 @@ function somethingLeftOf(el: HTMLElement): boolean {
   return false;
 }
 
-/** Played once per launch: the first page that opens shows it, and no other does. */
-let edgeLightPlayed = false;
-
 /**
- * A strip of glass that runs down the left edge, once, when the app opens: it says the menu is there without a
- * word or a shape left in the way. Pressing Left, or the button beside the pill, opens it.
+ * Three dots down the left edge, always there: the menu is that way. They brighten when the focus is at the edge,
+ * where Left opens it, and a click or the pointer opens it too. Not focusable, so the remote's Left keeps its own way.
  */
-function EdgeLight() {
-  const [show] = React.useState(() => {
-    if (edgeLightPlayed) return false;
-    edgeLightPlayed = true;
-    return true;
-  });
-  return show ? <span aria-hidden="true" className="tv-edge-light" /> : null;
+function EdgeDots({ onOpen }: { onOpen: () => void }) {
+  const [near, setNear] = React.useState(false);
+  React.useEffect(() => {
+    const check = () => {
+      const el = document.activeElement;
+      setNear(
+        el instanceof HTMLElement &&
+          el !== document.body &&
+          el.getBoundingClientRect().left < window.innerWidth * 0.12
+      );
+    };
+    document.addEventListener('focusin', check);
+    document.addEventListener('focusout', check);
+    return () => {
+      document.removeEventListener('focusin', check);
+      document.removeEventListener('focusout', check);
+    };
+  }, []);
+  return (
+    <button
+      type="button"
+      tabIndex={-1}
+      data-nav-out=""
+      aria-label={tr('Menu')}
+      data-near={near ? '' : undefined}
+      className="tv-edge-dots"
+      onClick={onOpen}
+    >
+      <i />
+      <i />
+      <i />
+    </button>
+  );
 }
 
 /**
@@ -285,7 +308,7 @@ export function TvosLayout() {
                 )}
                 {over && !playing && !sidebar && (
                   <Pinned>
-                    <EdgeLight />
+                    <EdgeDots onOpen={openSidebar} />
                   </Pinned>
                 )}
                 <div ref={setOver} className="contents" />
