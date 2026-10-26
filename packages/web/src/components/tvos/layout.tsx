@@ -24,6 +24,7 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
+import { BiChevronRight } from 'react-icons/bi';
 import { MenuOpener, Pinned } from './parts';
 import { tr } from './i18n';
 import { Sidebar } from './sidebar';
@@ -65,10 +66,10 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
- * Three dots down the left edge, always there: the menu is that way. They brighten when the focus is at the edge,
- * where Left opens it, and a click or the pointer opens it too. Not focusable, so the remote's Left keeps its own way.
+ * A slim glass capsule down the left edge, always there: the menu is that way. At the edge it widens and shows an
+ * arrow, where Left opens it; a click or the pointer opens it too. Not focusable, so the remote's Left keeps its way.
  */
-function EdgeDots({ onOpen }: { onOpen: () => void }) {
+function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
   const [near, setNear] = React.useState(false);
   React.useEffect(() => {
     const check = () => {
@@ -93,12 +94,11 @@ function EdgeDots({ onOpen }: { onOpen: () => void }) {
       data-nav-out=""
       aria-label={tr('Menu')}
       data-near={near ? '' : undefined}
-      className="tv-edge-dots"
+      className="tv-glass tv-edge-capsule"
       onClick={onOpen}
     >
-      <i />
-      <i />
-      <i />
+      <i className="tv-edge-grab" />
+      <BiChevronRight />
     </button>
   );
 }
@@ -308,7 +308,7 @@ export function TvosLayout() {
                 )}
                 {over && !playing && !sidebar && (
                   <Pinned>
-                    <EdgeDots onOpen={openSidebar} />
+                    <EdgeCapsule onOpen={openSidebar} />
                   </Pinned>
                 )}
                 <div ref={setOver} className="contents" />
