@@ -187,19 +187,17 @@ export class JellyfinClient {
       signal?: AbortSignal;
     } = {}
   ): Promise<T> {
-    // The app's language alone ("en", "fr"), which a server variant can pick its metadata language by.
-    const lang = i18n.locale.split('-')[0];
     const headers: Record<string, string> = {
       Authorization: this.authorization,
-      'Accept-Language': lang,
+      // The app's language alone ("en", "fr"), which a server variant can pick its metadata language by; CORS lets this header through.
+      'Accept-Language': i18n.locale.split('-')[0],
     };
     if (init.body !== undefined) headers['Content-Type'] = 'application/json';
     if (hinted.has(this.base))
       Object.assign(headers, hints(this.deviceName, init.purpose));
     let res: Response;
     try {
-      // Also in the query, which a variant reads with query('lang') where a webview rewrites Accept-Language.
-      res = await fetch(this.url(path, { ...init.query, lang }), {
+      res = await fetch(this.url(path, init.query), {
         method,
         headers,
         body: init.body === undefined ? undefined : JSON.stringify(init.body),
