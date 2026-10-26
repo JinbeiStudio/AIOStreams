@@ -26,7 +26,7 @@ const FR: Record<string, string> = {
   Downloads: 'Téléchargements',
   // Home
   'Continue watching': 'Continuer',
-  'Next up': 'Prochains épisodes',
+  'Next up': 'Reprendre',
   Upcoming: 'Bientôt disponible',
   'See all': 'Tout voir',
   'No catalogs: add some in your AIOStreams configuration.':
