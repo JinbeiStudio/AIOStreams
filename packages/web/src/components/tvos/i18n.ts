@@ -189,10 +189,104 @@ function catalogKey(name: string): string {
     .replace(/^-|-$/g, '');
 }
 
-/** A catalog's name in the app's language, or the server's own when it is not in the table. */
-export function catalogName(name: string | null | undefined): string {
-  if (!name) return '';
-  const entry = CATALOGS[catalogKey(name)];
+/*
+ * The catalogs' own ids, which the server's views carry in their Path
+ * (`/aiostreams/movie/4a9e3b0.mdblist.87667`): they stay the same whatever a catalog is renamed to.
+ */
+const IDS: Record<string, string> = {
+  'mdblist.86934': 'latest-digital-release',
+  'mdblist.87667': 'trakt-trending',
+  'mdblist.88434': 'trakt-trending',
+  'tmdb.top': 'tmdb-popular',
+  'mdblist.86710': 'latest-airing',
+  'streaming.cru': 'crunchyroll-latest',
+  'anilist.trending': 'anilist-trending',
+  'mdblist.136620': 'seasonal',
+  'tmdb.year': 'tmdb-by-year',
+  'tmdb.language': 'tmdb-by-language',
+  'tvdb.genres': 'tvdb-genres',
+  'tvdb.collections': 'tvdb-collections',
+  'mdblist.88307': 'trending-kids',
+  'mdblist.88309': 'trending-kids',
+  'mal.airing': 'mal-airing-now',
+  'custom.org_stremio_animecatalogs.anime.anidb_latest_ended': 'anidb-latest-ended',
+  'mal.top_series': 'mal-top-series',
+  'mal.top_movies': 'mal-top-movies',
+  'mal.top_anime': 'mal-top-all-time',
+  'mal.genres': 'mal-genres',
+  'mdblist.86751': 'netflix-latest',
+  'mdblist.88328': 'netflix-latest',
+  'mdblist.86753': 'amazon-prime-latest',
+  'mdblist.86755': 'amazon-prime-latest',
+  'mdblist.88319': 'apple-plus-latest',
+  'mdblist.88317': 'apple-plus-latest',
+  'mdblist.86758': 'disney-plus-latest',
+  'mdblist.86759': 'disney-plus-latest',
+  'mdblist.86761': 'paramount-plus-latest',
+  'mdblist.86762': 'paramount-plus-latest',
+  'mdblist.89649': 'hbo-max-latest',
+  'mdblist.89647': 'hbo-max-latest',
+  'mdblist.88327': 'hulu-latest',
+  'mdblist.88326': 'hulu-latest',
+  'mdblist.91213': 'action',
+  'mdblist.91211': 'action',
+  'mdblist.116038': 'animated',
+  'mdblist.116037': 'animated',
+  'mdblist.91224': 'comedy',
+  'mdblist.91223': 'comedy',
+  'mdblist.3126': 'crime',
+  'mdblist.3108': 'crime',
+  'mdblist.91297': 'drama',
+  'mdblist.91296': 'drama',
+  'mdblist.91217': 'horror',
+  'mdblist.91215': 'horror',
+  'mdblist.91221': 'sci-fi',
+  'mdblist.91220': 'sci-fi',
+  'mdblist.91894': 'thriller',
+  'mdblist.91893': 'thriller',
+  'mdblist.84403': 'top-documentaries',
+  'mdblist.84677': 'top-documentaries',
+  'mdblist.8043': 'history-and-war',
+  'mdblist.102554': 'must-see-modern-horror',
+  'mdblist.3892': 'must-see-mindfuck',
+  'mdblist.84487': 'top-nature',
+  'mdblist.84401': 'top-reality-tv',
+  'mdblist.83497': 'top-standup-comedy',
+};
+
+interface CatalogView {
+  Name?: string | null;
+  Path?: string | null;
+}
+
+/**
+ * The catalog's own id from the view's Path, as sent and without the ending the server adds (`_movie`, `_series`,
+ * `_anime`): both are tried, since some real ids end the same way (`mal.top_series`).
+ */
+function catalogIds(view: CatalogView): string[] {
+  const found = /^\/aiostreams\/(?:movie|series|anime)\/[0-9a-f]+\.(.+)$/.exec(
+    view.Path ?? ''
+  );
+  if (!found) return [];
+  return [found[1], found[1].replace(/_(?:movie|series|anime)$/, '')];
+}
+
+/** Whether the server says this catalog is anime, by its path or its id, whatever it is called. */
+export function isAnimeCatalog(view: CatalogView): boolean {
+  if (view.Path?.startsWith('/aiostreams/anime/')) return true;
+  return catalogIds(view).some((id) =>
+    /^(?:anilist|mal|kitsu)\.|^streaming\.cru$|anime/.test(id)
+  );
+}
+
+/** A catalog's name in the app's language: by its id first, then its name, else the server's own. */
+export function catalogName(view: CatalogView): string {
+  const name = view.Name ?? '';
+  const byId = catalogIds(view)
+    .map((id) => IDS[id])
+    .find(Boolean);
+  const key = byId || (name ? catalogKey(name) : '');
+  const entry = key ? CATALOGS[key] : undefined;
   if (!entry) return name;
   return (i18n.locale ?? '').split('-')[0] === 'fr' ? entry[1] : entry[0];
 }

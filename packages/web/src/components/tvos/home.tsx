@@ -44,7 +44,7 @@ import {
   useScrolledDown,
   useFocusWithin,
 } from './parts';
-import { catalogName, tr } from './i18n';
+import { catalogName, isAnimeCatalog, tr } from './i18n';
 
 const HERO_EACH = 8;
 const HERO_MAX = 10;
@@ -282,7 +282,7 @@ function UpcomingRow() {
 const ANIME = /anime|anilist|crunchyroll|\bmal\b|anidb|kitsu/i;
 
 export function catalogTag(view: BaseItemDto): string | undefined {
-  if (ANIME.test(view.Name ?? '')) return 'Anime';
+  if (isAnimeCatalog(view) || ANIME.test(view.Name ?? '')) return 'Anime';
   if (view.CollectionType === 'movies') return 'Movies';
   if (view.CollectionType === 'tvshows') return 'Series';
   return undefined;
@@ -325,7 +325,7 @@ function CatalogRow({ view, first }: { view: BaseItemDto; first: boolean }) {
   return (
     <div ref={ref}>
       <Row
-        title={catalogName(view.Name)}
+        title={catalogName(view)}
         tag={catalogTag(view)}
         shape={landscape ? 'wide' : 'poster'}
       >

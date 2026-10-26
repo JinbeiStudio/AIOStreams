@@ -113,7 +113,7 @@ export function TvosCatalog({
     <div className="tv-page tv-list-page">
       <TopBar />
       <h1 className="tv-page-title">
-        {catalogName(view?.Name)}
+        {view ? catalogName(view) : ''}
         {tag && (
           <span className="tv-tag" data-tag={tag.toLowerCase()}>
             {tr(tag)}
@@ -167,7 +167,7 @@ export function TvosCatalog({
               data-on={v.Id === viewId ? '' : undefined}
               onClick={() => v.Id !== viewId && open(v.Id!, current)}
             >
-              {catalogName(v.Name)}
+              {catalogName(v)}
             </button>
           ))}
         </div>
