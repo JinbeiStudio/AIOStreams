@@ -24,7 +24,6 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
-import { BiChevronRight } from 'react-icons/bi';
 import { MenuOpener, Pinned } from './parts';
 import { tr } from './i18n';
 import { Sidebar } from './sidebar';
@@ -66,45 +65,29 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
- * The sidebar's handle on the left edge: with its word for a few seconds when a page opens, a thin line while at rest,
- * and lit again when the focus reaches the left edge. A click opens the menu; the remote's Left does as ever.
+ * A light that runs down the left edge when a page opens, and again when the focus reaches that edge: it says the
+ * menu is there without a word or a shape in the way. Pressing Left, or the button beside the pill, opens it.
  */
-function EdgeHandle({ path, onOpen }: { path: string; onOpen: () => void }) {
-  const [intro, setIntro] = React.useState(true);
-  const [near, setNear] = React.useState(false);
+function EdgeLight({ path }: { path: string }) {
+  const [tick, setTick] = React.useState(0);
+  React.useEffect(() => setTick((t) => t + 1), [path]);
   React.useEffect(() => {
-    setIntro(true);
-    const timer = window.setTimeout(() => setIntro(false), 4000);
-    return () => window.clearTimeout(timer);
-  }, [path]);
-  React.useEffect(() => {
+    let near = false;
     const check = () => {
       const el = document.activeElement;
-      if (!(el instanceof HTMLElement) || el === document.body)
-        return setNear(false);
-      setNear(el.getBoundingClientRect().left < window.innerWidth * 0.12);
+      const now =
+        el instanceof HTMLElement &&
+        el !== document.body &&
+        el.getBoundingClientRect().left < window.innerWidth * 0.12;
+      if (now && !near) setTick((t) => t + 1);
+      near = now;
     };
     document.addEventListener('focusin', check);
-    document.addEventListener('focusout', check);
-    return () => {
-      document.removeEventListener('focusin', check);
-      document.removeEventListener('focusout', check);
-    };
+    return () => document.removeEventListener('focusin', check);
   }, []);
-  return (
-    <button
-      type="button"
-      tabIndex={-1}
-      data-nav-out=""
-      aria-label={tr('Menu')}
-      data-state={near ? 'near' : intro ? 'intro' : 'rest'}
-      className="tv-glass tv-menu-handle"
-      onClick={onOpen}
-    >
-      <BiChevronRight />
-      <span>{tr('Menu')}</span>
-    </button>
-  );
+  return tick ? (
+    <span key={tick} aria-hidden="true" className="tv-edge-light" />
+  ) : null;
 }
 
 /**
@@ -312,7 +295,7 @@ export function TvosLayout() {
                 )}
                 {over && !playing && !sidebar && (
                   <Pinned>
-                    <EdgeHandle path={pathname} onOpen={openSidebar} />
+                    <EdgeLight path={pathname} />
                   </Pinned>
                 )}
                 <div ref={setOver} className="contents" />

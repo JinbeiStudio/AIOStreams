@@ -105,50 +105,50 @@
     color 0.2s ease;
 }
 .tv-menu-button:is(:focus, :hover) {
-  background: rgba(255, 255, 255, 0.95);
-  color: #000;
+  /* Brighter glass with the icon kept white, not a white fill. */
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
   transform: scale(1.1);
 }
-/* The handle on the left edge: the word for a few seconds, then a thin line, lit when the focus is at the edge. */
-.tv-glass.tv-menu-handle {
+/* A light running down the left edge when a page opens: the menu is that way. */
+.tv-edge-light {
   position: fixed;
   left: 0;
-  top: 50%;
+  top: 0;
   z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 0.3vw;
-  height: 4.2vw;
-  max-width: 14vw;
-  padding: 0 1.3vw 0 0.5vw;
-  border: 0;
-  border-radius: 0 2.1vw 2.1vw 0;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 1.2vw;
-  font-weight: 600;
-  color: #fff;
-  outline: none;
-  transform: translateY(-50%);
-  transition:
-    max-width 0.35s ease,
-    padding 0.35s ease,
-    opacity 0.35s ease,
-    background 0.2s ease,
-    color 0.2s ease;
+  width: 0.3vw;
+  height: 34vh;
+  border-radius: 0 0.3vw 0.3vw 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0)
+  );
+  box-shadow: 0 0 1.4vw 0.2vw rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transform: translateY(-100%);
+  animation: tv-edge-light 1.8s cubic-bezier(0.4, 0, 0.2, 1) 1 both;
 }
-.tv-menu-handle svg {
-  flex: none;
-  font-size: 1.8vw;
+@keyframes tv-edge-light {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  18%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(300%);
+  }
 }
-.tv-glass.tv-menu-handle[data-state='rest'] {
-  max-width: 0.45vw;
-  padding: 0;
-  opacity: 0.6;
-}
-.tv-glass.tv-menu-handle[data-state='near'] {
-  background: rgba(255, 255, 255, 0.95);
-  color: #000;
+@media (prefers-reduced-motion: reduce) {
+  .tv-edge-light {
+    animation: none;
+  }
 }
 .tv-pill {
   display: flex;
