@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      IPK: aiostreams-webos-${{ needs.web.outputs.version }}.ipk
+      IPK: jinbei-studio-webos-${{ needs.web.outputs.version }}.ipk
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      WGT: aiostreams-tizen-${{ needs.web.outputs.version }}.wgt
+      WGT: jinbei-studio-tizen-${{ needs.web.outputs.version }}.wgt
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -129,20 +129,20 @@ jobs:
           sparse-checkout-cone-mode: false
       - uses: actions/download-artifact@v8
         with:
-          pattern: aiostreams-*
+          pattern: jinbei-studio-*
           merge-multiple: true
           path: feed
       - run: |
           repo="https://github.com/${{ github.repository }}"
           raw="https://raw.githubusercontent.com/${{ github.repository }}"
-          cp "feed/aiostreams-webos-$VERSION.ipk" feed/aiostreams-webos.ipk
-          cp "feed/aiostreams-tizen-$VERSION.wgt" feed/aiostreams-tizen.wgt
+          cp "feed/jinbei-studio-webos-$VERSION.ipk" feed/jinbei-studio-webos.ipk
+          cp "feed/jinbei-studio-tizen-$VERSION.wgt" feed/jinbei-studio-tizen.wgt
           # The repository points at this release's own copy, which never changes under its hash.
           jq -n \
             --slurpfile app packages/smart-tv/webos/appinfo.json \
             --arg version "$VERSION" \
-            --arg ipk "$repo/releases/download/$RELEASE/aiostreams-webos-$VERSION.ipk" \
-            --arg sha256 "$(sha256sum feed/aiostreams-webos.ipk | cut -d' ' -f1)" \
+            --arg ipk "$repo/releases/download/$RELEASE/jinbei-studio-webos-$VERSION.ipk" \
+            --arg sha256 "$(sha256sum feed/jinbei-studio-webos.ipk | cut -d' ' -f1)" \
             --arg icon "$raw/main/packages/smart-tv/webos/largeIcon.png" \
             --arg source "$repo" \
             '$app[0] as $a | {packages: [{
@@ -167,4 +167,4 @@ jobs:
           else
             gh release create smart-tv --latest=false --title "TV apps" --notes-file notes.md
           fi
-          gh release upload smart-tv feed/aiostreams-webos.ipk feed/aiostreams-tizen.wgt --clobber
+          gh release upload smart-tv feed/jinbei-studio-webos.ipk feed/jinbei-studio-tizen.wgt --clobber

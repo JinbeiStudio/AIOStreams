@@ -51,12 +51,12 @@ jobs:
 
           | Device | Download |
           | --- | --- |
-          | Mac, Apple silicon | \`aiostreams-desktop-osx-arm64.pkg\` (Intel: \`-osx-x64.pkg\`). Not signed by Apple: the first time, allow it in System Settings, Privacy & Security, Open Anyway. |
-          | Windows | \`aiostreams-desktop-win-x64.exe\` (Arm PCs: \`-win-arm64.exe\`). If Windows warns: More info, Run anyway. |
-          | Linux | \`aiostreams-desktop-linux-x64.flatpak\` (installed with \`flatpak install --user\`; it doesn't update itself) |
-          | Android, Android TV | \`aiostreams-android-arm64-v8a.apk\` (most devices) |
-          | LG TV (webOS) | \`aiostreams-webos-*.ipk\`, installed with Developer Mode or the Homebrew Channel |
-          | Samsung TV (Tizen) | \`aiostreams-tizen-*.wgt\` |
+          | Mac, Apple silicon | \`jinbei-studio-osx-arm64.pkg\` (Intel: \`-osx-x64.pkg\`). Not signed by Apple: the first time, allow it in System Settings, Privacy & Security, Open Anyway. |
+          | Windows | \`jinbei-studio-win-x64.exe\` (Arm PCs: \`-win-arm64.exe\`). If Windows warns: More info, Run anyway. |
+          | Linux | \`jinbei-studio-linux-x64.flatpak\` (installed with \`flatpak install --user\`; it doesn't update itself) |
+          | Android, Android TV | \`jinbei-studio-android-arm64-v8a.apk\` (most devices) |
+          | LG TV (webOS) | \`jinbei-studio-webos-*.ipk\`, installed with Developer Mode or the Homebrew Channel |
+          | Samsung TV (Tizen) | \`jinbei-studio-tizen-*.wgt\` |
 
           The Mac, Windows and Android apps offer the next version themselves.
           The style can be switched off in Settings, Theme, Interface.
@@ -100,7 +100,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v8
         with:
-          pattern: aiostreams-*
+          pattern: jinbei-studio-*
           merge-multiple: true
           path: tv
       - run: |

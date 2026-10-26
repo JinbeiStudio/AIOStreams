@@ -210,7 +210,7 @@ jobs:
             --packAuthors 'Jinbei Studio' --icon packages/desktop/app/icons/aiostreams.ico `
             --channel $env:CHANNEL --runtime win-${{ matrix.arch }} --outputDir releases
           if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed' }
-          $name = "aiostreams-desktop-$env:CHANNEL"
+          $name = "jinbei-studio-$env:CHANNEL"
           Move-Item "releases/jinbei-studio-$env:CHANNEL-Setup.exe" "releases/$name.exe" -Force
           Move-Item "releases/jinbei-studio-$env:CHANNEL-Portable.zip" "releases/$name.zip" -Force
 
@@ -229,7 +229,7 @@ jobs:
 
       - name: Attach to the release
         if: ${{ inputs.release != '' }}
-        run: gh release upload ${{ inputs.release }} "releases/aiostreams-desktop-$env:CHANNEL.exe" "releases/aiostreams-desktop-$env:CHANNEL.zip" --clobber
+        run: gh release upload ${{ inputs.release }} "releases/jinbei-studio-$env:CHANNEL.exe" "releases/jinbei-studio-$env:CHANNEL.zip" --clobber
 
   macos:
     name: macOS ${{ matrix.arch }}
@@ -334,7 +334,7 @@ jobs:
             --packAuthors "Jinbei Studio" --channel "$CHANNEL" --runtime osx-${{ matrix.arch }} \
             --outputDir releases
           ls -l releases
-          name="aiostreams-desktop-$CHANNEL"
+          name="jinbei-studio-$CHANNEL"
           mv releases/*"-$CHANNEL-Setup.pkg" "releases/$name.pkg"
           # Velopack adds its updater after the bundle was sealed. The installer is fine,
           # since installed files are not quarantined, but a downloaded zip is checked.
@@ -366,7 +366,7 @@ jobs:
 
       - name: Attach to the release
         if: ${{ inputs.release != '' }}
-        run: gh release upload "${{ inputs.release }}" "releases/aiostreams-desktop-$CHANNEL.pkg" "releases/aiostreams-desktop-$CHANNEL.zip" --clobber
+        run: gh release upload "${{ inputs.release }}" "releases/jinbei-studio-$CHANNEL.pkg" "releases/jinbei-studio-$CHANNEL.zip" --clobber
 
   linux:
     name: Linux ${{ matrix.arch }}
@@ -431,11 +431,11 @@ jobs:
           grep -q "^version = \"$VERSION\"" packages/desktop/Cargo.toml
           sh packages/desktop/scripts/make-flatpak.sh
           mkdir -p releases
-          mv "$FLATPAK_WORK/io.github.viren070.aiostreams.flatpak" "releases/aiostreams-desktop-$CHANNEL.flatpak"
+          mv "$FLATPAK_WORK/io.github.viren070.aiostreams.flatpak" "releases/jinbei-studio-$CHANNEL.flatpak"
 
       - name: Publish to the feed
-        run: gh release upload "$FEED" "releases/aiostreams-desktop-$CHANNEL.flatpak" --clobber
+        run: gh release upload "$FEED" "releases/jinbei-studio-$CHANNEL.flatpak" --clobber
 
       - name: Attach to the release
         if: ${{ inputs.release != '' }}
-        run: gh release upload "${{ inputs.release }}" "releases/aiostreams-desktop-$CHANNEL.flatpak" --clobber
+        run: gh release upload "${{ inputs.release }}" "releases/jinbei-studio-$CHANNEL.flatpak" --clobber
