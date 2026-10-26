@@ -178,6 +178,12 @@ export function TvosCatalog({
               onClick={() => v.Id !== viewId && open(v.Id!, current)}
             >
               {catalogName(v)}
+              {/* Two lists can share a name (new releases of films and of anime); the tag tells them apart. */}
+              {catalogTag(v) === 'Anime' && (
+                <span className="tv-tag" data-tag="anime">
+                  {tr('Anime')}
+                </span>
+              )}
             </button>
           ))}
         </div>

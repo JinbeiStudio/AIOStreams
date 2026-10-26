@@ -404,6 +404,15 @@
     transform 0.25s ease,
     background 0.2s ease;
 }
+.tv-tab .tv-tag {
+  margin-left: 0.6vw;
+  font-size: 0.8vw;
+  vertical-align: middle;
+}
+.tv-tab:is(:focus, :hover) .tv-tag {
+  color: #000;
+  border-color: rgba(0, 0, 0, 0.35);
+}
 .tv-tab[data-on] {
   background: rgba(255, 255, 255, 0.16);
   color: #fff;
