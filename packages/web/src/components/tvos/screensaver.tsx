@@ -1,5 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings -- the tvOS style's words go through tr() (./i18n), which this rule doesn't know */
 import React from 'react';
+import { formatLocale } from '../../lib/i18n';
 import { useSession } from '../../lib/session';
 import { useLibraryHeads, useViews } from '../../lib/queries';
 import { backdropUrl, logoUrl } from '../../lib/images';
@@ -105,7 +106,10 @@ function Slides() {
         />
       )}
       <div className="tv-saver-time">
-        {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {now.toLocaleTimeString(formatLocale(), {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
       </div>
     </div>
   );

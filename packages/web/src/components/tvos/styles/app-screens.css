@@ -60,8 +60,12 @@ html[data-tvos-build][data-tv] [data-ui='player-controls'] {
 }
 html[data-tvos-build][data-tv]
   :is([data-ui='player-bottom-bar'], [data-ui='player-top-bar']) {
-  padding-left: var(--tv-gutter) !important;
-  padding-right: var(--tv-gutter) !important;
+  /* The player sits outside the page that defines the gutter, hence the fallback. */
+  padding-left: var(--tv-gutter, 5.7vw) !important;
+  padding-right: var(--tv-gutter, 5.7vw) !important;
+}
+html[data-tvos-build][data-tv] [data-ui='player-title'] {
+  left: var(--tv-gutter, 5.7vw);
 }
 
 /*
