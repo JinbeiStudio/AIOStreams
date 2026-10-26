@@ -279,15 +279,38 @@ export function isAnimeCatalog(view: CatalogView): boolean {
   );
 }
 
-/** A catalog's name in the app's language: by its id first, then its name, else the server's own. */
-export function catalogName(view: CatalogView): string {
-  const name = view.Name ?? '';
+/** The "– Films" / "– Séries" a server's names may end with, so other apps can tell two lists apart; this one has its tag. */
+const KIND_SUFFIX = /\s+[–-]\s+(?:Films?|Séries?|Series|Movies?|Shows?)$/i;
+
+/** The kind a server's name ends with ("– Films", "– Séries"), for a view that does not say it otherwise. */
+export function nameKind(name: string | null | undefined): 'Movies' | 'Series' | undefined {
+  const found = KIND_SUFFIX.exec(name ?? '');
+  if (!found) return undefined;
+  return /film|movie/i.test(found[0]) ? 'Movies' : 'Series';
+}
+
+function plainName(name: string): string {
+  return name.replace(KIND_SUFFIX, '');
+}
+
+function catalogKeyOf(view: CatalogView): string {
   const byId = catalogIds(view)
     .map((id) => IDS[id])
     .find(Boolean);
-  const key = byId || (name ? catalogKey(name) : '');
+  return byId || (view.Name ? catalogKey(plainName(view.Name)) : '');
+}
+
+/** Which catalog a view is, whether it lists movies or shows: the same for both, whatever the server calls them. */
+export function catalogGroup(view: CatalogView): string {
+  return catalogKeyOf(view);
+}
+
+/** A catalog's name in the app's language: by its id first, then its name, else the server's own without its ending. */
+export function catalogName(view: CatalogView): string {
+  const name = view.Name ?? '';
+  const key = catalogKeyOf(view);
   const entry = key ? CATALOGS[key] : undefined;
-  if (!entry) return name;
+  if (!entry) return plainName(name);
   return (i18n.locale ?? '').split('-')[0] === 'fr' ? entry[1] : entry[0];
 }
 

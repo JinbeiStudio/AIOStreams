@@ -44,7 +44,7 @@ import {
   useScrolledDown,
   useFocusWithin,
 } from './parts';
-import { catalogName, isAnimeCatalog, tr } from './i18n';
+import { catalogName, isAnimeCatalog, nameKind, tr } from './i18n';
 
 const HERO_EACH = 8;
 const HERO_MAX = 10;
@@ -285,7 +285,7 @@ export function catalogTag(view: BaseItemDto): string | undefined {
   if (isAnimeCatalog(view) || ANIME.test(view.Name ?? '')) return 'Anime';
   if (view.CollectionType === 'movies') return 'Movies';
   if (view.CollectionType === 'tvshows') return 'Series';
-  return undefined;
+  return nameKind(view.Name);
 }
 
 function leftOf(item: BaseItemDto): string | null {

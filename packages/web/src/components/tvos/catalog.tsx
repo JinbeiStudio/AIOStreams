@@ -17,7 +17,7 @@ import { navigate, to } from '../../lib/paths';
 import { PosterGrid } from './grid';
 import { Failed, TopBar } from './parts';
 import { catalogTag } from './home';
-import { catalogName, count, tr } from './i18n';
+import { catalogGroup, catalogName, count, tr } from './i18n';
 
 // The app's own kinds, so a new one there shows here too.
 
@@ -98,7 +98,11 @@ export function TvosCatalog({
   const switchKind = (next: Kind) => {
     if (next === current) return;
     const twin = all.find(
-      (v) => v.Name === view?.Name && kindOf(v) === next && v.Id !== viewId
+      (v) =>
+        !!view &&
+        catalogGroup(v) === catalogGroup(view) &&
+        kindOf(v) === next &&
+        v.Id !== viewId
     );
     if (twin) return open(twin.Id!, next);
     if (view && !kindOf(view)) return open(viewId, next);
