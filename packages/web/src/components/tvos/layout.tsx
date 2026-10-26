@@ -66,34 +66,16 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
- * A slim glass capsule down the left edge, always there: the menu is that way. At the edge it widens and shows an
- * arrow, where Left opens it; a click or the pointer opens it too. Not focusable, so the remote's Left keeps its way.
+ * A slim glass capsule down the left edge, always there: the menu is that way. Under the pointer it widens and shows
+ * an arrow; a click opens the menu. Not focusable, so the remote's Left keeps its own way of opening it.
  */
 function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
-  const [near, setNear] = React.useState(false);
-  React.useEffect(() => {
-    const check = () => {
-      const el = document.activeElement;
-      setNear(
-        el instanceof HTMLElement &&
-          el !== document.body &&
-          el.getBoundingClientRect().left < window.innerWidth * 0.12
-      );
-    };
-    document.addEventListener('focusin', check);
-    document.addEventListener('focusout', check);
-    return () => {
-      document.removeEventListener('focusin', check);
-      document.removeEventListener('focusout', check);
-    };
-  }, []);
   return (
     <button
       type="button"
       tabIndex={-1}
       data-nav-out=""
       aria-label={tr('Menu')}
-      data-near={near ? '' : undefined}
       className="tv-glass tv-edge-capsule"
       onClick={onOpen}
     >

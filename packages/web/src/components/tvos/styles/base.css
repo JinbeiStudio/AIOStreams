@@ -149,18 +149,15 @@
   opacity: 0;
   transition: opacity 0.25s ease;
 }
-/* At the edge, or under the pointer: wider and brighter, the line becomes an arrow. */
-.tv-glass.tv-edge-capsule[data-near],
+/* Under the pointer only: wider and brighter, the line becomes an arrow. The focus never widens it. */
 .tv-glass.tv-edge-capsule:hover {
   width: 2vw;
   opacity: 1;
   background: rgba(255, 255, 255, 0.22);
 }
-.tv-edge-capsule[data-near] .tv-edge-grab,
 .tv-edge-capsule:hover .tv-edge-grab {
   opacity: 0;
 }
-.tv-edge-capsule[data-near] svg,
 .tv-edge-capsule:hover svg {
   opacity: 1;
 }
