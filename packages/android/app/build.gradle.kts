@@ -40,7 +40,7 @@ android {
         versionCode = providers.gradleProperty("aiostreams.versionCode").map(String::toInt).getOrElse(1)
         buildConfigField("String", "WEB_URL", "\"\"")
         val feed = providers.gradleProperty("aiostreams.updateFeed")
-            .getOrElse("https://github.com/Viren070/AIOStreams/releases/download")
+            .getOrElse("https://github.com/JinbeiStudio/jinbeistudio-tv/releases/download")
         buildConfigField("String", "UPDATE_FEED", "\"$feed\"")
         resValue("string", "app_name", "Jinbei Studio")
         val inspectable = providers.gradleProperty("aiostreams.inspectable").getOrElse("false")
