@@ -183,11 +183,18 @@ function choice(): string {
   return mine;
 }
 
+let onSwitch: (() => void | Promise<void>) | undefined;
+
+/** Called after the language changes, so what was saved in the old one can go. */
+export function onLanguageSwitch(fn: () => void | Promise<void>): void {
+  onSwitch = fn;
+}
+
 /** Activates the chosen language, and follows changes to it or to the system's. */
 export async function startI18n(): Promise<void> {
   const follow = () => {
     const next = chosenLocale(choice());
-    if (next !== i18n.locale) void activate(next);
+    if (next !== i18n.locale) void activate(next).then(() => onSwitch?.());
   };
   await activate(chosenLocale(choice()));
   onSettingsChange(follow);
