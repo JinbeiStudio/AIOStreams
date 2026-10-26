@@ -15,7 +15,7 @@ const CLIENT_ID: &str = "1484926986865479680";
 /// The application's art asset.
 const LOGO: &str =
     "https://cdn.discordapp.com/app-assets/1484926986865479680/1553797379705020567.png";
-const REPO_URL: &str = "https://github.com/Viren070/AIOStreams";
+const REPO_URL: &str = "https://github.com/JinbeiStudio/jinbeistudio-tv";
 /// A presence Discord was not running for is sent again this often.
 const RETRY: Duration = Duration::from_secs(30);
 /// Discord takes five updates every twenty seconds.

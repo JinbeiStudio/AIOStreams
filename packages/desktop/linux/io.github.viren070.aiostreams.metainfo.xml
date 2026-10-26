@@ -16,23 +16,23 @@
     </p>
   </description>
   <launchable type="desktop-id">io.github.viren070.aiostreams.desktop</launchable>
-  <url type="homepage">https://github.com/Viren070/AIOStreams</url>
-  <url type="bugtracker">https://github.com/Viren070/AIOStreams/issues</url>
+  <url type="homepage">https://github.com/JinbeiStudio/jinbeistudio-tv</url>
+  <url type="bugtracker">https://github.com/JinbeiStudio/jinbeistudio-tv/issues</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/Viren070/AIOStreams/main/packages/desktop/linux/screenshots/home.png</image>
+      <image>https://raw.githubusercontent.com/JinbeiStudio/jinbeistudio-tv/main/packages/desktop/linux/screenshots/home.png</image>
       <caption>Home, with a featured title and your rows</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/Viren070/AIOStreams/main/packages/desktop/linux/screenshots/collection.png</image>
+      <image>https://raw.githubusercontent.com/JinbeiStudio/jinbeistudio-tv/main/packages/desktop/linux/screenshots/collection.png</image>
       <caption>A collection's titles</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/Viren070/AIOStreams/main/packages/desktop/linux/screenshots/episodes-list.png</image>
+      <image>https://raw.githubusercontent.com/JinbeiStudio/jinbeistudio-tv/main/packages/desktop/linux/screenshots/episodes-list.png</image>
       <caption>A show's seasons and episodes</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/Viren070/AIOStreams/main/packages/desktop/linux/screenshots/player.png</image>
+      <image>https://raw.githubusercontent.com/JinbeiStudio/jinbeistudio-tv/main/packages/desktop/linux/screenshots/player.png</image>
       <caption>Playing with mpv</caption>
     </screenshot>
   </screenshots>
