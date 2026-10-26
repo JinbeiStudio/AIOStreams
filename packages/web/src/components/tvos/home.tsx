@@ -282,6 +282,9 @@ function UpcomingRow() {
 const ANIME = /anime|anilist|crunchyroll|\bmal\b|anidb|kitsu/i;
 
 export function catalogTag(view: BaseItemDto): string | undefined {
+  // A name that says its kind is believed; the rest is read from the path, the id or the words in the name.
+  const named = nameKind(view.Name);
+  if (named) return named;
   if (isAnimeCatalog(view) || ANIME.test(view.Name ?? '')) return 'Anime';
   if (view.CollectionType === 'movies') return 'Movies';
   if (view.CollectionType === 'tvshows') return 'Series';

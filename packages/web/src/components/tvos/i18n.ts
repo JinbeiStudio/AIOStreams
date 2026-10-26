@@ -280,12 +280,15 @@ export function isAnimeCatalog(view: CatalogView): boolean {
 }
 
 /** The "– Films" / "– Séries" a server's names may end with, so other apps can tell two lists apart; this one has its tag. */
-const KIND_SUFFIX = /\s+[–-]\s+(?:Films?|Séries?|Series|Movies?|Shows?)$/i;
+const KIND_SUFFIX = /\s+[–-]\s+(?:Films?|Séries?|Series|Movies?|Shows?|Anime)$/i;
 
 /** The kind a server's name ends with ("– Films", "– Séries"), for a view that does not say it otherwise. */
-export function nameKind(name: string | null | undefined): 'Movies' | 'Series' | undefined {
+export function nameKind(
+  name: string | null | undefined
+): 'Movies' | 'Series' | 'Anime' | undefined {
   const found = KIND_SUFFIX.exec(name ?? '');
   if (!found) return undefined;
+  if (/anime/i.test(found[0])) return 'Anime';
   return /film|movie/i.test(found[0]) ? 'Movies' : 'Series';
 }
 
