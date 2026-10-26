@@ -24,7 +24,6 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
-import { BiChevronRight } from 'react-icons/bi';
 import { MenuOpener, Pinned } from './parts';
 import { tr } from './i18n';
 import { Sidebar } from './sidebar';
@@ -66,21 +65,21 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
- * A slim glass capsule down the left edge, always there: the menu is that way. Under the pointer it widens and shows
- * an arrow; a click opens the menu. Not focusable, so the remote's Left keeps its own way of opening it.
+ * A grabber on the left edge, as Apple draws one: a short soft capsule with nothing around it, always there, saying the
+ * menu is that way. Under the pointer it lengthens and brightens; a click opens the menu. Not focusable, so the
+ * remote's Left keeps its own way of opening it.
  */
-function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
+function EdgeGrabber({ onOpen }: { onOpen: () => void }) {
   return (
     <button
       type="button"
       tabIndex={-1}
       data-nav-out=""
       aria-label={tr('Menu')}
-      className="tv-glass tv-edge-capsule"
+      className="tv-edge-grabber"
       onClick={onOpen}
     >
-      <i className="tv-edge-grab" />
-      <BiChevronRight />
+      <i />
     </button>
   );
 }
@@ -290,7 +289,7 @@ export function TvosLayout() {
                 )}
                 {over && !playing && !sidebar && (
                   <Pinned>
-                    <EdgeCapsule onOpen={openSidebar} />
+                    <EdgeGrabber onOpen={openSidebar} />
                   </Pinned>
                 )}
                 <div ref={setOver} className="contents" />
