@@ -44,7 +44,7 @@ import {
   useScrolledDown,
   useFocusWithin,
 } from './parts';
-import { tr } from './i18n';
+import { catalogName, tr } from './i18n';
 
 const HERO_EACH = 8;
 const HERO_MAX = 10;
@@ -325,7 +325,7 @@ function CatalogRow({ view, first }: { view: BaseItemDto; first: boolean }) {
   return (
     <div ref={ref}>
       <Row
-        title={view.Name ?? ''}
+        title={catalogName(view.Name)}
         tag={catalogTag(view)}
         shape={landscape ? 'wide' : 'poster'}
       >
