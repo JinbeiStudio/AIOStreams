@@ -119,11 +119,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.1vw;
+  /* As the hero's dots capsule: 1.3vw thick, fully rounded, the same glass. */
+  width: 1.3vw;
   height: 9vw;
   padding: 0;
   border: 0;
-  border-radius: 0 1.1vw 1.1vw 0;
+  border-radius: 0 99px 99px 0;
+  background: rgba(118, 120, 130, 0.3);
+  backdrop-filter: blur(16px) brightness(1.18);
+  -webkit-backdrop-filter: blur(16px) brightness(1.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
   overflow: hidden;
   color: #fff;
   opacity: 0.6;
@@ -137,9 +142,10 @@
 /* The grabber line at rest. */
 .tv-edge-grab {
   display: block;
-  width: 0.26vw;
+  /* The active dot's own size across: 0.4vw. */
+  width: 0.4vw;
   height: 52%;
-  border-radius: 0.2vw;
+  border-radius: 99px;
   background: rgba(255, 255, 255, 0.85);
   transition: opacity 0.2s ease;
 }
