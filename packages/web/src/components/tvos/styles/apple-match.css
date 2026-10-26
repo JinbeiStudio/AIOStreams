@@ -70,19 +70,7 @@
     visibility 0s linear 0.35s;
 }
 
-/*
- * TVs: glass panels become a flat translucent tint and focus shadows stay
- * still; the page's artwork keeps its blur, as a Mac's.
- */
-html[data-tvos-build][data-tv] *,
-html[data-tvos-build][data-tv] *::before,
-html[data-tvos-build][data-tv] *::after {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-html[data-tvos-build][data-tv] {
-  --tv-glass: rgba(96, 98, 108, 0.6);
-}
+/* TVs keep the Mac's frosted glass; only the focus shadows stay still. */
 html[data-tvos-build][data-tv] .tv-backdrop img {
   animation: none;
 }
