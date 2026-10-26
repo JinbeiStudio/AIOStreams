@@ -238,3 +238,17 @@
   color: #000 !important;
   outline: none !important;
 }
+
+/* History's export and reset beside the title: smaller than the page's action buttons, spaced from it and each other. */
+.tv-title-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8vw;
+  margin-left: 2vw;
+  vertical-align: middle;
+}
+.tv-title-actions button {
+  height: 2.9vw !important;
+  padding: 0 1.5vw !important;
+  font-size: 1.1vw !important;
+}
