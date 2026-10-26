@@ -50,7 +50,11 @@ const BUNDLED_ICONS = [
   'favicon.ico',
   'icon0.svg',
   'apple-icon.png',
-].map((name) => ({ from: `../frontend/public/${name}`, to: name }));
+].map((name) => ({
+  // The page that shows before any server is connected carries Jinbei Studio's own logo.
+  from: name === 'logo.png' ? './branding/logo.png' : `../frontend/public/${name}`,
+  to: name,
+}));
 
 /**
  * `--env-mode standalone` builds the app on its own, with a server list,
