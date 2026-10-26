@@ -286,20 +286,6 @@ html[data-tvos-build] [data-ui='settings-tab']:focus-visible {
 html[data-tvos-build] [data-ui='settings-tab'] svg {
   font-size: 1.5vw;
 }
-html[data-tvos-build] [data-ui='settings-card-body'] {
-  border: 0 !important;
-  border-radius: 1.4vw !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-}
-html[data-tvos-build] [data-ui='settings-card-body'] > * + * {
-  border-color: rgba(255, 255, 255, 0.06) !important;
-}
-html[data-tvos-build] [data-ui='settings-card-item'] {
-  padding: 1vw 1.4vw !important;
-}
-html[data-tvos-build] [data-ui='settings-card-item']:hover {
-  background: rgba(255, 255, 255, 0.04) !important;
-}
 html[data-tvos-build] [data-ui='settings-card-title'] {
   font-size: 1.3vw;
   font-weight: 600;
@@ -369,31 +355,26 @@ html[data-tvos-build] [data-ui='settings-card-description'] {
   margin-left: 1.6vw;
   font-size: max(12px, 0.95vw) !important;
 }
+/* One glass card per group, its settings as rows with a hairline between them: no box inside the box. */
 html[data-tvos-build] [data-ui='settings-card-body'] {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8vw;
-  overflow: visible !important;
-  background: transparent !important;
   border: 0 !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-}
-html[data-tvos-build] [data-ui='settings-card-body'] > * {
-  border-width: 0 !important;
-}
-html[data-tvos-build] [data-ui='settings-card-item'] {
-  padding: 1.1vw 1.6vw !important;
-  border-radius: 1vw;
-  /* Light on the glass, so the colour behind shows through, as on Apple TV's bars. */
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1.4vw !important;
+  background: rgba(255, 255, 255, 0.09) !important;
   backdrop-filter: blur(28px) saturate(1.8);
   -webkit-backdrop-filter: blur(28px) saturate(1.8);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-body'] > * + * {
+  border-width: 1px 0 0 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-item'],
+html[data-tvos-build] [data-ui='settings-card-item']:hover {
+  padding: 1.1vw 1.6vw !important;
+  background: transparent !important;
   transition:
-    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1.2),
     background 0.15s ease,
     color 0.15s ease;
 }
@@ -401,7 +382,6 @@ html[data-tvos-build] [data-ui='settings-card-item'] {
 html[data-tvos-build] [data-ui='settings-card-item']:focus-within:not(:has(.UI-Select__root, .UI-Input__root, .UI-NumberInput__root, .UI-Textarea__root)) {
   background: rgba(255, 255, 255, 0.95) !important;
   color: #000;
-  transform: scale(1.012);
 }
 html[data-tvos-build] [data-ui='settings-card-item'] p.font-semibold {
   font-size: max(14px, 1.25vw);
