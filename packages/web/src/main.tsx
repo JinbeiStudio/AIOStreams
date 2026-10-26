@@ -28,6 +28,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 30_000,
+      // A TV coming back would refetch every list at once and freeze for seconds; lists refresh as they are opened.
+      refetchOnWindowFocus: false,
       retry: false,
       persister,
       // Runs even while the server is out of reach, so saved copies still load.
