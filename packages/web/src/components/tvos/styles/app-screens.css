@@ -394,3 +394,15 @@ html[data-tvos-build] [data-ui='settings-card-item']:focus-within:not(:has(.UI-S
   opacity: 0.8;
 }
 
+
+/* A switch with a label draws its own hover box; the row is the box here, so it draws none. */
+html[data-tvos-build] [data-ui='settings-card-item'] .group\/switch {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+html[data-tvos-build] [data-ui='settings-card-item'] .UI-Switch__root::after {
+  display: none;
+}
