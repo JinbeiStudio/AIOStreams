@@ -136,11 +136,11 @@ const FR: Record<string, string> = {
  */
 const CATALOGS: Record<string, [string, string]> = {
   'latest-digital-release': ['New releases', 'Nouveautés'],
-  'trakt-trending': ['Trending', 'En ce moment'],
-  'tmdb-popular': ['Most popular', 'Les plus populaires'],
+  'trakt-trending': ['Trending', 'Tendances'],
+  'tmdb-popular': ['Popular', 'Populaires'],
   'latest-airing': ['New releases', 'Nouveautés'],
   'crunchyroll-latest': ['New releases', 'Nouveautés'],
-  'anilist-trending': ['Trending', 'En ce moment'],
+  'anilist-trending': ['Trending', 'Tendances'],
   seasonal: ['Seasonal', 'De saison'],
   'tmdb-by-year': ['By year', 'Par année'],
   'tmdb-by-language': ['By language', 'Par langue'],
