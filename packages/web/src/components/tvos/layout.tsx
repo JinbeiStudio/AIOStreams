@@ -24,8 +24,8 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
-import { BiMenu } from 'react-icons/bi';
-import { Pinned } from './parts';
+import { BiChevronRight } from 'react-icons/bi';
+import { MenuOpener, Pinned } from './parts';
 import { tr } from './i18n';
 import { Sidebar } from './sidebar';
 import { TvosOutlet } from './routes';
@@ -66,6 +66,48 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
+ * The sidebar's handle on the left edge: with its word for a few seconds when a page opens, a thin line while at rest,
+ * and lit again when the focus reaches the left edge. A click opens the menu; the remote's Left does as ever.
+ */
+function EdgeHandle({ path, onOpen }: { path: string; onOpen: () => void }) {
+  const [intro, setIntro] = React.useState(true);
+  const [near, setNear] = React.useState(false);
+  React.useEffect(() => {
+    setIntro(true);
+    const timer = window.setTimeout(() => setIntro(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [path]);
+  React.useEffect(() => {
+    const check = () => {
+      const el = document.activeElement;
+      if (!(el instanceof HTMLElement) || el === document.body)
+        return setNear(false);
+      setNear(el.getBoundingClientRect().left < window.innerWidth * 0.12);
+    };
+    document.addEventListener('focusin', check);
+    document.addEventListener('focusout', check);
+    return () => {
+      document.removeEventListener('focusin', check);
+      document.removeEventListener('focusout', check);
+    };
+  }, []);
+  return (
+    <button
+      type="button"
+      tabIndex={-1}
+      data-nav-out=""
+      aria-label={tr('Menu')}
+      data-state={near ? 'near' : intro ? 'intro' : 'rest'}
+      className="tv-glass tv-menu-handle"
+      onClick={onOpen}
+    >
+      <BiChevronRight />
+      <span>{tr('Menu')}</span>
+    </button>
+  );
+}
+
+/**
  * The tvOS style's frame: Apple TV's sidebar instead of the app's, its own
  * home, and every other page (settings, the player…) as the app has it.
  */
@@ -92,6 +134,7 @@ export function TvosLayout() {
   // The sidebar, as the Apple TV app's: Back at the home (or with nowhere to go back to) opens it, Back again closes it.
   const [sidebar, setSidebar] = React.useState(false);
   const closeSidebar = React.useCallback(() => setSidebar(false), []);
+  const openSidebar = React.useCallback(() => setSidebar(true), []);
   React.useEffect(() => setSidebar(false), [pathname, playing]);
   const router = useRouter();
   const [under, setUnder] = React.useState<HTMLDivElement | null>(null);
@@ -231,6 +274,7 @@ export function TvosLayout() {
             {/* While the sidebar is open the page underneath can't take the focus, as on Apple TV. */}
             <div inert={sidebar} className="contents">
               {/* As the app's layout: on TVs the page moves in glide layers, fixed things beside them. */}
+              <MenuOpener.Provider value={openSidebar}>
               <PinnedTargets.Provider value={pinned}>
                 <div ref={setUnder} className="contents" />
                 {/* Drawn once the places for fixed things exist, so none starts a frame inside the moving page. */}
@@ -266,21 +310,14 @@ export function TvosLayout() {
                     )}
                   </GlideLayers>
                 )}
-                {/* The menu's own button, at the top left of every page, where the sidebar comes from. */}
-                {over && !playing && (
+                {over && !playing && !sidebar && (
                   <Pinned>
-                    <button
-                      type="button"
-                      aria-label={tr('Menu')}
-                      className="tv-glass tv-menu-button"
-                      onClick={() => setSidebar(true)}
-                    >
-                      <BiMenu />
-                    </button>
+                    <EdgeHandle path={pathname} onOpen={openSidebar} />
                   </Pinned>
                 )}
                 <div ref={setOver} className="contents" />
               </PinnedTargets.Provider>
+              </MenuOpener.Provider>
             </div>
           </ItemMenuHost>
         </VersionPickerProvider>

@@ -86,22 +86,17 @@
   opacity: 0;
   pointer-events: none;
 }
-/* The menu button, top left on every page: it opens the sidebar the remote's Left opens. */
+/* The menu button beside the pill, top right: it opens the sidebar the remote's Left opens. */
 .tv-menu-button {
-  position: fixed;
-  /* Above the pages' own titles, which start at 4.2vw, so it covers none. */
-  top: 1.2vw;
-  left: var(--tv-gutter);
-  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.8vw;
-  height: 2.8vw;
+  width: 3.45vw;
+  height: 3.45vw;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  font-size: 1.5vw;
+  font-size: 1.7vw;
   color: #fff;
   outline: none;
   transition:
@@ -113,6 +108,47 @@
   background: rgba(255, 255, 255, 0.95);
   color: #000;
   transform: scale(1.1);
+}
+/* The handle on the left edge: the word for a few seconds, then a thin line, lit when the focus is at the edge. */
+.tv-glass.tv-menu-handle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.3vw;
+  height: 4.2vw;
+  max-width: 14vw;
+  padding: 0 1.3vw 0 0.5vw;
+  border: 0;
+  border-radius: 0 2.1vw 2.1vw 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.2vw;
+  font-weight: 600;
+  color: #fff;
+  outline: none;
+  transform: translateY(-50%);
+  transition:
+    max-width 0.35s ease,
+    padding 0.35s ease,
+    opacity 0.35s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.tv-menu-handle svg {
+  flex: none;
+  font-size: 1.8vw;
+}
+.tv-glass.tv-menu-handle[data-state='rest'] {
+  max-width: 0.45vw;
+  padding: 0;
+  opacity: 0.6;
+}
+.tv-glass.tv-menu-handle[data-state='near'] {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
 }
 .tv-pill {
   display: flex;
