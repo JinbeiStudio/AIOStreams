@@ -327,3 +327,89 @@ html[data-tvos-build] [data-ui='downloads-section'] h2 {
   font-size: 1.6vw;
   font-weight: 700;
 }
+
+/*
+ * Settings the way Apple TV draws them: a tinted backdrop, a glass list of sections at the left, and each setting a
+ * translucent bar of its own, the label at the left and its control at the right, the focused bar white.
+ */
+html[data-tvos-build]:has([data-ui='settings-tabs']),
+html[data-tvos-build]:has([data-ui='settings-tabs']) body {
+  background:
+    radial-gradient(60vw 45vw at 12% 8%, rgba(10, 132, 255, 0.28), transparent 70%),
+    radial-gradient(50vw 40vw at 92% 88%, rgba(191, 90, 242, 0.22), transparent 70%),
+    var(--tv-bg) !important;
+  background-attachment: fixed;
+}
+html[data-tvos-build] [data-ui='settings-tab-group'] {
+  background: rgba(40, 40, 44, 0.5) !important;
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+html[data-tvos-build] [data-ui='settings-tab'] {
+  height: 3.3vw !important;
+  font-size: 1.3vw !important;
+}
+html[data-tvos-build] [data-ui='settings-tab'][data-state='active'] {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-title'] {
+  margin: 0 0 0.5vw 1.6vw;
+  font-size: max(11px, 0.85vw);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+html[data-tvos-build] [data-ui='settings-card-description'] {
+  margin-left: 1.6vw;
+  font-size: max(12px, 0.95vw) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-body'] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vw;
+  overflow: visible !important;
+  background: transparent !important;
+}
+html[data-tvos-build] [data-ui='settings-card-body'] > * {
+  border-width: 0 !important;
+}
+html[data-tvos-build] [data-ui='settings-card-item'] {
+  padding: 1.1vw 1.6vw !important;
+  border-radius: 1vw;
+  background: rgba(60, 60, 66, 0.5);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    background 0.15s ease,
+    color 0.15s ease;
+}
+html[data-tvos-build] [data-ui='settings-card-item']:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-item']:focus-within {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000;
+  transform: scale(1.012);
+}
+html[data-tvos-build] [data-ui='settings-card-item'] p.font-semibold {
+  font-size: max(14px, 1.25vw);
+}
+html[data-tvos-build] [data-ui='settings-card-item'] .text-sm {
+  font-size: max(12px, 0.98vw);
+}
+html[data-tvos-build] [data-ui='settings-card-item']:focus-within p {
+  color: inherit !important;
+  opacity: 0.8;
+}
+html[data-tvos-build]
+  [data-ui='settings-card-item']:focus-within
+  :is(.UI-Select__root, .UI-Input__root, .UI-NumberInput__root) {
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #000;
+}
