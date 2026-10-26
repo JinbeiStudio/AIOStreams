@@ -83,7 +83,14 @@ export function TvosHistory() {
   const ownHistory = useOwnHistory(!full);
   const history = full ? fullHistory : ownHistory;
   const ownSessions = useOwnSessions(!full);
-  const sessions = (full ? activity.data?.sessions : ownSessions.data) ?? [];
+  // Now playing follows the chosen profile; everyone shows all of them.
+  const sameUser = (a?: string | null, b?: string | null) =>
+    !!a &&
+    !!b &&
+    a.replace(/-/g, '').toLowerCase() === b.replace(/-/g, '').toLowerCase();
+  const sessions = (
+    (full ? activity.data?.sessions : ownSessions.data) ?? []
+  ).filter((s) => !shown || !s.UserId || sameUser(s.UserId, shown));
   const owner = profiles.find((p) => p.user.Id === shown);
   const days = React.useMemo(() => {
     const list: { key: string; date: Date | null; entries: HistoryEntry[] }[] =
