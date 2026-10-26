@@ -8,7 +8,11 @@ use velopack::locator::{LocationContext, auto_locate_app_manifest};
 use velopack::sources::HttpSource;
 use velopack::{UpdateCheck, UpdateInfo, UpdateManager, UpdateOptions};
 
-const RELEASES: &str = "https://github.com/Viren070/AIOStreams/releases/download";
+/// A fork's builds set AIOSTREAMS_RELEASES, so they update from its own releases.
+const RELEASES: &str = match option_env!("AIOSTREAMS_RELEASES") {
+    Some(url) => url,
+    None => "https://github.com/Viren070/AIOStreams/releases/download",
+};
 const RECHECK: Duration = Duration::from_secs(6 * 60 * 60);
 /// Velopack's names for the operating systems, which begin its channel names.
 const OS: &str = if cfg!(windows) {

@@ -79,7 +79,8 @@ jobs:
           code=$(( ($(date -u +%s) - 1704067200) / 60 ))
           # Without the configuration cache, which would keep the passwords.
           ./gradlew --no-configuration-cache :app:assembleRelease \
-            -Paiostreams.version="$VERSION" -Paiostreams.versionCode="$code"
+            -Paiostreams.version="$VERSION" -Paiostreams.versionCode="$code" \
+            -Paiostreams.updateFeed="https://github.com/${{ github.repository }}/releases/download"
           mkdir -p out
           apks='{}'
           for abi in arm64-v8a armeabi-v7a x86_64; do

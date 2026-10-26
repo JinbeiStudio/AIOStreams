@@ -1,0 +1,108 @@
+name: tvOS Style Release
+
+# Every app with the tvOS style on one release: the desktop app (Mac, Windows, Linux), Android and the TVs.
+# Started by a tvos-v* tag, or by hand with a version. The desktop and Android apps then offer the next
+# release themselves, as they update from this repository's releases.
+on:
+  push:
+    tags: ['tvos-v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version, as 1.2.0 (the release is tvos-v1.2.0)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.names.outputs.version }}
+      tag: ${{ steps.names.outputs.tag }}
+      tv: ${{ steps.names.outputs.tv }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: packages/smart-tv/package.json
+          sparse-checkout-cone-mode: false
+      - id: names
+        env:
+          INPUT: ${{ inputs.version }}
+        run: |
+          version="${INPUT:-${GITHUB_REF_NAME#tvos-v}}"
+          echo "version=$version" >>"$GITHUB_OUTPUT"
+          echo "tag=tvos-v$version" >>"$GITHUB_OUTPUT"
+          # The TV build checks its release against the TV app's own version.
+          echo "tv=smart-tv-v$(jq -r .version packages/smart-tv/package.json)" >>"$GITHUB_OUTPUT"
+      - env:
+          TAG: ${{ steps.names.outputs.tag }}
+          TV: ${{ steps.names.outputs.tv }}
+          VERSION: ${{ steps.names.outputs.version }}
+        run: |
+          repo="https://github.com/${{ github.repository }}"
+          cat >notes.md <<EOF
+          AIOStreams with its tvOS style. Pick your device:
+
+          | Device | Download |
+          | --- | --- |
+          | Mac, Apple silicon | \`aiostreams-desktop-osx-arm64.pkg\` (Intel: \`-osx-x64.pkg\`). Not signed by Apple: the first time, allow it in System Settings, Privacy & Security, Open Anyway. |
+          | Windows | \`aiostreams-desktop-win-x64.exe\` (Arm PCs: \`-win-arm64.exe\`). If Windows warns: More info, Run anyway. |
+          | Linux | \`aiostreams-desktop-linux-x64.flatpak\` (installed with \`flatpak install --user\`; it doesn't update itself) |
+          | Android, Android TV | \`aiostreams-android-arm64-v8a.apk\` (most devices) |
+          | LG TV (webOS) | \`aiostreams-webos-*.ipk\`, installed with Developer Mode or the Homebrew Channel |
+          | Samsung TV (Tizen) | \`aiostreams-tizen-*.wgt\` |
+
+          The Mac, Windows and Android apps offer the next version themselves.
+          The style can be switched off in Settings, Theme, Interface.
+          EOF
+          gh release view "$TAG" -R "$repo" >/dev/null 2>&1 \
+            || gh release create "$TAG" -R "$repo" --target "$GITHUB_SHA" --title "tvOS style $VERSION" --notes-file notes.md
+          # The TV build attaches to a release named for the TV app's version, which it also needs.
+          gh release view "$TV" -R "$repo" >/dev/null 2>&1 \
+            || gh release create "$TV" -R "$repo" --target "$GITHUB_SHA" --latest=false --title "TV apps $TV" --notes "The TV apps, with the tvOS style. See $TAG."
+
+  desktop:
+    needs: release
+    uses: ./.github/workflows/desktop-build.yml
+    with:
+      version: ${{ needs.release.outputs.version }}
+      channel: stable
+      release: ${{ needs.release.outputs.tag }}
+
+  android:
+    needs: release
+    uses: ./.github/workflows/android-build.yml
+    secrets: inherit
+    with:
+      version: ${{ needs.release.outputs.version }}
+      channel: stable
+      release: ${{ needs.release.outputs.tag }}
+
+  tv:
+    needs: release
+    uses: ./.github/workflows/smart-tv-build.yml
+    with:
+      release: ${{ needs.release.outputs.tv }}
+
+  # The TV packages on the tvOS release too, so every download is on one page.
+  tv-files:
+    needs: [release, tv]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: aiostreams-*
+          merge-multiple: true
+          path: tv
+      - run: |
+          ls tv
+          gh release upload "${{ needs.release.outputs.tag }}" -R "${{ github.repository }}" tv/*.ipk tv/*.wgt --clobber
