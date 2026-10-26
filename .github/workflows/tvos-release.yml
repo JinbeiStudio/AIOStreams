@@ -23,7 +23,6 @@ jobs:
     outputs:
       version: ${{ steps.names.outputs.version }}
       tag: ${{ steps.names.outputs.tag }}
-      tv: ${{ steps.names.outputs.tv }}
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -38,11 +37,8 @@ jobs:
           version="${INPUT:-${GITHUB_REF_NAME#tvos-v}}"
           echo "version=$version" >>"$GITHUB_OUTPUT"
           echo "tag=tvos-v$version" >>"$GITHUB_OUTPUT"
-          # The TV build checks its release against the TV app's own version.
-          echo "tv=smart-tv-v$(jq -r .version packages/smart-tv/package.json)" >>"$GITHUB_OUTPUT"
       - env:
           TAG: ${{ steps.names.outputs.tag }}
-          TV: ${{ steps.names.outputs.tv }}
           VERSION: ${{ steps.names.outputs.version }}
         run: |
           repo="https://github.com/${{ github.repository }}"
@@ -63,9 +59,6 @@ jobs:
           EOF
           gh release view "$TAG" -R "$repo" >/dev/null 2>&1 \
             || gh release create "$TAG" -R "$repo" --target "$GITHUB_SHA" --title "tvOS style $VERSION" --notes-file notes.md
-          # The TV build attaches to a release named for the TV app's version, which it also needs.
-          gh release view "$TV" -R "$repo" >/dev/null 2>&1 \
-            || gh release create "$TV" -R "$repo" --target "$GITHUB_SHA" --latest=false --title "TV apps $TV" --notes "The TV apps, with the tvOS style. See $TAG."
 
   desktop:
     needs: release
@@ -88,7 +81,8 @@ jobs:
     needs: release
     uses: ./.github/workflows/smart-tv-build.yml
     with:
-      release: ${{ needs.release.outputs.tv }}
+      release: ${{ needs.release.outputs.tag }}
+      version: ${{ needs.release.outputs.version }}
 
   # The TV packages on the tvOS release too, so every download is on one page.
   tv-files:

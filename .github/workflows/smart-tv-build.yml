@@ -10,6 +10,11 @@ on:
         required: false
         type: string
         default: ''
+      version:
+        description: The version to give the packages instead of package.json's
+        required: false
+        type: string
+        default: ''
 
 jobs:
   # The page both packages hold, built once.
@@ -23,9 +28,10 @@ jobs:
       - id: version
         env:
           RELEASE: ${{ inputs.release }}
+          GIVEN: ${{ inputs.version }}
         run: |
-          version=$(jq -r .version packages/smart-tv/package.json)
-          if [ -n "$RELEASE" ] && [ "$RELEASE" != "smart-tv-v$version" ]; then
+          version="${GIVEN:-$(jq -r .version packages/smart-tv/package.json)}"
+          if [ -z "$GIVEN" ] && [ -n "$RELEASE" ] && [ "$RELEASE" != "smart-tv-v$version" ]; then
             echo "::error::$RELEASE does not match packages/smart-tv/package.json ($version)"
             exit 1
           fi
@@ -62,6 +68,8 @@ jobs:
           name: smart-tv-web
           path: packages/web/dist-standalone
       - working-directory: packages/smart-tv
+        env:
+          TV_VERSION: ${{ needs.web.outputs.version }}
         run: |
           node scripts/build.mjs webos
           mv out/*.ipk "out/$IPK"
@@ -95,6 +103,8 @@ jobs:
           name: smart-tv-web
           path: packages/web/dist-standalone
       - working-directory: packages/smart-tv
+        env:
+          TV_VERSION: ${{ needs.web.outputs.version }}
         run: |
           node scripts/build.mjs tizen
           mv out/AIOStreams.wgt "out/$WGT"
