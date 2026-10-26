@@ -132,27 +132,27 @@ const FR: Record<string, string> = {
 /*
  * Catalog names. The server sends the catalogs' own names ("Trakt Trending"); the key is that name as a slug
  * ("trakt-trending"), and the table gives the words shown in English and in French. A catalog that is not
- * listed shows the server's name. Movies and shows share a key; the tag next to the name tells them apart.
+ * listed shows the server's name. Movies, shows and anime share the same words; the tag next to the name says which is which.
  */
 const CATALOGS: Record<string, [string, string]> = {
   'latest-digital-release': ['New releases', 'Nouveautés'],
   'trakt-trending': ['Trending', 'Tendances'],
   'tmdb-popular': ['Popular', 'Populaires'],
   'latest-airing': ['On air now', 'En cours de diffusion'],
-  'crunchyroll-latest': ['New anime', 'Nouveaux animes'],
-  'anilist-trending': ['Trending anime', 'Animes tendances'],
+  'crunchyroll-latest': ['New releases', 'Nouveautés'],
+  'anilist-trending': ['Trending', 'Tendances'],
   seasonal: ['Seasonal', 'De saison'],
   'tmdb-by-year': ['By year', 'Par année'],
   'tmdb-by-language': ['By language', 'Par langue'],
   'tvdb-genres': ['By genre', 'Par genre'],
   'tvdb-collections': ['Collections', 'Sagas et collections'],
   'trending-kids': ['For kids', 'Pour les enfants'],
-  'mal-airing-now': ['Anime on air', 'Animes en cours de diffusion'],
-  'anidb-latest-ended': ['Recently finished anime', 'Animes récemment terminés'],
-  'mal-top-series': ['Best anime series', 'Meilleures séries d’animes'],
-  'mal-top-movies': ['Best anime movies', 'Meilleurs films d’animes'],
-  'mal-top-all-time': ['Best anime of all time', 'Les meilleurs animes de tous les temps'],
-  'mal-genres': ['Anime by genre', 'Animes par genre'],
+  'mal-airing-now': ['On air now', 'En cours de diffusion'],
+  'anidb-latest-ended': ['Recently finished', 'Récemment terminés'],
+  'mal-top-series': ['Best series', 'Meilleures séries'],
+  'mal-top-movies': ['Best movies', 'Meilleurs films'],
+  'mal-top-all-time': ['Best of all time', 'Les meilleurs de tous les temps'],
+  'mal-genres': ['By genre', 'Par genre'],
   'netflix-latest': ['New on Netflix', 'Nouveautés Netflix'],
   'amazon-prime-latest': ['New on Prime Video', 'Nouveautés Prime Video'],
   'apple-plus-latest': ['New on Apple TV+', 'Nouveautés Apple TV+'],
