@@ -141,6 +141,65 @@ html[data-tvos-build] [data-ui='auth-card'] {
   background: rgba(40, 40, 44, 0.72) !important;
   box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.5) !important;
 }
+/* Sign-in and add server as a tvOS dialog: large type and controls, floating glass, a focused field turns white. */
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] {
+  width: min(92vw, max(420px, 36vw));
+  max-width: none !important;
+  gap: max(18px, 1.6vw);
+  padding: max(28px, 2.8vw) !important;
+  border-radius: max(28px, 2.6vw) !important;
+  background: rgba(46, 46, 52, 0.5) !important;
+  backdrop-filter: blur(3vw) saturate(1.6);
+  -webkit-backdrop-filter: blur(3vw) saturate(1.6);
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='page-title'] {
+  font-size: max(24px, 2.4vw);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] p {
+  font-size: max(15px, 1.2vw);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] label {
+  font-size: max(15px, 1.15vw);
+  font-weight: 600;
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] input {
+  height: max(48px, 4vw);
+  padding: 0 max(16px, 1.4vw);
+  font-size: max(17px, 1.5vw);
+  border-radius: max(14px, 1.2vw);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.25s ease-out;
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] input:focus {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000;
+  transform: scale(1.02);
+}
+html[data-tvos-build]
+  [data-page='sign-in']
+  [data-ui='auth-card']
+  input:focus::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] button[type='submit'],
+html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] .UI-Button__root {
+  min-height: max(48px, 4vw);
+  font-size: max(17px, 1.5vw);
+  font-weight: 600;
+  border-radius: 999px;
+}
+html[data-tvos-build] [data-page='sign-in'] [data-ui='brand-logo'] {
+  width: max(88px, 9vw);
+  height: auto;
+}
+
 html[data-tvos-build] [data-ui='quick-connect-code'] {
   font-family: inherit !important;
   font-weight: 700;
