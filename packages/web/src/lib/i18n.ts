@@ -20,13 +20,17 @@ const catalogs = import.meta.webpackContext('../locales', {
   chunkName: 'locale-[request]',
 });
 
-/** Every language with a catalog, the test ones included. */
+/** The only languages this build offers; the other catalogs stay unused. */
+const OFFERED = [SOURCE_LOCALE, 'fr'];
+
+/** Every language offered, the test ones included. */
 export const LOCALES = [
   ...new Set(
     catalogs
       .keys()
       .filter((key) => key.startsWith('./'))
       .map((key) => key.slice(2, -'.po'.length))
+      .filter((l) => OFFERED.includes(l) || PSEUDO_LOCALES.includes(l))
   ),
 ];
 
