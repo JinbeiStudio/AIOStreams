@@ -417,15 +417,3 @@ html[data-tvos-build]
   background: rgba(0, 0, 0, 0.08) !important;
   color: #000;
 }
-
-/* The same colour as a fixed layer behind the panel, for where the page's own background is not the one drawn. */
-html[data-tvos-build] [data-ui='settings-panel']::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(55vw 40vw at 70% 18%, rgba(10, 100, 255, 0.55), transparent 70%),
-    radial-gradient(50vw 40vw at 30% 82%, rgba(100, 210, 255, 0.38), transparent 70%);
-}
