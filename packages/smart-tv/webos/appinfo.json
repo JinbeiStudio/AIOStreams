@@ -1,5 +1,5 @@
 {
-  "id": "com.jinbeistudio.aiostreams",
+  "id": "com.jinbeistudio.aiostreams.webos",
   "vendor": "Jinbei Studio",
   "type": "web",
   "main": "index.html",
