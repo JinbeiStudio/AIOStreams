@@ -17,9 +17,34 @@ import { navigate, to } from '../../lib/paths';
 import { PosterGrid } from './grid';
 import { Failed, TopBar } from './parts';
 import { catalogTag } from './home';
-import { catalogName, count, tr } from './i18n';
+import {
+  catalogGroup,
+  catalogName,
+  count,
+  isServiceLibrary,
+  tr,
+} from './i18n';
 
 // The app's own kinds, so a new one there shows here too.
+
+type TabKind = Kind | 'Anime';
+
+/** Movies, Shows, then Anime, then Collections: the app's kinds with an Anime tab among them. */
+const TABS: { kind: TabKind; label: string }[] = [
+  ...KINDS.filter((k) => k.kind !== 'BoxSet'),
+  {
+    kind: 'Anime',
+    get label() {
+      return tr('Anime');
+    },
+  },
+  ...KINDS.filter((k) => k.kind === 'BoxSet'),
+];
+
+/** The tab a catalog belongs to: Anime when the server's name or id says so, else its own kind. */
+function kindIn(view: BaseItemDto | undefined): TabKind | undefined {
+  return view && catalogTag(view) === 'Anime' ? 'Anime' : kindOf(view);
+}
 
 /**
  * Discover, as the app's: Movies, Shows or Collections, the catalogs of that
@@ -36,20 +61,29 @@ export function TvosCatalog({
   kind?: string;
 }) {
   const views = useViews();
-  const all = views.data?.Items ?? [];
+  const all = (views.data?.Items ?? []).filter((v) => !isServiceLibrary(v));
   const view = all.find((v) => v.Id === viewId);
-  const current: Kind =
-    KINDS.find((k) => k.kind === kind)?.kind ?? kindOf(view) ?? 'Movie';
+  const current: TabKind =
+    TABS.find((k) => k.kind === kind)?.kind ?? kindIn(view) ?? 'Movie';
   // As the app's: a catalog with no kind of its own holds any kind, so every tab offers it.
-  const untyped = all.some((v) => !kindOf(v));
+  const untyped = all.some((v) => !kindIn(v));
   const siblings = all.filter(
-    (v) => kindOf(v) === current || !kindOf(v) || v.Id === viewId
+    (v) => kindIn(v) === current || !kindIn(v) || v.Id === viewId
   );
-  const offered = KINDS.filter(
+  // Two lists of a tab can share a name (Crunchyroll's films and shows): the kind is added to tell them apart.
+  const shown = (v: BaseItemDto) => {
+    const name = catalogName(v);
+    const twins = siblings.filter(
+      (s) => s.Id !== v.Id && catalogName(s) === name
+    );
+    if (!twins.length) return name;
+    return `${name} – ${kindOf(v) === 'Movie' ? tr('Movies') : tr('Series')}`;
+  };
+  const offered = TABS.filter(
     (k) =>
       k.kind === current ||
-      all.some((v) => kindOf(v) === k.kind) ||
-      (untyped && k.kind !== 'BoxSet')
+      all.some((v) => kindIn(v) === k.kind) ||
+      (untyped && k.kind !== 'BoxSet' && k.kind !== 'Anime')
   );
   const genres = useGenres(viewId);
   const required = useFeature('genreRequired') && needsGenre(view);
@@ -66,7 +100,12 @@ export function TvosCatalog({
   const [unwatched, setUnwatched] = React.useState(false);
   const pages = useItemPages(viewId, {
     filter: unwatched ? 'unplayed' : undefined,
-    types: view && kindOf(view) === current ? libraryTypes(view) : current,
+    types:
+      view && kindIn(view) === current
+        ? libraryTypes(view)
+        : current === 'Anime'
+          ? 'Series'
+          : current,
     genreId: chosen?.Id,
     recursive: true,
     enabled: !!view && !genres.isLoading,
@@ -86,26 +125,30 @@ export function TvosCatalog({
   const pick = (name?: string) =>
     navigate(to.discover(viewId, { genre: name, kind }));
   // The genre travels by name, as its id belongs to the catalog it came from.
-  const open = (id: string, next: Kind) =>
+  const open = (id: string, next: TabKind) =>
     navigate(
       to.discover(id, {
         genre: genre ?? undefined,
-        kind: kindOf(all.find((v) => v.Id === id)) === next ? undefined : next,
+        kind: kindIn(all.find((v) => v.Id === id)) === next ? undefined : next,
       }),
       { replace: true }
     );
   // As the app's switch: the same catalog in the other kind, else this one filtered, else the last of that kind.
-  const switchKind = (next: Kind) => {
+  const switchKind = (next: TabKind) => {
     if (next === current) return;
     const twin = all.find(
-      (v) => v.Name === view?.Name && kindOf(v) === next && v.Id !== viewId
+      (v) =>
+        !!view &&
+        catalogGroup(v) === catalogGroup(view) &&
+        kindIn(v) === next &&
+        v.Id !== viewId
     );
     if (twin) return open(twin.Id!, next);
-    if (view && !kindOf(view)) return open(viewId, next);
+    if (view && !kindIn(view)) return open(viewId, next);
     const previous = lastCatalog(next);
     const target =
-      all.find((v) => v.Id === previous && kindOf(v) === next) ??
-      all.find((v) => kindOf(v) === next);
+      all.find((v) => v.Id === previous && kindIn(v) === next) ??
+      all.find((v) => kindIn(v) === next);
     if (target) open(target.Id!, next);
   };
   const tag = view && catalogTag(view);
@@ -113,7 +156,7 @@ export function TvosCatalog({
     <div className="tv-page tv-list-page">
       <TopBar />
       <h1 className="tv-page-title">
-        {catalogName(view?.Name)}
+        {view ? shown(view) : ''}
         {tag && (
           <span className="tv-tag" data-tag={tag.toLowerCase()}>
             {tr(tag)}
@@ -167,7 +210,7 @@ export function TvosCatalog({
               data-on={v.Id === viewId ? '' : undefined}
               onClick={() => v.Id !== viewId && open(v.Id!, current)}
             >
-              {catalogName(v.Name)}
+              {shown(v)}
             </button>
           ))}
         </div>

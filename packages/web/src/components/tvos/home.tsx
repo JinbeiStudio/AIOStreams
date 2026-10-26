@@ -44,7 +44,13 @@ import {
   useScrolledDown,
   useFocusWithin,
 } from './parts';
-import { catalogName, tr } from './i18n';
+import {
+  catalogName,
+  isAnimeCatalog,
+  isServiceLibrary,
+  nameKind,
+  tr,
+} from './i18n';
 
 const HERO_EACH = 8;
 const HERO_MAX = 10;
@@ -94,7 +100,7 @@ export const TvosHome = React.memo(function TvosHome() {
 function useCatalogs() {
   const views = useViews();
   const genreRequired = useFeature('genreRequired');
-  const all = views.data?.Items ?? [];
+  const all = (views.data?.Items ?? []).filter((v) => !isServiceLibrary(v));
   return {
     views,
     catalogs: genreRequired ? all.filter((v) => !needsGenre(v)) : all,
@@ -282,10 +288,13 @@ function UpcomingRow() {
 const ANIME = /anime|anilist|crunchyroll|\bmal\b|anidb|kitsu/i;
 
 export function catalogTag(view: BaseItemDto): string | undefined {
-  if (ANIME.test(view.Name ?? '')) return 'Anime';
+  // A name that says its kind is believed; the rest is read from the path, the id or the words in the name.
+  const named = nameKind(view.Name);
+  if (named) return named;
+  if (isAnimeCatalog(view) || ANIME.test(view.Name ?? '')) return 'Anime';
   if (view.CollectionType === 'movies') return 'Movies';
   if (view.CollectionType === 'tvshows') return 'Series';
-  return undefined;
+  return nameKind(view.Name);
 }
 
 function leftOf(item: BaseItemDto): string | null {
@@ -325,7 +334,7 @@ function CatalogRow({ view, first }: { view: BaseItemDto; first: boolean }) {
   return (
     <div ref={ref}>
       <Row
-        title={catalogName(view.Name)}
+        title={catalogName(view)}
         tag={catalogTag(view)}
         shape={landscape ? 'wide' : 'poster'}
       >
