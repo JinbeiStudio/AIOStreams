@@ -70,6 +70,15 @@ export function TvosCatalog({
   const siblings = all.filter(
     (v) => kindIn(v) === current || !kindIn(v) || v.Id === viewId
   );
+  // Two lists of a tab can share a name (Crunchyroll's films and shows): the kind is added to tell them apart.
+  const shown = (v: BaseItemDto) => {
+    const name = catalogName(v);
+    const twins = siblings.filter(
+      (s) => s.Id !== v.Id && catalogName(s) === name
+    );
+    if (!twins.length) return name;
+    return `${name} – ${kindOf(v) === 'Movie' ? tr('Movies') : tr('Series')}`;
+  };
   const offered = TABS.filter(
     (k) =>
       k.kind === current ||
@@ -147,7 +156,7 @@ export function TvosCatalog({
     <div className="tv-page tv-list-page">
       <TopBar />
       <h1 className="tv-page-title">
-        {view ? catalogName(view) : ''}
+        {view ? shown(view) : ''}
         {tag && (
           <span className="tv-tag" data-tag={tag.toLowerCase()}>
             {tr(tag)}
@@ -201,7 +210,7 @@ export function TvosCatalog({
               data-on={v.Id === viewId ? '' : undefined}
               onClick={() => v.Id !== viewId && open(v.Id!, current)}
             >
-              {catalogName(v)}
+              {shown(v)}
             </button>
           ))}
         </div>
