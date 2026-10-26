@@ -1,280 +1,116 @@
-<p align="center">
-    <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/selfhst/icons/png/aiostreams-light.png">
-          <img alt="AIOStreams Logo" src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/aiostreams.png" width=256 height=256>
-    </picture>
-</p>
-
-<h1 align="center">AIOStreams</h1>
+<h1 align="center">Jinbei Studio</h1>
 
 <p align="center">
-  <strong>One addon to rule them all.</strong>
-  <br />
-  AIOStreams consolidates multiple Stremio addons and debrid/usenet services - including its own suite of built-in addons and a native Usenet streaming engine - into a single, highly customisable super-addon.
+  A living-room player for your own streaming server, in an Apple TV look.<br>
+  For Mac, Windows, Linux, Android, Android TV, Fire TV, LG and Samsung TVs.
 </p>
 
 <p align="center">
-    <a href="https://github.com/Viren070/AIOStreams/actions/workflows/deploy-docker.yml"> 
-        <img src="https://img.shields.io/github/actions/workflow/status/viren070/aiostreams/deploy-docker.yml?style=for-the-badge&logo=github" alt="Build Status">
-    </a>
-    <a href="https://github.com/Viren070/AIOStreams/releases/latest">
-        <img src="https://img.shields.io/github/v/release/viren070/aiostreams?style=for-the-badge&logo=github" alt="Latest Release">
-    </a>
-    <a href="https://github.com/Viren070/AIOStreams/stargazers">
-        <img src="https://img.shields.io/github/stars/Viren070/AIOStreams?style=for-the-badge&logo=github " alt="GitHub Stars">
-    </a>
-    <a href="https://github.com/sponsors/Viren070">
-        <img src="https://img.shields.io/github/sponsors/viren070?style=for-the-badge&logo=githubsponsors" alt="GitHub Sponsors">
-    </a>
-    <a href="https://hub.docker.com/r/viren070/aiostreams">
-        <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fregistry-stats.viren070.me%2Fapi%2Fdh%3Aviren070%2Faiostreams%2Cghcr%3Aviren070%2Faiostreams%2Faiostreams&query=%24.total_downloads_formatted&logo=docker&label=pulls&style=for-the-badge" alt="Docker Pulls">
-    </a>
-    <a href="https://discord.viren070.me">
-        <img src="https://img.shields.io/discord/1225024298490662974?style=for-the-badge&logo=discord&color=7289DA" alt="Discord Server">
-    </a>
-
+  <a href="https://tv.jinbeistudio.com">Download page</a> ·
+  <a href="https://github.com/JinbeiStudio/jinbeistudio-tv/releases/latest">Latest release</a>
 </p>
 
----
+Jinbei Studio is a fork of [AIOStreams](https://github.com/Viren070/AIOStreams) by Viren070, which does all the real work: the server, the Jellyfin-compatible API, the web app and the players. This fork gives the web app and its apps an Apple TV style, a few TV-specific fixes, and its own releases for the family's devices. All credit for AIOStreams goes to its authors. For the server, its configuration and its documentation, see the [AIOStreams docs](https://docs.aiostreams.viren070.me).
 
-## ✨ What is AIOStreams?
+## What this fork adds
 
-AIOStreams was created to give users ultimate control over their Stremio experience. Instead of juggling multiple addons with different configurations and limitations, AIOStreams acts as a central hub. It fetches results from all your configured sources, then deduplicates, filters, sorts, and formats them according to _your_ rules before presenting them in a single, clean list.
+- **An Apple TV look**, on by default: large artwork, a hero with the next title, liquid-glass buttons, menus and panels, a side menu opened with the remote's Left key, a search button and a Menu button in the top bar.
+- **Catalogs named by language.** The app names every catalog from its own table, in English or French, whatever the server calls it. Rows carry a Movies, Series or Anime tag, and there is an Anime tab.
+- **English and French**, chosen in Settings. The app sends its language to the server, so a server can switch its metadata addon by language. See [metadata in two languages](#metadata-in-two-languages).
+- **TV fixes:** the webOS native player (embedded subtitles and audio, subtitles grouped into one folder per language), 1080p on webOS, safe margins in the player, Previous and Next episode buttons, a keyboard that opens on a text field, and a lighter refetch when the app returns to the front.
+- **A history page** with one tab per profile, where "Now playing" follows the chosen profile.
 
-Whether you're a casual user who wants a simple, unified stream list or a power user who wants to fine-tune every aspect of your results, AIOStreams has you covered.
+## Download
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/ba15f9f6-b8d4-4060-9b1f-00adeb0d1d9b" alt="AIOStreams in action" width="850" />
-</p>
+Every release has all the files on one page: **[Latest release](https://github.com/JinbeiStudio/jinbeistudio-tv/releases/latest)**.
 
----
+| Device | File |
+| --- | --- |
+| Mac, Apple silicon | `jinbei-studio-osx-arm64.zip` or `.pkg` (Intel: `-osx-x64`) |
+| Windows | `jinbei-studio-win-x64.exe` (Arm PCs: `-win-arm64.exe`) |
+| Linux | `jinbei-studio-linux-x64.flatpak` (or `-arm64`) |
+| Android, Android TV, Fire TV | `jinbei-studio-android-arm64-v8a.apk` (Fire TV Stick: `-armeabi-v7a.apk`) |
+| LG TV (webOS) | `jinbei-studio-webos-<version>.ipk` |
+| Samsung TV (Tizen) | `jinbei-studio-tizen-<version>.wgt` |
 
-## 🚀 Key Features
+The Mac, Windows and Android apps offer new versions themselves. The TV apps and Linux do not.
 
-### 🔌 All Your Addons, One Interface
+## Install
 
-Add any Stremio addon you already use - Torrentio, Comet, MediaFusion, and many more - alongside AIOStreams' own built-in addons. All results flow through a single, unified pipeline.
+<details>
+<summary><b>Mac</b></summary>
 
-- **Addon Marketplace**: Browse and enable 80+ community addons directly from the configuration page. AIOStreams automatically applies your debrid API keys to compatible addons, so you configure your credentials once and they work everywhere.
-- **Custom Addon Support**: Add _any_ Stremio addon by URL. If it works in Stremio, it works here.
-- **Automatic Updates**: Addon manifests are generated dynamically, so you always get the latest addon updates without reconfiguring anything.
-- **Full Stremio Support**: Streams, catalogs, metadata, subtitles, and addon catalogs are all supported.
-- **Addon Categorisation**: Categorise your addons to keep things neat and organised.
+1. Download the file for your Mac: Apple silicon if it has an M chip, otherwise Intel.
+2. Open the `.zip` and drag Jinbei Studio into Applications.
+3. The first time, right-click the app, then Open, then Open. macOS warns because the app is not from the App Store.
+4. If it still refuses: System Settings, Privacy & Security, scroll down, Open Anyway.
+</details>
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4af785d1-dec3-438b-b62c-5aaf6d3d62c5" alt="Addon Marketplace" width="850"/>
+<details>
+<summary><b>Windows</b></summary>
 
-  <img width="850"  alt="image" src="https://github.com/user-attachments/assets/fc85afc5-1367-40e0-9018-40002dd0878f" />
+1. Download the installer and open it.
+2. If Windows says "Windows protected your PC", click More info, then Run anyway.
+3. Follow the installer, then open Jinbei Studio from the Start menu.
+</details>
 
-</p>
+<details>
+<summary><b>Linux</b></summary>
 
-### 📺 AIOStreams App
+1. Download the `.flatpak` for your processor.
+2. `flatpak install --user ./jinbei-studio-linux-x64.flatpak`
+3. Start it from your applications menu.
+</details>
 
-Watch without Stremio, with the same addons, filters, sorting and formatting. There's nothing extra to self-host and no Jellyfin to install: it runs on your AIOStreams instance. Public instances have it on except ElfHosted's, and ElfHosted's private instances have it off until you turn it on. It plays streams with a link, such as debrid and Usenet ones, so P2P torrents aren't supported.
+<details>
+<summary><b>Android, Android TV and Fire TV Stick</b></summary>
 
-<p align="center">
-  <img src="packages/docs/public/apps/hero.webp" alt="The AIOStreams app on a TV, a computer and a phone" width="850" />
-</p>
+- **Phone or tablet:** download `jinbei-studio-android-arm64-v8a.apk`, open it, allow installs from your browser or file manager, and choose Install (Install anyway if Play Protect warns).
+- **Android TV, Google TV, Fire TV:** install the free **Downloader** app. On Fire TV, turn on Install unknown apps for Downloader in Settings, My Fire TV, Developer options. In Downloader, type the address of the `.apk` from the latest release, then Install and Open. A Fire TV Stick needs the `armeabi-v7a` file.
+</details>
 
-**Where you can watch**
+<details>
+<summary><b>LG TV (webOS)</b></summary>
 
-- **In Your Browser**: On any device. Add it to your phone's home screen and it opens like an app.
-- **Desktop App**: For Windows, macOS and Linux, with a built-in player that plays what a browser can't, including HDR on Windows and macOS. It keeps itself up to date on Windows and macOS, and comes as a Flatpak on Linux. **[Download it here](https://github.com/Viren070/AIOStreams/releases/tag/desktop)**.
-- **Android App** (new): For phones, tablets and TVs, including Google TV and Fire TV, with a layout made for the remote on TVs. ExoPlayer and mpv play the video: HDR and Dolby Vision, converting profile 7 to 8.1 where a device needs it, styled subtitles that look as they do in mpv, surround passthrough, picture-in-picture and touch gestures. Its screens are a web page drawn over the native player, so low-end TV sticks can feel slow to browse. **[Get it here](https://docs.aiostreams.viren070.me/apps/android)**.
-- **Smart TVs** (new): Apps for LG and Samsung TVs, installed from a file. So far only tried in the TV makers' emulators. **[Install guide](https://docs.aiostreams.viren070.me/apps/smart-tv)**.
-- **Jellyfin Apps**: Your configuration is also a Jellyfin-compatible server, so Swiftfin, Findroid, Infuse, Kodi, Android TV and other Jellyfin apps can sign in to it too, on a TV with a Quick Connect code.
+1. Install **Developer Mode** from the LG Content Store and sign in with a free LG developer account. Turn on Dev Mode Status and Key Server.
+2. On a computer, install [Dev Manager](https://github.com/webosbrew/dev-manager-desktop), add the TV by its IP address and pair.
+3. In Dev Manager, Apps, Install IPK, choose the downloaded `.ipk`, then open Jinbei Studio from the TV.
 
-**What's inside**
+The app keeps working only while Developer Mode is renewed, as LG requires.
+</details>
 
-- **Browse**: Home rows for Continue Watching, Next Up and each catalog, plus Discover, search, collections, favourites, a calendar of airing episodes, and a page for every title and person.
-- **Versions**: Your streams as versions, sorted and named by your formatter. Switch version mid-play, skip the list and play the top one, or open it in an external player like VLC or Infuse.
-- **Player**: Audio and subtitle tracks in your preferred languages, subtitles from your subtitle addons in your own size, colours and outline, skip intro, recap and credits, and the next episode with an optional countdown.
-- **Subtitle Sync**: Nudge them, sync them by ear, or pick the spoken line from a list, remembered for each version.
-- **Activity**: Your watch history by day or as a table, to mark unwatched, remove or export. The main profile also sees everyone's history and what each person is playing right now.
-- **Household Profiles**: A profile for everyone, each with its own Continue Watching and an optional PIN. Switch between them without signing out.
-- **Tracker Sync**: Addons that support [Watch State](https://docs.aiostreams.viren070.me/reference/addon-protocol/watch-state) can record what you play and bring in the history they hold, so what you watched elsewhere can show up in Continue Watching.
-- **Downloads and Offline**: Download movies, episodes and whole seasons in the desktop and Android apps to watch without a connection. Every app also keeps what you browse, so pages open instantly and can be browsed offline.
-- **Custom Themes and CSS**: Preset themes, your own accent and background colours, and custom CSS with [documented hooks](https://docs.aiostreams.viren070.me/reference/web-app-css), all following you to every device.
-- **Desktop Extras**: mpv playback for MKV, HEVC, AV1 and styled subtitles, surround output with Dolby and DTS passthrough, chapters, your own `mpv.conf`, `input.conf`, scripts and shaders, what you're watching in the system's media controls and on your Discord profile, the keyboard's media keys, and background updates with an optional nightly channel on Windows and macOS.
+<details>
+<summary><b>Samsung TV (Tizen)</b></summary>
 
-### 🧩 Built-in Addons
+1. On the TV, open Apps, press 1 2 3 4 5, turn on Developer mode and enter your computer's IP address.
+2. On a computer, install Tizen Studio with the TV Extensions, connect to the TV, and create a Samsung certificate that includes it.
+3. Re-sign and install the downloaded `.wgt`.
+</details>
 
-AIOStreams ships with a suite of its own addons - search engines and integrations that are hosted alongside AIOStreams itself and available exclusively to your instance. They're configured and used just like any other addon in the marketplace.
+## Connect to your server
 
-> [!NOTE]
-> Built-in addons that search for torrents require a debrid service. Usenet results can be streamed by AIOStreams' own built-in usenet engine, via external tools like [NzbDAV](https://github.com/nzbdav-dev/nzbdav) or [AltMount](https://github.com/javi11/altmount), natively by Stremio itself, or through TorBox (Pro plan) - see the [Usenet guide](https://docs.aiostreams.viren070.me/guides/usenet). All built-in addons support anime and Kitsu/MAL catalogs.
+On first start the app asks for your server's address and a profile. Jinbei Studio uses the Jellyfin-compatible API of an [AIOStreams](https://github.com/Viren070/AIOStreams) server, so you need one. The address looks like `https://your-server/p/<code>`, and each person can have their own profile and history.
 
-The built-in addons include:
+## Metadata in two languages
 
-| Addon               | Description                                                      |
-| ------------------- | ---------------------------------------------------------------- |
-| **Stremio GDrive**  | Stream files directly from your Google Drive.                    |
-| **TorBox Search**   | Search TorBox's index with more options than the official addon. |
-| **Knaben**          | Proxy search across The Pirate Bay, 1337x, Nyaa.si, and more.    |
-| **Zilean**          | Scrape a Zilean DMM hashlist instance.                           |
-| **AnimeTosho**      | Mirror of most Nyaa.si and TokyoTosho anime releases.            |
-| **Torrent Galaxy**  | Search Torrent Galaxy for results.                               |
-| **Easynews Search** | Text-based search of Easynews' Usenet index.                     |
-| **SeaDex**          | Best-release database for anime (community curated).             |
-| **NekoBT**          | Anime results via nekoBT.                                        |
-| **EZTV**            | TV show torrent search via EZTV.                                 |
-| **Bitmagnet**       | Connect your self-hosted Bitmagnet DHT crawler.                  |
-| **Jackett**         | Connect your Jackett instance by URL and API key.                |
-| **Prowlarr**        | Connect your Prowlarr instance by URL and API key.               |
-| **NZBHydra2**       | Connect your NZBHydra2 instance to search Usenet indexers.       |
-| **Newznab**         | Directly configure any Newznab-compatible Usenet indexer.        |
-| **Torznab**         | Configure any Torznab API to search torrent results.             |
-| **Library**         | Browse and stream content from your debrid/usenet library        |
+The app sends its language (`en` or `fr`) with every request. A server that runs two metadata addons, one per language, can pick between them with two configuration variants:
 
-### 🌐 Debrid & Usenet Service Support
+```
+# aiometadata-fr   when: resource == 'jellyfin' and header('accept-language') != 'en'
+enable presets[options.name="AIOMetadata FR"]
 
-AIOStreams supports all major debrid and Usenet services, including:
+# aiometadata-en   when: resource == 'jellyfin' and header('accept-language') == 'en'
+enable presets[options.name="AIOMetadata EN"]
+```
 
-**Debrid**: Real-Debrid, AllDebrid, Debrid-Link, Premiumize, TorBox, EasyDebrid, PikPak, Offcloud, Seedr, put.io, and more.
+Both addons stay disabled in the base configuration. Other clients, such as Infuse, do not send the app's language and get the French one.
 
-**Usenet**: the built-in usenet engine (streams straight from your own NNTP provider), Easynews, NzbDAV, AltMount, Stremio NNTP, StremThru Newz.
+## About this repository
 
-Services are configured once in the **Services** tab and automatically applied to every compatible addon in your configuration.
+- `main` is Jinbei Studio. Releases are tagged `tvos-v<version>` and build every platform.
+- `upstream-main` follows AIOStreams, and its releases are merged into `main`.
+- The tvOS style lives in `packages/web/src/components/tvos`, switched in Settings, Theme, Interface.
 
-Full guide: [docs.aiostreams.viren070.me/guides/usenet](https://docs.aiostreams.viren070.me/guides/usenet)
+## Licence
 
-<p align="center">
-    <img width="1500" alt="image" src="https://github.com/user-attachments/assets/fbf40e7d-b303-4bef-a43e-5ce3d26684bb" />
-</p>
-
-### 🔬 Advanced Filtering Engine
-
-Because every addon is routed through AIOStreams, you only configure your filters **once** and they apply universally.
-
-- **Property Filters**: Include, require, or exclude results by resolution (240p–2160p), quality (CAM through BluRay REMUX), encode (AVC, HEVC, AV1...), HDR/Dolby Vision tags, audio format (Atmos, TrueHD, DTS...), audio channels, stream type (debrid, usenet, P2P...), and language.
-- **Size, Bitrate & Seeder Filters**: Set minimum and maximum bounds for file size, bitrate, seeder count, and result age.
-- **Cached/Uncached Control**: Filter by cache status globally or scoped to specific services or addons.
-- **Keyword Filters**: Match or exclude results by simple keyword against the filename.
-- **Regex Filters**: Full regular expression matching against filenames, indexer names, and release groups.
-- **Stream Expression Language (SEL)**: Write dynamic conditional rules using a purpose-built expression language.
-  - _Example_: Only remove 720p results when more than five 1080p results are already present: `count(resolution(streams, '1080p')) > 5 ? resolution(streams, '720p') : false`
-  - Full reference: [docs.aiostreams.viren070.me/reference/stream-expressions](https://docs.aiostreams.viren070.me/reference/stream-expressions)
-- **Accurate Matching**: Uses various metadata sources to precisely verify titles, years, and episode numbers - so you only ever see the right content. Can be applied per-addon or per-content type.
-- **Smart Deduplication**: Detect duplicate streams by filename, infohash, or a "smart detect" hash computed from a configurable set of file attributes (size, resolution, encode, release group, etc.).
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4bab4c2c-a47a-482b-a623-079fc792dc33" alt="Filtering Configuration" width="750"/>
-</p>
-
-### 📊 Powerful Sorting
-
-Build your ideal sort order from a wide range of criteria - resolution, quality, encode, language, audio, visual tags, stream type, cache status, seeders, size, bitrate, service, addon, age, and more. Sorting is:
-
-- **Fully Customisable**: Stack any number of criteria in any order.
-- **Content-Aware**: Define separate sort orders for movies, series, and anime, and separate rules for cached vs. uncached results.
-- **Expression/Regex Scored**: Use Stream Expressions / Regex Patterns to compute a numeric score per stream and sort by that score for maximum precision.
-- **Preferred Lists**: Define ranked lists of preferred values (e.g. prefer `HDR10+` over `HDR` over `SDR`) and have the sorter use those rankings automatically.
-
-Full guide: [docs.aiostreams.viren070.me/guides/scored-sorting](https://docs.aiostreams.viren070.me/guides/scored-sorting)
-
-<p align="center">
-    <img width="920" alt="image" src="https://github.com/user-attachments/assets/88eb560d-d95d-4964-93ed-7b6b82c861b9" />
-</p>
-
-### 🎨 Custom Stream Formatter
-
-Design exactly how stream information appears in Stremio using a powerful templating system.
-
-- **Live Preview**: See exactly what your streams will look like as you build your template.
-- **Built-in Formats**: Start from one of the included presets - some are built in, others are inspired by popular addons and community contributions.
-- **Full Customisation**: The template system gives you access to every parsed stream attribute. See the [Custom Formatter reference](https://docs.aiostreams.viren070.me/reference/custom-formatter) for the full variable and function list.
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/44ba6860-6778-4f0f-a192-e3f28df6b893" alt="Custom Formatter" width="900"/>
-</p>
-
-### 🗃️ Unified Catalog Management
-
-Take control of your Stremio home page from one place.
-
-- **Rename**: Rename any catalog's title or type to whatever you want.
-- **Reorder & Disable**: Drag catalogs into your preferred order or hide the ones you don't use.
-- **Shuffle**: Discover new content by shuffling the results of any catalog. You can persist the shuffle for a set period.
-- **Enhanced Posters**: Automatically upgrade catalog posters with high-quality artwork from supported poster services (e.g. [RPDB](https://rpdb.net/)) - even for addons that don't natively support it.
-- **Merged Catalogs**: Combine results from multiple catalogs into one unified catalog.
-
-<p align="center"> 
-    <img width="900"  alt="image" src="https://github.com/user-attachments/assets/24d2ea64-f742-48f0-8552-bb8a62f61a75" />
-</p>
-
-### 🛡️ Proxy Support
-
-- **Built-in Proxy**: AIOStreams includes its own proxy for forwarding streams.
-- **External Proxy**: Integrate with [MediaFlow Proxy](https://github.com/mhdzumair/mediaflow-proxy) or [StremThru](https://github.com/MunifTanjim/stremthru) by providing your instance URL and credentials.
-- **Bypass IP Restrictions**: Essential for debrid services that restrict simultaneous connections from different IP addresses.
-- **NZB Proxying**: The built-in proxy can also forward NZB download requests for the Newznab built-in addon.
-- **Outgoing Request Proxy**: Route AIOStreams' own requests to upstream addons through an HTTP/SOCKS5 proxy - useful when your server's IP is blocked by an upstream service.
-
----
-
-## 🚀 Getting Started
-
-1. **Choose how to run it**
-   - **Public Instance**: Use a [community-hosted instance](https://docs.aiostreams.viren070.me/getting-started/public-instances) - free, no setup required.
-   - **Self-Host**: Run it yourself with Docker for full control and no limits.
-   - **Managed Hosting**: Use a managed AIOStreams instance via **[ElfHosted](https://store.elfhosted.com/product/aiostreams/?utm_source=github&utm_medium=readme&utm_campaign=aiostreams-readme)** (ElfHosted are a project sponsor).
-
-2. **Configure your addon**
-   - Open the `/stremio/configure` page of your instance in a browser.
-   - Add your debrid or Usenet credentials, install addons from the marketplace, and set up your filters, sorting, and formatting.
-
-3. **Create your user**
-   - On the **Save & Install** page, enter a password to protect your configuration
-
-4. **Install the addon**
-   - Use the Installation Options provided to install the addon to whatever app you are using.
-   - Or watch without Stremio: under **AIOStreams app**, open the app in your browser or get it for your computer, phone or TV, or connect a Jellyfin app under **Jellyfin apps**.
-
-For full setup and configuration instructions, see the **[documentation](https://docs.aiostreams.viren070.me)**.
-
----
-
-## 🌍 Translations
-
-The AIOStreams apps are translated on **[Hosted Weblate](https://hosted.weblate.org/engage/aiostreams/)**. Anyone can translate into their language there, no coding needed. See the **[translating guide](https://docs.aiostreams.viren070.me/guides/translating)** for how it works.
-
-<a href="https://hosted.weblate.org/engage/aiostreams/">
-  <img src="https://hosted.weblate.org/widget/aiostreams/svg-badge.svg" alt="Translation status">
-</a>
-
----
-
-## ❤️ Support the Project
-
-AIOStreams is a passion project developed and maintained for free. If you find it useful, please consider:
-
-- ⭐ **[Star the repository](https://github.com/Viren070/AIOStreams)** on GitHub.
-- ⭐ **[Star the addon](https://stremio-addons.net/addons/aiostreams)** in the Stremio Community Catalog.
-- 🤝 **Contribute**: Report issues, suggest features, or submit pull requests.
-- ☕ **Donate**:
-  - **[Ko-fi](https://ko-fi.com/viren070)**
-  - **[GitHub Sponsors](https://github.com/sponsors/Viren070)**
-
----
-
-<h2 align="center">⭐ Star History</h2>
-
-<p align="center">
-  <img src="https://star-history.dera.page/svg?repos=Viren070/AIOStreams&type=Date" href="https://star-history.dera.page/#Viren070/AIOStreams&Date" alt="Star History" width="750"/>
-</p>
-
----
-
-## ⚠️ Disclaimer
-
-AIOStreams is a tool for aggregating and managing data from other Stremio addons. It does not host, store, or distribute any content. The developer does not endorse or promote access to copyrighted content. Users are solely responsible for complying with all applicable laws and the terms of service of any addons or services they use with AIOStreams.
-
-## 🙏 Credits
-
-This project wouldn't be possible without the foundational work of many others in the community, especially those who develop the addons that AIOStreams integrates. Special thanks to the developers of all integrated addons, the creators of [mhdzumair/mediaflow-proxy](https://github.com/mhdzumair/mediaflow-proxy) and [MunifTanjim/stremthru](https://github.com/MunifTanjim/stremthru), and the open-source projects that inspired parts of AIOStreams' design:
-
-- UI components and issue templates adapted with permission from [5rahim/seanime](https://github.com/5rahim/seanime)
-- [NzbDAV](https://github.com/nzbdav-dev/nzbdav) & [AltMount](https://github.com/javi11/altmount) integration inspired by [Sanket9225/UsenetStreamer](https://github.com/Sanket9225/UsenetStreamer/)
-- [sleeyax/stremio-easynews-addon](https://github.com/sleeyax/stremio-easynews-addon) for the project's initial structure
-- Custom formatter system inspired by and adapted from [diced/zipline](https://github.com/diced/zipline)
-- Stream Expression Language powered by [silentmatt/expr-eval](https://github.com/silentmatt/expr-eval)
+Jinbei Studio is licensed under the [GNU Affero General Public License v3](LICENSE), like AIOStreams, whose copyright notices stay with the files. Because this is a modified version, its source is this repository.
