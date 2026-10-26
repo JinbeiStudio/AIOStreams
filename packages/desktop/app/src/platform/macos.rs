@@ -605,16 +605,16 @@ pub fn set_window_buttons(window: &Window, visible: bool) {
 pub fn install_menu(on_quit: impl Fn() + Send + Sync + 'static) -> Option<Menu> {
     let quit = MenuItem::with_id(
         QUIT,
-        "Quit AIOStreams",
+        "Quit Jinbei Studio",
         true,
         "CmdOrCtrl+Q".parse::<Accelerator>().ok(),
     );
     let separator = PredefinedMenuItem::separator;
     let app = Submenu::with_items(
-        "AIOStreams",
+        "Jinbei Studio",
         true,
         &[
-            &PredefinedMenuItem::about(Some("About AIOStreams"), None),
+            &PredefinedMenuItem::about(Some("About Jinbei Studio"), None),
             &separator(),
             &PredefinedMenuItem::services(None),
             &separator(),

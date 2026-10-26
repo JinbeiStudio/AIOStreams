@@ -249,7 +249,7 @@ fn update(shown: &mut Shown, snapshot: Option<&Snapshot>) -> bool {
 
 fn root_property(name: &str) -> Variant {
     match name {
-        "Identity" => "AIOStreams".to_variant(),
+        "Identity" => "Jinbei Studio".to_variant(),
         "DesktopEntry" => "io.github.viren070.aiostreams".to_variant(),
         "SupportedUriSchemes" | "SupportedMimeTypes" => Vec::<String>::new().to_variant(),
         _ => false.to_variant(),

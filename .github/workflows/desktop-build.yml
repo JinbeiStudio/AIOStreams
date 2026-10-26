@@ -206,7 +206,7 @@ jobs:
           vpk download http --url $feed --channel $env:CHANNEL -o releases
           if ($LASTEXITCODE -ne 0) { Write-Host 'No earlier release to build a delta from' }
           vpk pack --packId aiostreams-desktop --packVersion ${{ inputs.version }} `
-            --packDir stage --mainExe aiostreams-desktop.exe --packTitle AIOStreams `
+            --packDir stage --mainExe aiostreams-desktop.exe --packTitle 'Jinbei Studio' `
             --packAuthors AIOStreams --icon packages/desktop/app/icons/aiostreams.ico `
             --channel $env:CHANNEL --runtime win-${{ matrix.arch }} --outputDir releases
           if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed' }
@@ -330,7 +330,7 @@ jobs:
           vpk download http --url "$feed" --channel "$CHANNEL" -o releases \
             || echo 'No earlier release to build a delta from'
           vpk pack --packId aiostreams-desktop --packVersion "$VERSION" \
-            --packDir stage/AIOStreams.app --mainExe aiostreams-desktop --packTitle AIOStreams \
+            --packDir stage/AIOStreams.app --mainExe aiostreams-desktop --packTitle 'Jinbei Studio' \
             --packAuthors AIOStreams --channel "$CHANNEL" --runtime osx-${{ matrix.arch }} \
             --outputDir releases
           ls -l releases

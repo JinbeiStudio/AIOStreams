@@ -47,7 +47,7 @@ jobs:
         run: |
           repo="https://github.com/${{ github.repository }}"
           cat >notes.md <<EOF
-          AIOStreams with its tvOS style. Pick your device:
+          Jinbei Studio: AIOStreams with its tvOS style. Pick your device:
 
           | Device | Download |
           | --- | --- |

@@ -4,8 +4,8 @@ fn main() {
         Ok("windows") => {
             winresource::WindowsResource::new()
                 .set_icon("icons/aiostreams.ico")
-                .set("ProductName", "AIOStreams")
-                .set("FileDescription", "AIOStreams")
+                .set("ProductName", "Jinbei Studio")
+                .set("FileDescription", "Jinbei Studio")
                 .compile()
                 .expect("could not embed the Windows resources");
         }

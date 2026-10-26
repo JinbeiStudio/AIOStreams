@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=AIOStreams
+Name=Jinbei Studio
 Comment=Browse and play your libraries
 Exec=aiostreams-desktop %u
 Icon=io.github.viren070.aiostreams

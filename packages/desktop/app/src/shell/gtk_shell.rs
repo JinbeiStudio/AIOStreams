@@ -260,7 +260,7 @@ pub fn run(app: App) {
     } = app;
     // The window's app id and class, which desktops match to its entry and icon.
     glib::set_prgname(Some("io.github.viren070.aiostreams"));
-    glib::set_application_name("AIOStreams");
+    glib::set_application_name("Jinbei Studio");
     // From 4.16 GTK draws with Vulkan, which stutters mpv's OpenGL frames in fullscreen.
     let minor = gtk4::minor_version();
     if minor >= 16 && std::env::var_os("GSK_RENDERER").is_none() {
@@ -274,7 +274,7 @@ pub fn run(app: App) {
     unsafe { libc::setlocale(libc::LC_NUMERIC, c"C".as_ptr()) };
     let saved = placement::load(&data_dir);
     let window = gtk4::Window::builder()
-        .title("AIOStreams")
+        .title("Jinbei Studio")
         .default_width(saved.width as i32)
         .default_height(saved.height as i32)
         .maximized(saved.maximized)
