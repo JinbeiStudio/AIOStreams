@@ -24,6 +24,9 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
+import { BiMenu } from 'react-icons/bi';
+import { Pinned } from './parts';
+import { tr } from './i18n';
 import { Sidebar } from './sidebar';
 import { TvosOutlet } from './routes';
 
@@ -262,6 +265,19 @@ export function TvosLayout() {
                       </div>
                     )}
                   </GlideLayers>
+                )}
+                {/* The menu's own button, at the top left of every page, where the sidebar comes from. */}
+                {over && !playing && (
+                  <Pinned>
+                    <button
+                      type="button"
+                      aria-label={tr('Menu')}
+                      className="tv-glass tv-menu-button"
+                      onClick={() => setSidebar(true)}
+                    >
+                      <BiMenu />
+                    </button>
+                  </Pinned>
                 )}
                 <div ref={setOver} className="contents" />
               </PinnedTargets.Provider>

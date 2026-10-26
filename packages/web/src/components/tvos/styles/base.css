@@ -86,6 +86,34 @@
   opacity: 0;
   pointer-events: none;
 }
+/* The menu button, top left on every page: it opens the sidebar the remote's Left opens. */
+.tv-menu-button {
+  position: fixed;
+  /* Above the pages' own titles, which start at 4.2vw, so it covers none. */
+  top: 1.2vw;
+  left: var(--tv-gutter);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8vw;
+  height: 2.8vw;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.5vw;
+  color: #fff;
+  outline: none;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.tv-menu-button:is(:focus, :hover) {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
+  transform: scale(1.1);
+}
 .tv-pill {
   display: flex;
   align-items: center;
