@@ -371,7 +371,7 @@ html[data-tvos-build] [data-ui='settings-card-description'] {
 html[data-tvos-build] [data-ui='settings-card-body'] {
   display: flex;
   flex-direction: column;
-  gap: 0.3vw;
+  gap: 0.8vw;
   overflow: visible !important;
   background: transparent !important;
 }
