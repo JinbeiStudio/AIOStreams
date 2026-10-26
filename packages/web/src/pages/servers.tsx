@@ -25,7 +25,9 @@ import {
   ConfirmationDialog,
   useConfirmationDialog,
 } from '@aiostreams/ui/shared/confirmation-dialog';
+import { tr } from '../components/tvos/i18n';
 import { UserAvatar } from '../components/user-avatar';
+import { useTvosStyle } from '../lib/tvos-style';
 import { JellyfinClient } from '../lib/client';
 import { currentHost } from '../lib/hosts';
 import { readCredentials } from '../lib/credentials';
@@ -60,6 +62,7 @@ function AddServer({
   onAdded(server: SavedServer): void;
   onBack?: () => void;
 }) {
+  const tvos = useTvosStyle();
   const [address, setAddress] = React.useState(initial ?? '');
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -87,17 +90,21 @@ function AddServer({
     >
       <div className="space-y-1 text-center">
         <h1 data-ui="page-title" className="text-xl font-semibold">
-          <Trans>Add a server</Trans>
+          {tvos ? tr('Add your profile') : <Trans>Add a server</Trans>}
         </h1>
         <p className="text-sm text-[--muted]">
-          <Trans>
-            The address of the AIOStreams instance where you set up your addon.
-            Other Jellyfin servers work too.
-          </Trans>
+          {tvos ? (
+            tr('Type the address you were given to open your profile.')
+          ) : (
+            <Trans>
+              The address of the AIOStreams instance where you set up your
+              addon. Other Jellyfin servers work too.
+            </Trans>
+          )}
         </p>
       </div>
       <TextInput
-        label={t`Server address`}
+        label={tvos ? tr('Profile address') : t`Server address`}
         placeholder="https://aiostreams.example.com"
         value={address}
         onValueChange={setAddress}

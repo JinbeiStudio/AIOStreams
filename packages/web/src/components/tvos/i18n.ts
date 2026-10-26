@@ -7,6 +7,11 @@ import { i18n } from '@lingui/core';
  * A missing translation shows the English.
  */
 const FR: Record<string, string> = {
+  // Add a profile
+  'Add your profile': 'Ajouter votre profil',
+  'Type the address you were given to open your profile.':
+    'Saisissez l’adresse reçue pour ouvrir votre profil.',
+  'Profile address': 'Adresse du profil',
   // Sidebar and pages
   Home: 'Accueil',
   Discover: 'Découvrir',
