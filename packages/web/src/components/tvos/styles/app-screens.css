@@ -334,12 +334,13 @@ html[data-tvos-build] [data-ui='downloads-section'] h2 {
  */
 /* The element that paints the page's background is [data-tvos], above the document's own. */
 [data-tvos]:has([data-ui='settings-tabs']) {
+  /* Fixed to the window, so the colour stays where it is while the tabs and the page scroll. */
   background:
-    radial-gradient(55vw 40vw at 70% 18%, rgba(10, 100, 255, 0.6), transparent 70%),
-    radial-gradient(50vw 40vw at 30% 82%, rgba(100, 210, 255, 0.42), transparent 70%),
-    radial-gradient(40vw 30vw at 95% 85%, rgba(0, 122, 255, 0.35), transparent 70%),
+    radial-gradient(60vw 50vh at 78% 12%, rgba(10, 100, 255, 0.55), transparent 70%) fixed,
+    radial-gradient(55vw 50vh at 18% 92%, rgba(100, 210, 255, 0.4), transparent 70%) fixed,
+    radial-gradient(45vw 40vh at 96% 92%, rgba(0, 122, 255, 0.32), transparent 70%) fixed,
+    radial-gradient(40vw 35vh at 4% 8%, rgba(90, 200, 250, 0.18), transparent 70%) fixed,
     var(--tv-bg) !important;
-  background-attachment: fixed;
 }
 html[data-tvos-build] [data-ui='settings-tab-group'] {
   background: rgba(40, 40, 44, 0.5) !important;
