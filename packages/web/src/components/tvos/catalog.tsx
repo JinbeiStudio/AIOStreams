@@ -17,7 +17,7 @@ import { navigate, to } from '../../lib/paths';
 import { PosterGrid } from './grid';
 import { Failed, TopBar } from './parts';
 import { catalogTag } from './home';
-import { count, tr } from './i18n';
+import { catalogName, count, tr } from './i18n';
 
 // The app's own kinds, so a new one there shows here too.
 
@@ -113,7 +113,7 @@ export function TvosCatalog({
     <div className="tv-page tv-list-page">
       <TopBar />
       <h1 className="tv-page-title">
-        {view?.Name}
+        {catalogName(view?.Name)}
         {tag && (
           <span className="tv-tag" data-tag={tag.toLowerCase()}>
             {tr(tag)}
@@ -167,7 +167,7 @@ export function TvosCatalog({
               data-on={v.Id === viewId ? '' : undefined}
               onClick={() => v.Id !== viewId && open(v.Id!, current)}
             >
-              {v.Name}
+              {catalogName(v.Name)}
             </button>
           ))}
         </div>

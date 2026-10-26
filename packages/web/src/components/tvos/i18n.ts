@@ -25,9 +25,9 @@ const FR: Record<string, string> = {
   'Watch together': 'Regarder ensemble',
   Downloads: 'Téléchargements',
   // Home
-  'Continue watching': 'Reprendre',
-  'Next up': 'À suivre',
-  Upcoming: 'Bientôt',
+  'Continue watching': 'Continuer',
+  'Next up': 'Épisode suivant',
+  Upcoming: 'Bientôt disponible',
   'See all': 'Tout voir',
   'No catalogs: add some in your AIOStreams configuration.':
     'Aucun catalogue : ajoutez-en dans votre configuration AIOStreams.',
@@ -45,7 +45,7 @@ const FR: Record<string, string> = {
   '{n} titles': '{n} titres',
   // Buttons
   Play: 'Lecture',
-  Resume: 'Reprendre',
+  Resume: 'Continuer',
   Versions: 'Versions',
   Details: 'Détails',
   Next: 'Suivant',
@@ -128,6 +128,74 @@ const FR: Record<string, string> = {
   "Apple TV's look, or the app's own pages. Kept on this device.":
     "L'apparence de l'Apple TV, ou les pages de l'app. Gardé sur cet appareil.",
 };
+
+/*
+ * Catalog names. The server sends the catalogs' own names ("Trakt Trending"); the key is that name as a slug
+ * ("trakt-trending"), and the table gives the words shown in English and in French. A catalog that is not
+ * listed shows the server's name. Movies, shows and anime share the same words; the tag next to the name says which is which.
+ */
+const CATALOGS: Record<string, [string, string]> = {
+  'latest-digital-release': ['New releases', 'Nouveautés'],
+  'trakt-trending': ['Trending', 'Tendances'],
+  'tmdb-popular': ['Popular', 'Populaires'],
+  'latest-airing': ['New releases', 'Nouveautés'],
+  'crunchyroll-latest': ['New releases', 'Nouveautés'],
+  'anilist-trending': ['Trending', 'Tendances'],
+  seasonal: ['Seasonal', 'De saison'],
+  'tmdb-by-year': ['By year', 'Par année'],
+  'tmdb-by-language': ['By language', 'Par langue'],
+  'tvdb-genres': ['By genre', 'Par genre'],
+  'tvdb-collections': ['Collections', 'Sagas et collections'],
+  'trending-kids': ['For kids', 'Pour les enfants'],
+  'mal-airing-now': ['New episodes', 'Nouveaux épisodes'],
+  'anidb-latest-ended': ['Recently finished', 'Récemment terminés'],
+  'mal-top-series': ['Best series', 'Meilleures séries'],
+  'mal-top-movies': ['Best movies', 'Meilleurs films'],
+  'mal-top-all-time': ['Best of all time', 'Les meilleurs de tous les temps'],
+  'mal-genres': ['By genre', 'Par genre'],
+  'netflix-latest': ['New on Netflix', 'Nouveautés Netflix'],
+  'amazon-prime-latest': ['New on Prime Video', 'Nouveautés Prime Video'],
+  'apple-plus-latest': ['New on Apple TV+', 'Nouveautés Apple TV+'],
+  'disney-plus-latest': ['New on Disney+', 'Nouveautés Disney+'],
+  'paramount-plus-latest': ['New on Paramount+', 'Nouveautés Paramount+'],
+  'hbo-max-latest': ['New on HBO Max', 'Nouveautés HBO Max'],
+  'hulu-latest': ['New on Hulu', 'Nouveautés Hulu'],
+  action: ['Action', 'Action'],
+  animated: ['Animation', 'Animation'],
+  comedy: ['Comedy', 'Comédie'],
+  crime: ['Crime', 'Policier'],
+  drama: ['Drama', 'Drame'],
+  horror: ['Horror', 'Horreur'],
+  'sci-fi': ['Sci-fi', 'Science-fiction'],
+  thriller: ['Thriller', 'Thriller'],
+  'top-documentaries': ['Documentaries', 'Documentaires'],
+  'history-and-war': ['History & war', 'Histoire et guerre'],
+  'must-see-modern-horror': ['Modern horror to see', 'Horreur moderne à voir'],
+  'must-see-mindfuck': ['Mind-bending', 'Qui retournent le cerveau'],
+  'top-nature': ['Nature', 'Nature'],
+  'top-reality-tv': ['Reality TV', 'Télé-réalité'],
+  'top-standup-comedy': ['Comedy – Stand-up', 'Comédie – Stand-up'],
+};
+
+/** "Apple+  Latest" -> "apple-plus-latest". */
+function catalogKey(name: string): string {
+  return name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\+/g, ' plus ')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/** A catalog's name in the app's language, or the server's own when it is not in the table. */
+export function catalogName(name: string | null | undefined): string {
+  if (!name) return '';
+  const entry = CATALOGS[catalogKey(name)];
+  if (!entry) return name;
+  return (i18n.locale ?? '').split('-')[0] === 'fr' ? entry[1] : entry[0];
+}
 
 /** `text` in the chosen language, with `{name}` filled from `vars`. */
 export function tr(
