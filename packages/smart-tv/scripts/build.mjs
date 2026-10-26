@@ -15,9 +15,10 @@ import { zipSync } from 'fflate';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const platform = process.argv[2];
-const { version } = JSON.parse(
-  readFileSync(join(root, 'package.json'), 'utf8')
-);
+// The tvOS style's releases name their own version for the TV apps.
+const version =
+  process.env.TV_VERSION ||
+  JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 const out = join(root, 'out');
 
 function run(command, args, options = {}) {
@@ -41,11 +42,9 @@ function stageApp(manifest, withVersion, scripts = []) {
   const file = join(stage, manifest);
   writeFileSync(file, withVersion(readFileSync(file, 'utf8')));
   const index = join(stage, 'index.html');
-  const tags = [
-    'boot.js',
-    ...(platform === 'webos' ? ['loader.js'] : []),
-    ...scripts,
-  ].map((src) => `<script src="${src}"></script>`);
+  const tags = ['boot.js', ...scripts].map(
+    (src) => `<script src="${src}"></script>`
+  );
   writeFileSync(
     index,
     readFileSync(index, 'utf8').replace('<head>', `<head>${tags.join('')}`)
