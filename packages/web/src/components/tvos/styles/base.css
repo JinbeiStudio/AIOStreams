@@ -119,11 +119,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 0.75vw;
+  width: 1.1vw;
   height: 9vw;
   padding: 0;
   border: 0;
-  border-radius: 0 0.75vw 0.75vw 0;
+  border-radius: 0 1.1vw 1.1vw 0;
   overflow: hidden;
   color: #fff;
   opacity: 0.6;
