@@ -6,6 +6,8 @@
   "title": "Jinbei Studio",
   "icon": "icon.png",
   "largeIcon": "largeIcon.png",
+  "iconColor": "#4B4D54",
+  "bgColor": "#4B4D54",
   "splashBackground": "splash.png",
   "resolution": "1280x720",
   "disableBackHistoryAPI": true,
