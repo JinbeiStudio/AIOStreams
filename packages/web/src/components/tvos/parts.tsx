@@ -1,5 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings -- the tvOS style's words go through tr() (./i18n), which this rule doesn't know */
 import React from 'react';
+import { BiMenu } from 'react-icons/bi';
 import { createPortal } from 'react-dom';
 import { currentHost } from '../../lib/hosts';
 import { easeLayers, GLIDE_LAYERS } from '../../lib/input/glide';
@@ -44,7 +45,11 @@ export function Later({
 }
 
 /** The time and who is signed in, at the top right, as Apple's; the sections are in the sidebar. */
+/** What opens the sidebar, for the button beside the pill; the layout provides it. */
+export const MenuOpener = React.createContext<(() => void) | null>(null);
+
 export function TopBar({ hidden }: { hidden?: boolean }) {
+  const openMenu = React.useContext(MenuOpener);
   const { user } = useSession();
   const avatar = useOwnAvatar();
   const [now, setNow] = React.useState(() => new Date());
@@ -55,6 +60,16 @@ export function TopBar({ hidden }: { hidden?: boolean }) {
   return (
     <Pinned>
       <div className="tv-top" data-hidden={hidden ? '' : undefined}>
+        {openMenu && (
+          <button
+            type="button"
+            aria-label={tr('Menu')}
+            className="tv-glass tv-menu-button"
+            onClick={openMenu}
+          >
+            <BiMenu />
+          </button>
+        )}
         <div className="tv-glass tv-pill">
           {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           <span className="tv-avatar">

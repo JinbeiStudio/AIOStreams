@@ -14,6 +14,7 @@ const FR: Record<string, string> = {
   'Profile address': 'Adresse du profil',
   // Sidebar and pages
   Home: 'Accueil',
+  Menu: 'Menu',
   Discover: 'Découvrir',
   Search: 'Rechercher',
   Library: 'Bibliothèque',

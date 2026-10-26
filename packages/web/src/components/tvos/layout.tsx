@@ -24,6 +24,9 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
+import { BiChevronRight } from 'react-icons/bi';
+import { MenuOpener, Pinned } from './parts';
+import { tr } from './i18n';
 import { Sidebar } from './sidebar';
 import { TvosOutlet } from './routes';
 
@@ -63,6 +66,26 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
+ * A slim glass capsule down the left edge, always there: the menu is that way. Under the pointer it widens and shows
+ * an arrow; a click opens the menu. Not focusable, so the remote's Left keeps its own way of opening it.
+ */
+function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      tabIndex={-1}
+      data-nav-out=""
+      aria-label={tr('Menu')}
+      className="tv-glass tv-edge-capsule"
+      onClick={onOpen}
+    >
+      <i className="tv-edge-grab" />
+      <BiChevronRight />
+    </button>
+  );
+}
+
+/**
  * The tvOS style's frame: Apple TV's sidebar instead of the app's, its own
  * home, and every other page (settings, the player…) as the app has it.
  */
@@ -89,6 +112,7 @@ export function TvosLayout() {
   // The sidebar, as the Apple TV app's: Back at the home (or with nowhere to go back to) opens it, Back again closes it.
   const [sidebar, setSidebar] = React.useState(false);
   const closeSidebar = React.useCallback(() => setSidebar(false), []);
+  const openSidebar = React.useCallback(() => setSidebar(true), []);
   React.useEffect(() => setSidebar(false), [pathname, playing]);
   const router = useRouter();
   const [under, setUnder] = React.useState<HTMLDivElement | null>(null);
@@ -228,6 +252,7 @@ export function TvosLayout() {
             {/* While the sidebar is open the page underneath can't take the focus, as on Apple TV. */}
             <div inert={sidebar} className="contents">
               {/* As the app's layout: on TVs the page moves in glide layers, fixed things beside them. */}
+              <MenuOpener.Provider value={openSidebar}>
               <PinnedTargets.Provider value={pinned}>
                 <div ref={setUnder} className="contents" />
                 {/* Drawn once the places for fixed things exist, so none starts a frame inside the moving page. */}
@@ -263,8 +288,14 @@ export function TvosLayout() {
                     )}
                   </GlideLayers>
                 )}
+                {over && !playing && !sidebar && (
+                  <Pinned>
+                    <EdgeCapsule onOpen={openSidebar} />
+                  </Pinned>
+                )}
                 <div ref={setOver} className="contents" />
               </PinnedTargets.Provider>
+              </MenuOpener.Provider>
             </div>
           </ItemMenuHost>
         </VersionPickerProvider>

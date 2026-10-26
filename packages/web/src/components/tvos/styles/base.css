@@ -8,7 +8,7 @@
   --tv-bg: #141416;
   --tv-gutter: 5.7vw;
   /* Apple's dark translucent glass, shared by every button, pill and field: light, the blur behind doing the work. */
-  --tv-glass: rgba(30, 30, 34, 0.24);
+  --tv-glass: rgba(255, 255, 255, 0.16);
   --tv-text-dim: rgba(255, 255, 255, 0.6);
   background: var(--tv-bg);
   color: #fff;
@@ -86,6 +86,86 @@
   opacity: 0;
   pointer-events: none;
 }
+/* The menu button beside the pill, top right: it opens the sidebar the remote's Left opens. */
+.tv-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.45vw;
+  height: 3.45vw;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.7vw;
+  color: #fff;
+  outline: none;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.tv-menu-button:is(:focus, :hover) {
+  /* Brighter glass with the icon kept white, not a white fill. */
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  transform: scale(1.1);
+}
+/* A slim glass capsule down the left edge, always there: the menu is that way. */
+.tv-glass.tv-edge-capsule {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* As the hero's dots capsule: 1.3vw thick, fully rounded, the same glass. */
+  width: 1.3vw;
+  height: 9vw;
+  padding: 0;
+  border: 0;
+  /* Against the edge, its free corners as round as the dots capsule's. */
+  border-radius: 0 99px 99px 0;
+  background: rgba(118, 120, 130, 0.3);
+  backdrop-filter: blur(16px) brightness(1.18);
+  -webkit-backdrop-filter: blur(16px) brightness(1.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  color: #fff;
+  outline: none;
+  transform: translateY(-50%);
+  transition:
+    width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.3s ease,
+    background 0.25s ease;
+}
+/* The grabber line at rest. */
+.tv-edge-grab {
+  display: block;
+  /* The active dot's own size across: 0.4vw. */
+  width: 0.4vw;
+  height: 52%;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.55);
+  transition: opacity 0.2s ease;
+}
+.tv-edge-capsule svg {
+  position: absolute;
+  font-size: 1.5vw;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+/* Under the pointer only: wider and brighter, the line becomes an arrow. The focus never widens it. */
+.tv-glass.tv-edge-capsule:hover {
+  width: 2vw;
+  background: rgba(150, 152, 162, 0.42);
+}
+.tv-edge-capsule:hover .tv-edge-grab {
+  opacity: 0;
+}
+.tv-edge-capsule:hover svg {
+  opacity: 1;
+}
 .tv-pill {
   display: flex;
   align-items: center;
@@ -115,8 +195,8 @@
 /* tvOS's Liquid Glass: blur behind, a sheen across the top, light only on the top edge. */
 .tv-glass {
   background: var(--tv-glass);
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  backdrop-filter: blur(24px) saturate(1.6) brightness(1.18);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(1.18);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 0.6vw 1.6vw rgba(0, 0, 0, 0.25);
@@ -560,8 +640,8 @@
   border-radius: 1.6vw;
   padding: 1vw;
   background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px) brightness(1.18);
+  -webkit-backdrop-filter: blur(24px) brightness(1.18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .tv-calendar [data-ui='calendar-day'] {
@@ -689,8 +769,8 @@
   font-weight: 700;
   color: #fff;
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px) saturate(1.8);
-  -webkit-backdrop-filter: blur(10px) saturate(1.8);
+  backdrop-filter: blur(10px) saturate(1.8) brightness(1.18);
+  -webkit-backdrop-filter: blur(10px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
