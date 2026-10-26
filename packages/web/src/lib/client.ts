@@ -189,8 +189,8 @@ export class JellyfinClient {
   ): Promise<T> {
     const headers: Record<string, string> = {
       Authorization: this.authorization,
-      // The app's language, which a server variant can pick its metadata language by; CORS lets this header through.
-      'Accept-Language': i18n.locale,
+      // The app's language alone ("en", "fr"), which a server variant can pick its metadata language by; CORS lets this header through.
+      'Accept-Language': i18n.locale.split('-')[0],
     };
     if (init.body !== undefined) headers['Content-Type'] = 'application/json';
     if (hinted.has(this.base))
