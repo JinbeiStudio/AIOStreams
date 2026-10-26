@@ -146,7 +146,7 @@
   width: 0.4vw;
   height: 52%;
   border-radius: 99px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.55);
   transition: opacity 0.2s ease;
 }
 .tv-edge-capsule svg {
