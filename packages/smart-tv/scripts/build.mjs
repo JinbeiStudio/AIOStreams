@@ -15,6 +15,8 @@ import { zipSync } from 'fflate';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const platform = process.argv[2];
+// The package is 1080p only when asked, so the build can name its own folder; the manifest says 1080p always.
+const fullHd = process.argv.includes('--1080p');
 // The tvOS style's releases name their own version for the TV apps.
 const version =
   process.env.TV_VERSION ||
@@ -86,7 +88,7 @@ if (platform === 'webos') {
     join(cli, 'bin/ares-package.js'),
     stage,
     '--outdir',
-    out,
+    fullHd ? join(out, '1080p') : out,
     '--no-minify',
   ]);
 } else if (platform === 'tizen') {
@@ -99,6 +101,6 @@ if (platform === 'webos') {
   if (profile) sign(stage, profile);
   else writeUnsigned(stage, join(out, 'AIOStreams.wgt'));
 } else {
-  console.error('Usage: node scripts/build.mjs <webos|tizen>');
+  console.error('Usage: node scripts/build.mjs <webos [--1080p]|tizen>');
   process.exit(1);
 }

@@ -9,7 +9,7 @@
   "iconColor": "#2B2C31",
   "bgColor": "#2B2C31",
   "splashBackground": "splash.png",
-  "resolution": "1280x720",
+  "resolution": "1920x1080",
   "disableBackHistoryAPI": true,
   "requiredACG": []
 }
