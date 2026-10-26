@@ -113,8 +113,7 @@
 /* A slim glass capsule down the left edge, always there: the menu is that way. */
 .tv-glass.tv-edge-capsule {
   position: fixed;
-  /* A little off the edge, so both ends are rounded as the dots capsule's are. */
-  left: 0.5vw;
+  left: 0;
   top: 50%;
   z-index: 5;
   display: flex;
@@ -125,7 +124,8 @@
   height: 9vw;
   padding: 0;
   border: 0;
-  border-radius: 99px;
+  /* Against the edge, its free corners as round as the dots capsule's. */
+  border-radius: 0 99px 99px 0;
   background: rgba(118, 120, 130, 0.3);
   backdrop-filter: blur(16px) brightness(1.18);
   -webkit-backdrop-filter: blur(16px) brightness(1.18);
