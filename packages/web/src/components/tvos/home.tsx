@@ -44,7 +44,13 @@ import {
   useScrolledDown,
   useFocusWithin,
 } from './parts';
-import { catalogName, isAnimeCatalog, nameKind, tr } from './i18n';
+import {
+  catalogName,
+  isAnimeCatalog,
+  isServiceLibrary,
+  nameKind,
+  tr,
+} from './i18n';
 
 const HERO_EACH = 8;
 const HERO_MAX = 10;
@@ -94,7 +100,7 @@ export const TvosHome = React.memo(function TvosHome() {
 function useCatalogs() {
   const views = useViews();
   const genreRequired = useFeature('genreRequired');
-  const all = views.data?.Items ?? [];
+  const all = (views.data?.Items ?? []).filter((v) => !isServiceLibrary(v));
   return {
     views,
     catalogs: genreRequired ? all.filter((v) => !needsGenre(v)) : all,

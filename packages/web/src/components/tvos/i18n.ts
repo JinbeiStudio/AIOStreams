@@ -279,6 +279,11 @@ export function isAnimeCatalog(view: CatalogView): boolean {
   );
 }
 
+/** A debrid service's own files (Real-Debrid, TorBox), listed with the catalogs but not something to browse here. */
+export function isServiceLibrary(view: CatalogView): boolean {
+  return !!view.Path?.startsWith('/aiostreams/library/');
+}
+
 /** The "– Films" / "– Séries" a server's names may end with, so other apps can tell two lists apart; this one has its tag. */
 const KIND_SUFFIX = /\s+[–-]\s+(?:Films?|Séries?|Series|Movies?|Shows?|Anime)$/i;
 

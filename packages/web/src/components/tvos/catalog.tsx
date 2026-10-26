@@ -17,7 +17,13 @@ import { navigate, to } from '../../lib/paths';
 import { PosterGrid } from './grid';
 import { Failed, TopBar } from './parts';
 import { catalogTag } from './home';
-import { catalogGroup, catalogName, count, tr } from './i18n';
+import {
+  catalogGroup,
+  catalogName,
+  count,
+  isServiceLibrary,
+  tr,
+} from './i18n';
 
 // The app's own kinds, so a new one there shows here too.
 
@@ -36,7 +42,7 @@ export function TvosCatalog({
   kind?: string;
 }) {
   const views = useViews();
-  const all = views.data?.Items ?? [];
+  const all = (views.data?.Items ?? []).filter((v) => !isServiceLibrary(v));
   const view = all.find((v) => v.Id === viewId);
   const current: Kind =
     KINDS.find((k) => k.kind === kind)?.kind ?? kindOf(view) ?? 'Movie';
