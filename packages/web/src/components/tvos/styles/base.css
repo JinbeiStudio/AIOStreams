@@ -643,7 +643,7 @@ html[data-tv] .tv-glass.tv-edge-capsule {
   border: 0;
   border-radius: 1.6vw;
   padding: 1vw;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(118, 120, 130, 0.3);
   backdrop-filter: blur(24px) brightness(1.18);
   -webkit-backdrop-filter: blur(24px) brightness(1.18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -693,9 +693,9 @@ html[data-tv] .tv-glass.tv-edge-capsule {
   font-weight: 600;
   vertical-align: 0.2vw;
   color: rgba(255, 255, 255, 0.92);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px) saturate(1.8) brightness(1.1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.8) brightness(1.1);
+  background: rgba(118, 120, 130, 0.3);
+  backdrop-filter: blur(16px) brightness(1.18);
+  -webkit-backdrop-filter: blur(16px) brightness(1.18);
   /* One rim, drawn inside: brighter where it meets the top and bottom edges. */
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.2),
@@ -705,13 +705,22 @@ html[data-tv] .tv-glass.tv-edge-capsule {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .tv-tag[data-tag='movies'] {
-  background-color: rgba(110, 170, 255, 0.1);
+  background-image: linear-gradient(
+    rgba(110, 170, 255, 0.14),
+    rgba(110, 170, 255, 0.14)
+  );
 }
 .tv-tag[data-tag='series'] {
-  background-color: rgba(110, 230, 160, 0.09);
+  background-image: linear-gradient(
+    rgba(110, 230, 160, 0.14),
+    rgba(110, 230, 160, 0.14)
+  );
 }
 .tv-tag[data-tag='anime'] {
-  background-color: rgba(255, 130, 165, 0.1);
+  background-image: linear-gradient(
+    rgba(255, 130, 165, 0.14),
+    rgba(255, 130, 165, 0.14)
+  );
 }
 
 /* The app's own focus ring (purple) is replaced by the lift and light of the focused card. */
@@ -772,9 +781,9 @@ html[data-tv] .tv-glass.tv-edge-capsule {
   font-size: 0.95vw;
   font-weight: 700;
   color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(10px) saturate(1.8) brightness(1.18);
+  background: rgba(118, 120, 130, 0.3);
+  backdrop-filter: blur(16px) brightness(1.18);
+  -webkit-backdrop-filter: blur(16px) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);

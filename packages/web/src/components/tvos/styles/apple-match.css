@@ -86,24 +86,6 @@ html[data-tvos-build][data-tv] .tv-art {
 html[data-tvos-build][data-tv] :is(.tv-logo, .tv-title) {
   filter: none;
 }
-/* Panels that were glass: an opaque-enough tint so text stays readable without blur. */
-html[data-tvos-build][data-tv]
-  :is(
-    .UI-ContextMenu__root,
-    .UI-DropdownMenu__root,
-    .UI-Popover__root,
-    .UI-Modal__content,
-    .UI-Drawer__content,
-    .tv-sidebar,
-    [data-ui='next-episode-card'],
-    [data-sonner-toast]
-  ) {
-  background: rgba(78, 80, 90, 0.9) !important;
-}
-html[data-tvos-build][data-tv] .tv-tag {
-  background: rgba(255, 255, 255, 0.12);
-}
-
 /* A focused card's shadow only hints at the lift: small, close and light, not a dark smear under it. */
 html[data-tvos-build] .tv-card:focus .tv-art,
 html[data-tvos-build] .tv-card:hover .tv-art {

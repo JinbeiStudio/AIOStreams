@@ -97,8 +97,8 @@
 /* Buttons: small, dark and translucent, round; white when focused. */
 html[data-tvos-build] [data-ui='player-button'] {
   background: rgba(118, 120, 130, 0.32) !important;
-  backdrop-filter: blur(16px) !important brightness(1.18);
-  -webkit-backdrop-filter: blur(16px) !important brightness(1.18);
+  backdrop-filter: blur(16px) brightness(1.18) !important;
+  -webkit-backdrop-filter: blur(16px) brightness(1.18) !important;
   margin-left: 0.35rem;
 }
 html[data-tvos-build] [data-ui='player-button']:hover {
