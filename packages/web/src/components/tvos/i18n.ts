@@ -174,7 +174,7 @@ const CATALOGS: Record<string, [string, string]> = {
   'must-see-mindfuck': ['Mind-bending', 'Qui retournent le cerveau'],
   'top-nature': ['Nature', 'Nature'],
   'top-reality-tv': ['Reality TV', 'Télé-réalité'],
-  'top-standup-comedy': ['Comedy – Stand-up', 'Comédie – Stand-up'],
+  'top-standup-comedy': ['Comedy stand-up', 'Comédie stand-up'],
 };
 
 /** "Apple+  Latest" -> "apple-plus-latest". */
