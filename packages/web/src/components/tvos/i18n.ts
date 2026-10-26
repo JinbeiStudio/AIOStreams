@@ -279,9 +279,17 @@ export function isAnimeCatalog(view: CatalogView): boolean {
   );
 }
 
-/** A debrid service's own files (Real-Debrid, TorBox), listed with the catalogs but not something to browse here. */
+/**
+ * What AIOStreams lists itself (the debrid services' files, Real-Debrid and TorBox), as opposed to the catalogs
+ * of the metadata addon, whose paths name a kind (`/aiostreams/movie/…`). A server that is not AIOStreams, or a
+ * view without a path, is always shown.
+ */
 export function isServiceLibrary(view: CatalogView): boolean {
-  return !!view.Path?.startsWith('/aiostreams/library/');
+  const path = view.Path ?? '';
+  return (
+    path.startsWith('/aiostreams/') &&
+    !/^\/aiostreams\/(?:movie|series|anime)\//.test(path)
+  );
 }
 
 /** The "– Films" / "– Séries" a server's names may end with, so other apps can tell two lists apart; this one has its tag. */
