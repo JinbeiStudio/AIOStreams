@@ -110,41 +110,56 @@
   color: #fff;
   transform: scale(1.1);
 }
-/* A grabber on the left edge, Apple's way: a short soft capsule, nothing around it. */
-.tv-edge-grabber {
+/* A slim glass capsule down the left edge, always there: the menu is that way. */
+.tv-glass.tv-edge-capsule {
   position: fixed;
   left: 0;
   top: 50%;
   z-index: 5;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  /* The hit area is wider and taller than the capsule, so a pointer finds it. */
-  width: 2.4vw;
-  height: 11vw;
-  padding: 0 0 0 0.9vw;
+  justify-content: center;
+  width: 0.75vw;
+  height: 9vw;
+  padding: 0;
   border: 0;
-  background: none;
+  border-radius: 0 0.75vw 0.75vw 0;
+  overflow: hidden;
+  color: #fff;
+  opacity: 0.6;
   outline: none;
   transform: translateY(-50%);
-}
-.tv-edge-grabber i {
-  display: block;
-  width: 0.34vw;
-  height: 4.6vw;
-  border-radius: 99px;
-  /* Soft white, the grabber's own tertiary tone, with a faint light around it so it reads on any picture. */
-  background: rgba(255, 255, 255, 0.42);
-  box-shadow: 0 0 0.8vw rgba(255, 255, 255, 0.18);
   transition:
-    height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
     width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.3s ease,
     background 0.25s ease;
 }
-.tv-edge-grabber:hover i {
-  width: 0.42vw;
-  height: 6.2vw;
-  background: rgba(255, 255, 255, 0.9);
+/* The grabber line at rest. */
+.tv-edge-grab {
+  display: block;
+  width: 0.14vw;
+  height: 38%;
+  border-radius: 0.1vw;
+  background: rgba(255, 255, 255, 0.85);
+  transition: opacity 0.2s ease;
+}
+.tv-edge-capsule svg {
+  position: absolute;
+  font-size: 1.5vw;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+/* Under the pointer only: wider and brighter, the line becomes an arrow. The focus never widens it. */
+.tv-glass.tv-edge-capsule:hover {
+  width: 2vw;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.22);
+}
+.tv-edge-capsule:hover .tv-edge-grab {
+  opacity: 0;
+}
+.tv-edge-capsule:hover svg {
+  opacity: 1;
 }
 .tv-pill {
   display: flex;
