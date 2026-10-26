@@ -25,7 +25,7 @@ const FR: Record<string, string> = {
   'Watch together': 'Regarder ensemble',
   Downloads: 'Téléchargements',
   // Home
-  'Continue watching': 'Reprendre',
+  'Continue watching': 'Continuer',
   'Next up': 'À suivre',
   Upcoming: 'À venir',
   'See all': 'Tout voir',
@@ -45,7 +45,7 @@ const FR: Record<string, string> = {
   '{n} titles': '{n} titres',
   // Buttons
   Play: 'Lecture',
-  Resume: 'Reprendre',
+  Resume: 'Continuer',
   Versions: 'Versions',
   Details: 'Détails',
   Next: 'Suivant',
