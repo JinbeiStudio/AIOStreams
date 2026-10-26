@@ -137,9 +137,9 @@
 /* The grabber line at rest. */
 .tv-edge-grab {
   display: block;
-  width: 0.14vw;
-  height: 38%;
-  border-radius: 0.1vw;
+  width: 0.26vw;
+  height: 52%;
+  border-radius: 0.2vw;
   background: rgba(255, 255, 255, 0.85);
   transition: opacity 0.2s ease;
 }
