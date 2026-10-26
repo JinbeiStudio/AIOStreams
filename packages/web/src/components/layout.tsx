@@ -74,6 +74,7 @@ import { RemoteSheet } from './remote-sheet';
 import { WatchNextSync } from './watch-next';
 import { RandomPick } from './random-pick';
 import { ItemMenuHost } from './item-menu';
+import { useTvosStyle } from '../lib/tvos-style';
 import { HomePage } from '../pages/home';
 import { PageShown } from '../lib/page-shown';
 import { GlideLayers } from './glide-layers';
@@ -281,7 +282,7 @@ export function PageBackground() {
 }
 
 /** The router scrolls a commit after a page renders, so the old offset could paint first. */
-function PageScroll() {
+export function PageScroll() {
   const saved = useElementScrollRestoration({ getElement: () => window });
   React.useLayoutEffect(() => {
     window.scrollTo(saved?.scrollX ?? 0, saved?.scrollY ?? 0);
@@ -369,12 +370,12 @@ function HistoryButtons() {
   );
 }
 
-function pageName(pathname: string): string {
+export function pageName(pathname: string): string {
   return pathname.split('/')[1] || 'home';
 }
 
 /** While the server can't be reached, a note that it keeps trying; dismissed, it shrinks to an icon. */
-function ConnectionNote() {
+export function ConnectionNote() {
   // Mounted per outage, so the next one shows the full note again.
   return useReachable() ? null : <Unreachable />;
 }
@@ -460,7 +461,23 @@ function Unreachable() {
   );
 }
 
+/** The frame every page sits in: the usual one, or with the tvOS style its own full-screen one. */
 export function WebLayout() {
+  return useTvosStyle() ? (
+    <React.Suspense fallback={null}>
+      <TvosLayout />
+    </React.Suspense>
+  ) : (
+    <DefaultLayout />
+  );
+}
+
+// The tvOS style's frame, in its own file, loaded only when that style is chosen.
+const TvosLayout = React.lazy(() =>
+  import('./tvos/layout').then((m) => ({ default: m.TvosLayout }))
+);
+
+function DefaultLayout() {
   const { switchUser } = useSession();
   const users = usePickableUsers();
   const several = (users.data?.length ?? 0) > 1;
@@ -783,7 +800,7 @@ export function WebLayout() {
 }
 
 /** What runs while pages are open, and stops while the player is. */
-function PagesWork({ pathname }: { pathname: string }) {
+export function PagesWork({ pathname }: { pathname: string }) {
   useDiscordBrowsing(pathname);
   useDownloadRunner();
   usePendingStops();

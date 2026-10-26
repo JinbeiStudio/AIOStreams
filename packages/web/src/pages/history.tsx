@@ -595,7 +595,7 @@ function EntryMenu({ entries }: { entries: HistoryEntry[] }) {
   );
 }
 
-function ResetButton({ owner }: { owner: WebUser }) {
+export function ResetButton({ owner }: { owner: WebUser }) {
   const clear = useClearHistory();
   const name = owner.user.Name ?? '';
   const confirm = useConfirmationDialog({
@@ -632,7 +632,7 @@ function ResetButton({ owner }: { owner: WebUser }) {
   );
 }
 
-function ExportButton() {
+export function ExportButton() {
   const { client } = useSession();
   const [busy, setBusy] = React.useState(false);
   const run = async () => {

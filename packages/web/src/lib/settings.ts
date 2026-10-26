@@ -651,6 +651,9 @@ const discord = record(DISCORD_EVENTS, (event) =>
   )
 );
 
+export const INTERFACE_STYLES = ['tvos', 'aiostreams'] as const;
+export type InterfaceStyle = (typeof INTERFACE_STYLES)[number];
+
 /*
  * Grouped as the settings page lists them. How the user likes to watch
  * follows their account; what suits this device's screen, input, sound or
@@ -761,6 +764,12 @@ export const settings = {
       (value) => (value.trim() ? value.slice(0, MAX_CUSTOM_CSS) : undefined)
     ),
     serverCss: syncedFlag('serverCss', true),
+    /** The pages' look: Apple TV's (the default here) or the app's own; kept per device. */
+    interfaceStyle: device<InterfaceStyle>(
+      'aiostreams-web-theme-interface-style',
+      'tvos',
+      INTERFACE_STYLES
+    ),
   },
   playback: {
     autoPlayFirst: syncedFlag('autoPlayFirst', false, [

@@ -58,7 +58,7 @@ const HERO_ITEMS = 8;
 const HERO_MAX = 10;
 
 /** The first movie and series catalogs, or the first library without them. */
-function autoSources(views: BaseItemDto[]): FeaturedSource[] {
+export function autoSources(views: BaseItemDto[]): FeaturedSource[] {
   const ids = ['movies', 'tvshows']
     .map((kind) => views.find((v) => v.CollectionType === kind)?.Id)
     .filter((id): id is string => !!id);
@@ -68,7 +68,7 @@ function autoSources(views: BaseItemDto[]): FeaturedSource[] {
   );
 }
 
-function interleave(lists: BaseItemDto[][], max: number): BaseItemDto[] {
+export function interleave(lists: BaseItemDto[][], max: number): BaseItemDto[] {
   const seen = new Set<string>();
   const out: BaseItemDto[] = [];
   const longest = Math.max(0, ...lists.map((l) => l.length));

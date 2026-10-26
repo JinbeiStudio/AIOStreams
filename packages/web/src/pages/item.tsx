@@ -326,7 +326,7 @@ const MetaRow = React.memo(function MetaRow({ item }: { item: BaseItemDto }) {
 });
 
 /** The show's links, with the selected season's own in place of the show's. */
-function linksFor(item: BaseItemDto, season?: BaseItemDto) {
+export function linksFor(item: BaseItemDto, season?: BaseItemDto) {
   const own = season?.ExternalUrls ?? [];
   if (!own.length) return item.ExternalUrls;
   const byName = new Map(own.map((link) => [link.Name, link]));
@@ -1151,7 +1151,7 @@ const WEEKDAYS: NonNullable<BaseItemDto['AirDays']> = [
 ];
 
 /** When a series airs, in the app's language: `Every Sunday at 21:00`. */
-function airsLine(
+export function airsLine(
   days: BaseItemDto['AirDays'],
   time: string | null | undefined
 ): string | null {

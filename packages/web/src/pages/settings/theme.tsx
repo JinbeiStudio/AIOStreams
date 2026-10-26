@@ -24,6 +24,7 @@ import { focusOn, keyboardFocus } from '../../lib/input';
 import { SettingsCard } from '../../components/settings-card';
 import { Anchor } from '../../components/anchor';
 import { followsYou, DOCS_URL } from './common';
+import { InterfaceStylePicker } from '../../components/tvos/style-picker';
 
 const KEEP_CSS_MS = 15_000;
 
@@ -98,6 +99,7 @@ export function ThemeSection() {
   };
   return (
     <SettingsCard name="theme" title={t`Theme`} description={followsYou()}>
+      <InterfaceStylePicker />
       <div className="space-y-2">
         <p className="text-sm font-semibold">
           <Trans>Presets</Trans>

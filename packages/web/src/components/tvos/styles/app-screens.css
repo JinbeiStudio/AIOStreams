@@ -1,0 +1,255 @@
+/* The app's own screens (settings, sign-in, servers, downloads) and form controls in the tvOS look. */
+
+/* The app's own pages (settings, downloads, errors) inside the tvOS style: its gutters, which the app's sidebar would otherwise give. */
+[data-tvos] :is([data-ui='page-body'], [data-ui='page-message']) {
+  padding: max(4.2vw, env(safe-area-inset-top)) var(--tv-gutter) 4vw !important;
+}
+/* The calendar has its own frame already. */
+[data-tvos] .tv-calendar [data-ui='page-body'] {
+  padding: 0 !important;
+}
+
+/* No purple in the tvOS style: the app's brand colour becomes Apple's neutral system grays, light enough to read on, dark enough for white text. */
+html[data-tvos-build] {
+  --color-brand-50: 242 242 247;
+  --color-brand-100: 229 229 234;
+  --color-brand-200: 209 209 214;
+  --color-brand-300: 199 199 204;
+  --color-brand-400: 174 174 178;
+  --color-brand-500: 118 118 128;
+  --color-brand-600: 99 99 102;
+  --color-brand-700: 72 72 74;
+  --color-brand-800: 58 58 60;
+  --color-brand-900: 44 44 46;
+  --color-brand-950: 28 28 30;
+  --color-brand-default: 118 118 128;
+}
+
+/* Discover: the title count beside the catalog's name, and the watched filter set apart from the kinds. */
+.tv-count {
+  margin-left: 1vw;
+  font-size: 1.1vw;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+.tv-tabs-gap {
+  flex: none;
+  width: 1.6vw;
+}
+
+/* The app's navigation choices (rail, top bar, its background) don't apply to the tvOS sidebar, so they aren't offered. */
+[data-tvos] [data-ui='settings-card'][data-name='navigation'] {
+  display: none;
+}
+
+/* The hero's buttons all one height, as Apple's: the app's trailer, rating and download controls match Play, and those with only an icon are round. */
+html[data-tvos-build] .tv-hero .tv-app-action :is(button, a) {
+  height: 3.25vw !important;
+  font-size: 1.3vw !important;
+}
+html[data-tvos-build] .tv-hero .tv-app-action button:has(> svg:only-child) {
+  width: 3.25vw !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+}
+
+/* The player on a TV: kept inside the screen's safe area, with controls sized for across a room. */
+html[data-tvos-build][data-tv] [data-ui='player-controls'] {
+  --control: 3vw;
+  --icon: 1.45vw;
+}
+html[data-tvos-build][data-tv]
+  :is([data-ui='player-bottom-bar'], [data-ui='player-top-bar']) {
+  padding-left: var(--tv-gutter) !important;
+  padding-right: var(--tv-gutter) !important;
+}
+
+/*
+ * The app's own screens in the tvOS style: sign-in, who's watching, servers,
+ * settings and downloads, with tvOS form controls throughout.
+ */
+
+/* Form controls: pills and glass, white when focused, as tvOS draws them. */
+html[data-tvos-build] .UI-Button__root {
+  border-color: transparent !important;
+  border-radius: 999px;
+  transition:
+    transform 0.25s ease-out,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+html[data-tvos-build]
+  .UI-Button__root:is(:focus-visible, :hover):not(:disabled) {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  transform: scale(1.04);
+  --tw-ring-shadow: 0 0 #0000;
+}
+html[data-tvos-build]
+  :is(
+    .UI-Input__root,
+    .UI-Textarea__root,
+    .UI-Select__root,
+    .UI-NumberInput__root
+  ) {
+  border: 0 !important;
+  border-radius: 0.8vw;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+html[data-tvos-build]
+  :is(.UI-Input__root, .UI-Textarea__root, .UI-Select__root):is(
+    :focus,
+    :focus-visible,
+    :focus-within
+  ) {
+  background: rgba(255, 255, 255, 0.18) !important;
+  --tw-ring-shadow: 0 0 #0000;
+  outline: none !important;
+}
+/* Switches as Apple's: green when on. */
+html[data-tvos-build] .UI-Switch__root {
+  border: 0 !important;
+}
+html[data-tvos-build] .UI-Switch__root[data-state='checked'] {
+  background: #30d158 !important;
+}
+html[data-tvos-build] .UI-Switch__root[data-state='unchecked'] {
+  background: rgba(120, 120, 128, 0.36) !important;
+}
+html[data-tvos-build] .UI-Switch__root:focus-visible {
+  outline: 0.2vw solid #fff !important;
+  outline-offset: 0.2vw;
+  --tw-ring-shadow: 0 0 #0000;
+}
+html[data-tvos-build] .UI-Checkbox__root {
+  border-radius: 0.4vw;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+html[data-tvos-build] .UI-Checkbox__root[data-state='checked'] {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+/* Sign-in, unreachable, quick connect and add server: one glass panel on the dark screen, no purple glow. */
+html[data-tvos-build] [data-page='sign-in'] {
+  background: var(--tv-bg) !important;
+}
+html[data-tvos-build] [data-ui='auth-card'] {
+  border: 0 !important;
+  border-radius: 1.8vw !important;
+  background: rgba(40, 40, 44, 0.72) !important;
+  box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.5) !important;
+}
+html[data-tvos-build] [data-ui='quick-connect-code'] {
+  font-family: inherit !important;
+  font-weight: 700;
+}
+/* Who's watching, as Apple TV's profiles: large round photos that lift when focused, the name under. */
+html[data-tvos-build] [data-ui='user-picker'] {
+  gap: 3vw !important;
+}
+html[data-tvos-build] [data-ui='user-picker-user'] {
+  width: 10vw !important;
+  outline: none !important;
+}
+html[data-tvos-build] [data-ui='user-picker-user'] [data-focus-frame] > * {
+  width: 9vw !important;
+  height: 9vw !important;
+  font-size: 3vw !important;
+  --tw-ring-color: transparent !important;
+}
+html[data-tvos-build] [data-ui='user-picker-user'] [data-focus-frame] {
+  outline: none !important;
+  transition: transform 0.25s ease-out;
+}
+html[data-tvos-build]
+  [data-ui='user-picker-user']:is(:focus-visible, :hover)
+  [data-focus-frame] {
+  transform: scale(1.12);
+  box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.5);
+  border-radius: 999px;
+}
+html[data-tvos-build] [data-ui='user-picker-user'] span:last-child {
+  font-size: 1.2vw;
+  color: rgba(255, 255, 255, 0.6);
+}
+html[data-tvos-build]
+  [data-ui='user-picker-user']:is(:focus-visible, :hover)
+  span:last-child {
+  color: #fff;
+}
+/* Servers: glass cards. */
+html[data-tvos-build] [data-ui='server'] > * {
+  border: 0 !important;
+  border-radius: 1.4vw !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+html[data-tvos-build] [data-ui='server'] :focus-visible {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  outline: none !important;
+}
+
+/* Settings as tvOS's: the sections in a list at the left, the chosen one white, its settings in glass groups at the right. */
+html[data-tvos-build] [data-ui='settings-tab-group'] {
+  border: 0 !important;
+  border-radius: 1.4vw !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+html[data-tvos-build] [data-ui='settings-tab'] {
+  height: 2.9vw !important;
+  border-radius: 0.9vw !important;
+  font-size: 1.2vw !important;
+}
+html[data-tvos-build] [data-ui='settings-tab'][data-state='active'] {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+html[data-tvos-build] [data-ui='settings-tab']:focus-visible {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+}
+html[data-tvos-build] [data-ui='settings-tab'] svg {
+  font-size: 1.5vw;
+}
+html[data-tvos-build] [data-ui='settings-card-body'] {
+  border: 0 !important;
+  border-radius: 1.4vw !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-body'] > * + * {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-item'] {
+  padding: 1vw 1.4vw !important;
+}
+html[data-tvos-build] [data-ui='settings-card-item']:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+html[data-tvos-build] [data-ui='settings-card-title'] {
+  font-size: 1.3vw;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+html[data-tvos-build] [data-ui='settings-header'] > div:first-child {
+  border: 0 !important;
+  border-radius: 1vw !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+html[data-tvos-build] [data-ui='settings-header'] > div:first-child svg {
+  color: #fff !important;
+}
+
+/* Downloads: glass rows. */
+html[data-tvos-build] [data-ui='download'] {
+  border: 0 !important;
+  border-radius: 1.2vw !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+html[data-tvos-build] [data-ui='download']:focus-within {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+html[data-tvos-build] [data-ui='downloads-section'] h2 {
+  font-size: 1.6vw;
+  font-weight: 700;
+}

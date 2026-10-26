@@ -1,0 +1,712 @@
+/* The look, the artwork behind a page, cards and rows, the hero, and the tvOS pages. */
+
+/*
+ * The tvOS style's look: sizes follow the screen's width (as tvOS lays out on
+ * a 1920 canvas), focus lifts what it lands on, and controls are frosted glass.
+ */
+[data-tvos] {
+  --tv-bg: #141416;
+  --tv-gutter: 5.7vw;
+  /* Apple's dark translucent glass, shared by every button, pill and field: light, the blur behind doing the work. */
+  --tv-glass: rgba(30, 30, 34, 0.24);
+  --tv-text-dim: rgba(255, 255, 255, 0.6);
+  background: var(--tv-bg);
+  color: #fff;
+  min-height: 100vh;
+}
+
+.tv-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* The artwork behind a page, fading to the plain background once focus goes down. */
+.tv-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  transition:
+    opacity 0.5s ease,
+    filter 0.6s ease,
+    transform 0.6s ease;
+}
+.tv-backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: tv-fade 0.6s ease;
+}
+.tv-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* The artwork runs to the bottom edge, as in Apple's screenshots: only a light shade at the foot for the rows' titles. */
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.15) 45%,
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      transparent 25%,
+      transparent 55%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+}
+.tv-backdrop[data-lowered] {
+  opacity: 0;
+}
+@keyframes tv-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.tv-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Top right: search, settings, the time and who is signed in. */
+.tv-top {
+  position: fixed;
+  top: 3.7vw;
+  right: var(--tv-gutter);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.9vw;
+  transition: opacity 0.3s ease;
+}
+.tv-top[data-hidden] {
+  opacity: 0;
+  pointer-events: none;
+}
+.tv-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.8vw;
+  padding: 0.5vw 0.6vw 0.5vw 1.4vw;
+  font-size: 1.45vw;
+  font-weight: 600;
+}
+.tv-avatar {
+  width: 2.4vw;
+  height: 2.4vw;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.2vw;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #5abfff, #1f6be6);
+  overflow: hidden;
+}
+.tv-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* tvOS's Liquid Glass: blur behind, a sheen across the top, light only on the top edge. */
+.tv-glass {
+  background: var(--tv-glass);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0.6vw 1.6vw rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+}
+
+.tv-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7vw;
+  height: 3.65vw;
+  padding: 0 2.2vw;
+  font-size: 1.35vw;
+  font-weight: 600;
+  color: #fff;
+  border: 0;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    background 0.2s ease,
+    color 0.2s ease;
+  outline: none;
+}
+.tv-button.round {
+  /* For its name under it while focused. */
+  position: relative;
+  width: 3.45vw;
+  height: 3.45vw;
+  padding: 0;
+  font-size: 1.4vw;
+}
+.tv-button:focus,
+.tv-button:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
+  transform: scale(1.08);
+}
+
+/* Rows of cards, scrolling sideways with the focus. */
+.tv-row {
+  padding-top: 1.6vw;
+}
+.tv-row h2 {
+  margin: 0 var(--tv-gutter) 0.4vw;
+  /* Measured on Apple's screenshot (tvOS 27), a little larger: small, semi-bold and grey. */
+  font-size: 1.6vw;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0;
+}
+.tv-scroller {
+  display: flex;
+  gap: 2.4vw;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 1.2vw var(--tv-gutter) 1.6vw;
+  scroll-padding: 0 var(--tv-gutter);
+  scrollbar-width: none;
+}
+.tv-scroller::-webkit-scrollbar {
+  display: none;
+}
+/* On TVs a row's cards sit in glide layers that ease each jump on the compositor. */
+.tv-glide {
+  display: block;
+}
+.tv-glide [data-glide-layer] {
+  display: block;
+  width: max-content;
+  gap: inherit;
+  will-change: transform;
+}
+.tv-scroller-row {
+  display: flex;
+  gap: inherit;
+}
+.tv-scroller-row > div {
+  display: flex;
+}
+/* Older TV browsers leave a scroller's end padding out, so the gap after the last card stands in. */
+.tv-scroller-row::after {
+  content: '';
+  flex: none;
+  width: 0;
+}
+
+.tv-card {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6vw;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  outline: none;
+  cursor: pointer;
+}
+.tv-art {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.95vw;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    box-shadow 0.3s ease;
+}
+.tv-art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The focused card lifts and catches light on its top edge, glass rather than a frame. */
+.tv-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16),
+    transparent 35%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.tv-card:focus .tv-art,
+.tv-card:hover .tv-art {
+  transform: scale(1.12);
+  box-shadow: 0 1.6vw 2.4vw rgba(0, 0, 0, 0.7);
+}
+.tv-card:focus .tv-art::after,
+.tv-card:hover .tv-art::after {
+  opacity: 1;
+}
+.tv-card:focus .tv-caption,
+.tv-card:hover .tv-caption {
+  color: #fff;
+  transform: translateY(0.8vw);
+}
+
+.tv-poster .tv-art {
+  width: 12vw;
+  height: 18vw;
+}
+.tv-wide .tv-art {
+  width: 20.8vw;
+  height: 11.7vw;
+}
+.tv-caption {
+  width: 12vw;
+  /* Small and soft, as Apple's poster captions. */
+  font-size: 1.02vw;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    transform 0.3s ease,
+    color 0.2s ease;
+}
+
+/* A wide card carries its title and progress on the artwork, as tvOS 26 does. */
+.tv-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 3vw 0.95vw 0.95vw;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+}
+.tv-overlay strong {
+  display: block;
+  font-size: 1.25vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tv-overlay span {
+  display: block;
+  font-size: 0.95vw;
+  color: rgba(255, 255, 255, 0.75);
+}
+.tv-progress {
+  height: 0.26vw;
+  margin-top: 0.5vw;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+.tv-progress i {
+  display: block;
+  height: 100%;
+  background: #fff;
+}
+
+/* The hero and a title page's top: logo, details, buttons, over the artwork. */
+.tv-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.7vw;
+  padding: 0 var(--tv-gutter) 4.5vw;
+}
+.tv-home .tv-hero {
+  position: relative;
+  min-height: 62vh;
+  /* Room under it for the dots. */
+  padding-bottom: 3.2vw;
+}
+.tv-logo {
+  max-width: 32vw;
+  max-height: 12vw;
+  object-fit: contain;
+  object-position: left bottom;
+  filter: drop-shadow(0 0.3vw 0.8vw rgba(0, 0, 0, 0.5));
+}
+.tv-title {
+  font-size: 4vw;
+  font-weight: 700;
+  line-height: 1;
+  max-width: 55vw;
+}
+.tv-meta {
+  font-size: 1.25vw;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+.tv-overview {
+  max-width: 47vw;
+  font-size: 1.25vw;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tv-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.1vw;
+  margin-top: 0.6vw;
+}
+.tv-dots {
+  display: flex;
+  gap: 0.5vw;
+  margin-left: 0.6vw;
+}
+.tv-dots i {
+  width: 0.5vw;
+  height: 0.5vw;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+.tv-dots i[data-on] {
+  background: #fff;
+}
+
+/* Season tabs. */
+.tv-tabs {
+  display: flex;
+  gap: 0.7vw;
+  overflow-x: auto;
+  padding: 1.6vw var(--tv-gutter) 0.4vw;
+  scrollbar-width: none;
+}
+.tv-tab {
+  flex: none;
+  height: 2.8vw;
+  padding: 0 1.35vw;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: var(--tv-text-dim);
+  font-size: 1.12vw;
+  font-weight: 500;
+  outline: none;
+  transition:
+    transform 0.25s ease,
+    background 0.2s ease;
+}
+.tv-tab[data-on] {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-weight: 600;
+}
+.tv-tab:focus,
+.tv-tab:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
+  transform: scale(1.06);
+}
+
+/* An episode: its still, then its number, name and summary. */
+.tv-episode {
+  width: 20.8vw;
+}
+.tv-episode small {
+  font-size: 0.85vw;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+.tv-episode strong {
+  font-size: 1.15vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tv-episode p {
+  margin: 0;
+  font-size: 0.95vw;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Cast and crew. */
+.tv-person {
+  width: 9.4vw;
+  align-items: center;
+  text-align: center;
+}
+.tv-person .tv-art {
+  width: 8.3vw;
+  height: 8.3vw;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2.3vw;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tv-person strong {
+  font-size: 1.05vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.tv-person span {
+  font-size: 0.9vw;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Search: a glass field, posters under it. */
+.tv-search {
+  position: relative;
+  padding: 4.2vw var(--tv-gutter) 4vw;
+}
+.tv-field {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  padding: 0 1.6vw;
+  height: 4.4vw;
+  border-radius: 1.2vw;
+  transition: background 0.2s ease;
+}
+.tv-field input {
+  flex: 1;
+  background: none;
+  border: 0;
+  outline: none;
+  color: #fff;
+  font-size: 2vw;
+  font-weight: 500;
+}
+.tv-field input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+.tv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 12vw);
+  gap: 2.6vw 3.1vw;
+  padding-top: 2.6vw;
+}
+.tv-note {
+  font-size: 1.4vw;
+  color: rgba(255, 255, 255, 0.45);
+  padding-top: 2vw;
+}
+
+/* Calendar and history: a title, then rows or a wrapping list of wide cards. */
+.tv-list-page {
+  padding: 4.2vw 0 6vw;
+}
+.tv-page-title {
+  margin: 0 var(--tv-gutter);
+  /* On Apple's scale: bold rather than heavy. */
+  font-size: 2.5vw;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.tv-gutter {
+  padding-left: var(--tv-gutter);
+}
+.tv-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4vw 1.55vw;
+  padding: 1.8vw var(--tv-gutter);
+}
+.tv-tab[data-empty]:not([data-on]):not(:focus) {
+  opacity: 0.45;
+}
+
+/* The app's calendar in the tvOS style: glass grid, day squares that lift when focused. */
+.tv-calendar {
+  padding: 4.2vw var(--tv-gutter) 4vw;
+}
+.tv-calendar [data-ui='page-title'] {
+  font-size: 2.9vw;
+  font-weight: 700;
+}
+.tv-calendar [data-ui='calendar-grid'] {
+  border: 0;
+  border-radius: 1.6vw;
+  padding: 1vw;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.tv-calendar [data-ui='calendar-day'] {
+  height: 9.5vw;
+  border-radius: 1vw;
+  outline: none;
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2),
+    box-shadow 0.3s ease;
+}
+.tv-calendar [data-ui='calendar-day']:focus,
+.tv-calendar [data-ui='calendar-day']:focus-within {
+  transform: scale(1.08);
+  z-index: 2;
+  box-shadow:
+    0 1.2vw 2vw rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.tv-calendar [data-ui='calendar-day'][data-today] > span {
+  background: #fff;
+  color: #000;
+}
+.tv-calendar [data-ui='calendar-nav'] button {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.tv-calendar [data-ui='calendar-nav'] button:focus {
+  background: #fff;
+  color: #000;
+}
+
+/*
+ * What kind of catalog a row is, as clear Liquid Glass like iOS 26's
+ * notifications: almost no fill, a bright rim lit at top and bottom, the
+ * colour only a faint tint of the glass.
+ */
+.tv-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.7vw;
+  padding: 0.18vw 0.65vw;
+  line-height: 1;
+  border-radius: 99px;
+  font-size: 0.92vw;
+  font-weight: 600;
+  vertical-align: 0.2vw;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.8) brightness(1.1);
+  /* One rim, drawn inside: brighter where it meets the top and bottom edges. */
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 0.2vw 0.6vw rgba(0, 0, 0, 0.18);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.tv-tag[data-tag='movies'] {
+  background-color: rgba(110, 170, 255, 0.1);
+}
+.tv-tag[data-tag='series'] {
+  background-color: rgba(110, 230, 160, 0.09);
+}
+.tv-tag[data-tag='anime'] {
+  background-color: rgba(255, 130, 165, 0.1);
+}
+
+/* The app's own focus ring (purple) is replaced by the lift and light of the focused card. */
+[data-tvos] .tv-card,
+[data-tvos] .tv-card:focus,
+[data-tvos] .tv-card:focus-visible,
+[data-tvos] .tv-tab:focus-visible,
+[data-tvos] .tv-button:focus-visible {
+  outline: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+}
+[data-tvos] .tv-card:focus-visible {
+  box-shadow: none !important;
+}
+
+/* An episode's number, name and summary move down with the lifted still, so it never covers them. */
+.tv-episode small,
+.tv-episode strong,
+.tv-episode p {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+}
+.tv-episode:focus small,
+.tv-episode:focus strong,
+.tv-episode:focus p,
+.tv-episode:hover small,
+.tv-episode:hover strong,
+.tv-episode:hover p {
+  transform: translateY(1.3vw);
+}
+
+/* Room for a lifted card: wide cards grow less (rows space them further, above), as tvOS keeps a clear gap. */
+.tv-wide:focus .tv-art,
+.tv-wide:hover .tv-art {
+  transform: scale(1.07);
+}
+
+/* An episode's states, as the app marks them: watched, not out yet or missing, filler or recap. */
+.tv-badges {
+  position: absolute;
+  left: 0.7vw;
+  top: 0.7vw;
+  display: flex;
+  gap: 0.4vw;
+}
+.tv-badges .tv-tag {
+  margin: 0;
+}
+.tv-watched {
+  position: absolute;
+  right: 0.7vw;
+  top: 0.7vw;
+  width: 1.7vw;
+  height: 1.7vw;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 0.95vw;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px) saturate(1.8);
+  -webkit-backdrop-filter: blur(10px) saturate(1.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.tv-number {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 3.4vw;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0.2vw 1vw rgba(0, 0, 0, 0.6);
+}
+.tv-episode[data-unavailable] .tv-art img {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+.tv-episode[data-unavailable] {
+  cursor: default;
+}
+/* The wrapper the item menu adds keeps a row's cards laid out as before. */
+.tv-scroller > div,
+.tv-grid > div,
+.tv-wrap > div {
+  display: flex;
+}

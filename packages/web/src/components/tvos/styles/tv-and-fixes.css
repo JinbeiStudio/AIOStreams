@@ -1,0 +1,95 @@
+/* TV focus and artwork handling, cross-fades, Discover, player title, error pages. */
+
+/*
+ * TVs, as the app's own cards: what lifts on focus is transformed at rest too, since
+ * gaining a transform costs a layout, and focus moves in step with the glide (250ms), transform only.
+ */
+:where(html[data-tvos-build][data-tv]) .tv-art,
+:where(html[data-tvos-build][data-tv]) .tv-button {
+  transform: scale(1);
+}
+:where(html[data-tvos-build][data-tv]) .tv-caption {
+  transform: translateY(0);
+}
+html[data-tvos-build][data-tv] :is(.tv-caption, .tv-button) {
+  transition: transform 0.25s ease-out;
+}
+html[data-tvos-build][data-tv] .tv-art::after,
+html[data-tvos-build][data-tv] .tv-dots i {
+  transition: none;
+}
+html[data-tvos-build][data-tv] .tv-card:is(:focus, :hover) .tv-art {
+  box-shadow: none;
+}
+html[data-tvos-build][data-tv] :is(.tv-saver *, .tv-logo) {
+  filter: none;
+}
+
+/* TVs: lowered artwork is a copy blurred once, faded in over the sharp one, instead of a live blur. */
+.tv-backdrop-blur {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+html[data-tvos-build][data-tv] .tv-backdrop[data-lowered] {
+  filter: none;
+  transform: none;
+  opacity: 1;
+}
+html[data-tvos-build][data-tv] .tv-backdrop[data-lowered] .tv-backdrop-blur {
+  opacity: 1;
+}
+
+/* Each artwork fades in over the last once decoded, as the app's hero. */
+.tv-backdrop img.tv-backdrop-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: none;
+  transition: opacity 0.6s ease;
+}
+.tv-backdrop img.tv-backdrop-layer[data-shown] {
+  opacity: 1;
+}
+.tv-card-hold {
+  flex: none;
+}
+
+/* Discover's catalogs: on as many lines as they need, so none scrolls off and every line starts at the gutter. */
+.tv-tabs-wrap {
+  flex-wrap: wrap;
+  overflow: visible;
+  row-gap: 0.7vw;
+}
+
+/* A long row's places for cards not drawn, as wide as the cards until one is measured. */
+.tv-card-hold[data-shape='poster'] {
+  width: 12vw;
+}
+.tv-card-hold[data-shape='wide'] {
+  width: 20.8vw;
+}
+
+/* A page that didn't load: centred, as tvOS's alerts, with Try again focused. */
+.tv-failed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vw;
+  padding: 18vh var(--tv-gutter) 0;
+  text-align: center;
+}
+.tv-failed strong {
+  font-size: 2vw;
+  font-weight: 700;
+}
+.tv-failed span {
+  font-size: 1.2vw;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tv-failed .tv-button {
+  margin-top: 1vw;
+}

@@ -44,7 +44,7 @@ const FILTERS: { value: ItemFilter | undefined; label: string }[] = [
 
 export type Kind = 'Movie' | 'Series' | 'BoxSet';
 
-const KINDS: { kind: Kind; label: string; collectionType: string }[] = [
+export const KINDS: { kind: Kind; label: string; collectionType: string }[] = [
   {
     kind: 'Movie',
     collectionType: 'movies',
@@ -73,7 +73,7 @@ const PILL_CHARACTERS = 120;
 /** Stands for "no filter" in the picker, which has no empty option. */
 const ALL = '\u0000all';
 
-function kindOf(view: BaseItemDto | undefined): Kind | undefined {
+export function kindOf(view: BaseItemDto | undefined): Kind | undefined {
   return KINDS.find((k) => k.collectionType === view?.CollectionType)?.kind;
 }
 

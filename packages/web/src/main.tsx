@@ -1,4 +1,5 @@
 import './styles.css';
+import './components/tvos/tvos.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
@@ -17,6 +18,7 @@ import JellyfinWebApp from './app';
 import { persister } from './lib/cache';
 import { followReachable } from './lib/connection';
 import { startI18n } from './lib/i18n';
+import { markTvosStyle } from './lib/tvos-style';
 import { setupTv } from './lib/tv';
 
 onlineManager.setEventListener(followReachable);
@@ -47,6 +49,9 @@ for (const el of [container, document.body]) {
     if (!/^(transition|animation)/.test(args[0])) listen.apply(this, args);
   };
 }
+
+// Before anything draws, so the first screen already has the chosen look.
+markTvosStyle();
 
 // The page waits for its language, so it never shows English first.
 void startI18n().then(() =>

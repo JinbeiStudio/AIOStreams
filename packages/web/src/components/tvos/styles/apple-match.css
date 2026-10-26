@@ -1,0 +1,161 @@
+/* Artwork, type and sizes measured on Apple's screenshots; TVs' flat glass; loaders. */
+
+/* Lower down, the artwork stays as frosted glass: blurred, darkened and slightly saturated, rather than gone. */
+.tv-backdrop[data-lowered] {
+  opacity: 1;
+  filter: blur(48px) saturate(1.5) brightness(0.45);
+  transform: scale(1.12);
+}
+
+/*
+ * Type and sizes measured on Apple's screenshot (Apple TV app, tvOS 27): the
+ * hero's details and summary small and soft; its buttons compact; the logo smaller.
+ */
+.tv-hero .tv-meta {
+  font-size: 1.1vw;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+.tv-hero .tv-overview {
+  max-width: 28vw;
+  font-size: 1.1vw;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+}
+.tv-hero .tv-logo {
+  max-width: 24vw;
+  max-height: 9vw;
+}
+.tv-hero .tv-title {
+  font-size: 3.2vw;
+}
+.tv-hero .tv-buttons {
+  gap: 1.3vw;
+  margin-top: 1.4vw;
+}
+.tv-hero .tv-button {
+  height: 3.25vw;
+  padding: 0 2.6vw;
+  font-size: 1.3vw;
+  font-weight: 600;
+}
+.tv-hero .tv-button.round {
+  width: 3.25vw;
+  height: 3.25vw;
+  padding: 0;
+  font-size: 1.45vw;
+}
+
+/* The tag centred on the title's line. */
+.tv-row h2,
+.tv-page-title {
+  display: flex;
+  align-items: center;
+}
+.tv-row h2 .tv-tag,
+.tv-page-title .tv-tag {
+  vertical-align: baseline;
+  margin-left: 0.8vw;
+  /* Centred on the letters, not the line box, which leaves room above them for accents. */
+  position: relative;
+  top: 0.18em;
+}
+
+/* Closed, the sidebar can't take the focus even where the TV's browser ignores inert. */
+.tv-sidebar:not([data-open]) {
+  visibility: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.25s ease,
+    visibility 0s linear 0.35s;
+}
+
+/*
+ * TVs: glass panels become a flat translucent tint and focus shadows stay
+ * still; the page's artwork keeps its blur, as a Mac's.
+ */
+html[data-tvos-build][data-tv] *,
+html[data-tvos-build][data-tv] *::before,
+html[data-tvos-build][data-tv] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html[data-tvos-build][data-tv] {
+  --tv-glass: rgba(34, 34, 38, 0.72);
+}
+html[data-tvos-build][data-tv] .tv-backdrop img {
+  animation: none;
+}
+html[data-tvos-build][data-tv] .tv-card:focus .tv-art,
+html[data-tvos-build][data-tv] .tv-card:hover .tv-art {
+  box-shadow: 0 0.8vw 1.2vw rgba(0, 0, 0, 0.6);
+}
+html[data-tvos-build][data-tv] .tv-art {
+  box-shadow: none;
+  /* A shadow repaints every frame it animates; only the lift moves. */
+  transition: transform 0.25s ease-out;
+}
+html[data-tvos-build][data-tv] :is(.tv-logo, .tv-title) {
+  filter: none;
+}
+/* Panels that were glass: an opaque-enough tint so text stays readable without blur. */
+html[data-tvos-build][data-tv]
+  :is(
+    .UI-ContextMenu__root,
+    .UI-DropdownMenu__root,
+    .UI-Popover__root,
+    .UI-Modal__content,
+    .UI-Drawer__content,
+    .tv-sidebar,
+    [data-ui='next-episode-card'],
+    [data-sonner-toast]
+  ) {
+  background: rgba(30, 30, 34, 0.94) !important;
+}
+html[data-tvos-build][data-tv] .tv-tag {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* A focused card's shadow only hints at the lift: small, close and light, not a dark smear under it. */
+html[data-tvos-build] .tv-card:focus .tv-art,
+html[data-tvos-build] .tv-card:hover .tv-art {
+  box-shadow: 0 0.35vw 0.8vw rgba(0, 0, 0, 0.3);
+}
+html[data-tvos-build] .tv-person:focus .tv-art,
+html[data-tvos-build] .tv-person:hover .tv-art {
+  box-shadow: 0 0.3vw 0.7vw rgba(0, 0, 0, 0.3);
+}
+
+/* Every loader as tvOS's activity indicator: twelve spokes fading round, turning a spoke at a time. */
+html[data-tvos-build] {
+  --tv-activity: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.08%22%20transform%3D%22rotate%280%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.17%22%20transform%3D%22rotate%2830%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.25%22%20transform%3D%22rotate%2860%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.33%22%20transform%3D%22rotate%2890%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.42%22%20transform%3D%22rotate%28120%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.50%22%20transform%3D%22rotate%28150%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.58%22%20transform%3D%22rotate%28180%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.67%22%20transform%3D%22rotate%28210%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.75%22%20transform%3D%22rotate%28240%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.83%22%20transform%3D%22rotate%28270%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%220.92%22%20transform%3D%22rotate%28300%2050%2050%29%22%2F%3E%3Crect%20x%3D%2246%22%20y%3D%226%22%20width%3D%228%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22white%22%20opacity%3D%221.00%22%20transform%3D%22rotate%28330%2050%2050%29%22%2F%3E%3C%2Fsvg%3E');
+}
+html[data-tvos-build] .UI-LoadingSpinner__icon,
+html[data-tvos-build] [data-ui='player-cover-bar'] {
+  width: 2.6vw;
+  min-width: 28px;
+  height: 2.6vw;
+  min-height: 28px;
+  margin: 0;
+  border-radius: 0;
+  background: var(--tv-activity) center / contain no-repeat;
+  color: transparent;
+  fill: none;
+  overflow: visible;
+  animation: tv-activity 1s steps(12) infinite !important;
+}
+html[data-tvos-build] .UI-LoadingSpinner__icon > *,
+html[data-tvos-build] [data-ui='player-cover-bar'] > * {
+  display: none;
+}
+@keyframes tv-activity {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* The loading screen as Apple's: the artwork dimmed, the title, the indicator beneath. */
+html[data-tvos-build] [data-ui='player-cover-detail'],
+html[data-tvos-build] [data-ui='player-cover-status'] {
+  font-family: inherit;
+  color: rgba(255, 255, 255, 0.6);
+}

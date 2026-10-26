@@ -33,7 +33,7 @@ import { PeopleRow } from '../components/people';
 
 const SUGGESTIONS = 5;
 
-function nameWords(text: string): string[] {
+export function nameWords(text: string): string[] {
   return (
     text
       .normalize('NFD')
@@ -264,7 +264,7 @@ export function SearchPage({ initialTerm }: { initialTerm: string }) {
 }
 
 /** Offers the suggestions on the on-screen keyboard too, where a remote can reach them while typing. */
-function useKeyboardCompletions(names: string[]) {
+export function useKeyboardCompletions(names: string[]) {
   const show = currentHost().keyboardCompletions;
   const key = names.join('\n');
   React.useEffect(() => {
@@ -354,7 +354,7 @@ function ResultRow({
   );
 }
 
-function useVoice(
+export function useVoice(
   onHeard: (heard: string) => void,
   onWords: (words: string) => void
 ) {

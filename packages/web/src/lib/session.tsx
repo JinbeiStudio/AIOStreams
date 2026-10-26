@@ -21,6 +21,7 @@ import type {
   PickableUser,
   UserDto,
 } from './types';
+import { asksWho } from './tvos-style';
 
 interface SessionValue {
   client: JellyfinClient;
@@ -166,7 +167,7 @@ export function useSessionPhase(base: string) {
   /** Who to pick from as the app opens, or null to carry on as before. */
   const askWho = React.useCallback(
     async (proof: JellyfinClient, left: boolean) => {
-      if (!left && !settings.account.askWho.read()) return null;
+      if (!left && !asksWho()) return null;
       const users = await proof
         .get<PickableUser[]>('/AIOStreams/Users')
         .catch(() => null);
@@ -191,11 +192,7 @@ export function useSessionPhase(base: string) {
         users.length === 1 ? users[0] : users.find((u) => u.user.Id === last);
       if (target && signedIn && signedIn.User?.Id === target.user.Id) {
         adopt(proof, signedIn);
-      } else if (
-        !target ||
-        target.needs ||
-        (settings.account.askWho.read() && users.length > 1)
-      ) {
+      } else if (!target || target.needs || (asksWho() && users.length > 1)) {
         pick(proof, users);
       } else {
         await switchTo(proof, target.user.Id!);
@@ -220,7 +217,7 @@ export function useSessionPhase(base: string) {
         // Opens with the saved user at once; the server's answer replaces it.
         const saved = savedUser(base, stored.userId);
         const left = storage.get<string>(leftKey(base)) === stored.userId;
-        const mayAsk = left || settings.account.askWho.read();
+        const mayAsk = left || asksWho();
         if (saved && !mayAsk && !cancelled)
           setPhase({ kind: 'ready', client, user: saved });
         const [me, asking] = await Promise.all([

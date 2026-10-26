@@ -1,0 +1,282 @@
+/* eslint-disable lingui/no-unlocalized-strings -- the tvOS style's words go through tr() (./i18n), which this rule doesn't know */
+import React from 'react';
+import {
+  Outlet,
+  useChildMatches,
+  useRouter,
+  useRouterState,
+} from '@tanstack/react-router';
+import { cn } from '@aiostreams/ui/core/styling';
+import { currentHost } from '../../lib/hosts';
+import { isTextField, runAction, useAction } from '../../lib/input';
+import { usePlaylistsOffered } from '../../lib/playlists';
+import { useServerEvents } from '../../lib/server-events';
+import { PageShown } from '../../lib/page-shown';
+import { markTvosStyle } from '../../lib/tvos-style';
+import { ConnectionNote, PageScroll, PagesWork, pageName } from '../layout';
+import { ItemMenuHost } from '../item-menu';
+import { PartyHost } from '../party/party-host';
+import { PlaylistsHost } from '../playlists';
+import { RandomPick } from '../random-pick';
+import { RemoteSheet } from '../remote-sheet';
+import { RemoteTarget } from '../remote-target';
+import { VersionPickerProvider } from '../version-picker';
+import { WatchNextSync } from '../watch-next';
+import { GlideLayers } from '../glide-layers';
+import { PinnedTargets } from './parts';
+import { Sidebar } from './sidebar';
+import { TvosOutlet } from './routes';
+
+const TvosHome = React.lazy(() =>
+  import('./home').then((m) => ({ default: m.TvosHome }))
+);
+const TvosPlayerInfo = React.lazy(() =>
+  import('./player-info').then((m) => ({ default: m.PlayerInfo }))
+);
+const TvosScreensaver = React.lazy(() =>
+  import('./screensaver').then((m) => ({ default: m.Screensaver }))
+);
+
+const FOCUSABLE =
+  'button:not([disabled]), a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+/** Whether the page has anything focusable to the left of `el` on its line, scrolled out of a row included. */
+function somethingLeftOf(el: HTMLElement): boolean {
+  const r = el.getBoundingClientRect();
+  // A row's cards scrolled out of sight are still to its left, so a row is looked at whole.
+  const row = el.closest('[data-nav-row]');
+  if (row) return !row.firstElementChild?.contains(el);
+  // Only the page showing: the kept home under it has hundreds of cards.
+  const page =
+    el.closest('[data-page]') ??
+    el.closest('[data-ui="shell"]') ??
+    document.body;
+  for (const other of page.querySelectorAll<HTMLElement>(FOCUSABLE)) {
+    if (other === el || other.contains(el) || el.contains(other)) continue;
+    if (other.closest('.tv-sidebar, [inert], [data-nav-out]')) continue;
+    const o = other.getBoundingClientRect();
+    if (!o.width || !o.height) continue;
+    if (o.right <= r.left + 1 && o.bottom > r.top && o.top < r.bottom)
+      return true;
+  }
+  return false;
+}
+
+/**
+ * The tvOS style's frame: Apple TV's sidebar instead of the app's, its own
+ * home, and every other page (settings, the player…) as the app has it.
+ */
+export function TvosLayout() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const onHome = pathname === '/';
+  const entry = useRouterState({
+    select: (s) => s.location.state.__TSR_key ?? s.location.href,
+  });
+  // Kept per visit: going back to its entry shows it again, any other visit starts afresh.
+  const [kept, setKept] = React.useState<string>();
+  if (onHome && kept !== entry) setKept(entry);
+  const playing = useChildMatches({
+    select: (matches) => !!matches[0]?.pathname.startsWith('/play/'),
+  });
+  useServerEvents(playing);
+  const offersPlaylists = usePlaylistsOffered();
+  // Menus and dialogs open outside the page, so the whole document says the tvOS style is on.
+  // Left as the setting says when the layout goes (sign-out, who's watching), so those screens keep the look.
+  React.useEffect(() => {
+    document.documentElement.dataset.tvosBuild = '';
+    return markTvosStyle;
+  }, []);
+  // The sidebar, as the Apple TV app's: Back at the home (or with nowhere to go back to) opens it, Back again closes it.
+  const [sidebar, setSidebar] = React.useState(false);
+  const closeSidebar = React.useCallback(() => setSidebar(false), []);
+  React.useEffect(() => setSidebar(false), [pathname, playing]);
+  const router = useRouter();
+  const [under, setUnder] = React.useState<HTMLDivElement | null>(null);
+  const [over, setOver] = React.useState<HTMLDivElement | null>(null);
+  const pinned = React.useMemo(() => ({ under, over }), [under, over]);
+  useAction(
+    'back',
+    () => {
+      // As the app's Back: out of a field first, so typing (settings, search) isn't left by it.
+      const field = document.activeElement;
+      if (isTextField(field)) {
+        field.blur();
+        return true;
+      }
+      if (sidebar) {
+        // At the top of the app, Back from the sidebar leaves it, as Apple TV goes to its home screen.
+        const exit = onHome ? currentHost().exit : undefined;
+        if (exit) exit();
+        else setSidebar(false);
+        return true;
+      }
+      if (!onHome && router.history.canGoBack()) {
+        router.history.back();
+        return true;
+      }
+      setSidebar(true);
+      return true;
+    },
+    !playing
+  );
+  // Left from the leftmost thing on a page, or the pointer at the screen's left edge, opens it too.
+  // Run as the app's Left action, before its own move, so focus is still where the press found it.
+  // A held Left running along a row stops at the first card; only a fresh press goes on.
+  const leftHeld = React.useRef(false);
+  React.useEffect(() => {
+    const up = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') leftHeld.current = false;
+    };
+    window.addEventListener('keyup', up, true);
+    return () => window.removeEventListener('keyup', up, true);
+  }, []);
+  useAction(
+    'nav.left',
+    (input) => {
+      const held = leftHeld.current;
+      if (input === 'ArrowLeft') leftHeld.current = true;
+      if (sidebar || held) return false;
+      const el = document.activeElement;
+      if (
+        !(el instanceof HTMLElement) ||
+        el.closest('.tv-sidebar, [role=menu], [role=dialog]') ||
+        isTextField(el) ||
+        somethingLeftOf(el)
+      )
+        return false;
+      setSidebar(true);
+      return true;
+    },
+    !playing
+  );
+  React.useEffect(() => {
+    if (playing) return;
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.clientX <= 4) setSidebar(true);
+    };
+    window.addEventListener('pointermove', onMove);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+    };
+  }, [playing, sidebar]);
+  // The other pages' code fetched while idle, so a slow TV doesn't fetch it as one opens or playback starts.
+  React.useEffect(() => {
+    const warm = () => {
+      void import('./item');
+      void import('./player-info');
+      void import('./screensaver');
+      void import('./search');
+      void import('./person');
+      void import('./catalog');
+      void import('./library');
+      void import('./history');
+      void import('./calendar');
+    };
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(warm, { timeout: 5000 })
+      : window.setTimeout(warm, 3000);
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
+    };
+  }, []);
+  // The desktop app's Back leaves full screen before anything else, the player's too; a TV interface stays full screen.
+  React.useEffect(() => {
+    const host = currentHost();
+    const saved = host.back;
+    host.back = undefined;
+    return () => {
+      host.back = saved;
+    };
+  }, []);
+  // Backspace (when not typing) and Cmd+[ go back too, as a Mac's usual keys for it.
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const back =
+        (e.key === 'Backspace' &&
+          !e.metaKey &&
+          !e.ctrlKey &&
+          !isTextField(document.activeElement)) ||
+        (e.key === '[' && e.metaKey);
+      if (back && runAction('back', 'Escape')) e.preventDefault();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+  return (
+    <>
+      {!playing && <PagesWork pathname={pathname} />}
+      <div
+        data-ui="shell"
+        data-tvos=""
+        inert={playing}
+        className={cn(playing && 'invisible [content-visibility:hidden]')}
+      >
+        <VersionPickerProvider>
+          <RemoteTarget />
+          <RandomPick />
+          {offersPlaylists && <PlaylistsHost />}
+          {currentHost().watchNext && <WatchNextSync />}
+          <ItemMenuHost>
+            {!playing && (
+              <Sidebar
+                open={sidebar}
+                pathname={pathname}
+                onClose={closeSidebar}
+              />
+            )}
+            {/* While the sidebar is open the page underneath can't take the focus, as on Apple TV. */}
+            <div inert={sidebar} className="contents">
+              {/* As the app's layout: on TVs the page moves in glide layers, fixed things beside them. */}
+              <PinnedTargets.Provider value={pinned}>
+                <div ref={setUnder} className="contents" />
+                {/* Drawn once the places for fixed things exist, so none starts a frame inside the moving page. */}
+                {under && over && (
+                  <GlideLayers name="page">
+                    {/* As the app's: home stays, hidden, under other pages, so going back shows it as it was. */}
+                    {/* Each in its own boundary: a page loading must not hide and redraw the kept home. */}
+                    {kept && (
+                      <div
+                        key={kept}
+                        data-page="home"
+                        inert={!onHome}
+                        className={cn(
+                          !onHome &&
+                            'invisible absolute inset-x-0 top-0 [content-visibility:hidden]'
+                        )}
+                      >
+                        <React.Suspense fallback={null}>
+                          <PageShown.Provider value={onHome}>
+                            <TvosHome />
+                          </PageShown.Provider>
+                        </React.Suspense>
+                        {onHome && <PageScroll />}
+                      </div>
+                    )}
+                    {!onHome && !playing && (
+                      <div key={pathname} data-page={pageName(pathname)}>
+                        <React.Suspense fallback={null}>
+                          <TvosOutlet />
+                        </React.Suspense>
+                        <PageScroll />
+                      </div>
+                    )}
+                  </GlideLayers>
+                )}
+                <div ref={setOver} className="contents" />
+              </PinnedTargets.Provider>
+            </div>
+          </ItemMenuHost>
+        </VersionPickerProvider>
+        <ConnectionNote />
+      </div>
+      {playing && <Outlet />}
+      <React.Suspense fallback={null}>
+        {playing && <TvosPlayerInfo />}
+        <TvosScreensaver playing={playing} />
+      </React.Suspense>
+      <PartyHost />
+      <RemoteSheet />
+    </>
+  );
+}
