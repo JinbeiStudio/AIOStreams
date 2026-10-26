@@ -375,6 +375,9 @@ html[data-tvos-build] [data-ui='settings-card-body'] {
   gap: 0.8vw;
   overflow: visible !important;
   background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
 }
 html[data-tvos-build] [data-ui='settings-card-body'] > * {
   border-width: 0 !important;
@@ -393,9 +396,6 @@ html[data-tvos-build] [data-ui='settings-card-item'] {
     transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1.2),
     background 0.15s ease,
     color 0.15s ease;
-}
-html[data-tvos-build] [data-ui='settings-card-item']:hover {
-  background: rgba(255, 255, 255, 0.16) !important;
 }
 html[data-tvos-build] [data-ui='settings-card-item']:focus-within {
   background: rgba(255, 255, 255, 0.95) !important;
