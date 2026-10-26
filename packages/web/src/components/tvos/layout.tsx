@@ -64,12 +64,20 @@ function somethingLeftOf(el: HTMLElement): boolean {
   return false;
 }
 
+/** Played once per launch: the first page that opens shows it, and no other does. */
+let edgeLightPlayed = false;
+
 /**
- * A glassy light that runs down the left edge when a page opens: it says the menu is there without a word or a
- * shape in the way. Pressing Left, or the button beside the pill, opens it.
+ * A strip of glass that runs down the left edge, once, when the app opens: it says the menu is there without a
+ * word or a shape left in the way. Pressing Left, or the button beside the pill, opens it.
  */
-function EdgeLight({ path }: { path: string }) {
-  return <span key={path} aria-hidden="true" className="tv-edge-light" />;
+function EdgeLight() {
+  const [show] = React.useState(() => {
+    if (edgeLightPlayed) return false;
+    edgeLightPlayed = true;
+    return true;
+  });
+  return show ? <span aria-hidden="true" className="tv-edge-light" /> : null;
 }
 
 /**
@@ -277,7 +285,7 @@ export function TvosLayout() {
                 )}
                 {over && !playing && !sidebar && (
                   <Pinned>
-                    <EdgeLight path={pathname} />
+                    <EdgeLight />
                   </Pinned>
                 )}
                 <div ref={setOver} className="contents" />
