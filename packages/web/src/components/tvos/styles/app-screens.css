@@ -332,8 +332,8 @@ html[data-tvos-build] [data-ui='downloads-section'] h2 {
  * Settings the way Apple TV draws them: a tinted backdrop, a glass list of sections at the left, and each setting a
  * translucent bar of its own, the label at the left and its control at the right, the focused bar white.
  */
-html[data-tvos-build]:has([data-ui='settings-tabs']),
-html[data-tvos-build]:has([data-ui='settings-tabs']) body {
+/* The element that paints the page's background is [data-tvos], above the document's own. */
+[data-tvos]:has([data-ui='settings-tabs']) {
   background:
     radial-gradient(55vw 40vw at 70% 18%, rgba(10, 100, 255, 0.6), transparent 70%),
     radial-gradient(50vw 40vw at 30% 82%, rgba(100, 210, 255, 0.42), transparent 70%),
