@@ -27,7 +27,7 @@ const FR: Record<string, string> = {
   // Home
   'Continue watching': 'Reprendre',
   'Next up': 'À suivre',
-  Upcoming: 'Bientôt',
+  Upcoming: 'À venir',
   'See all': 'Tout voir',
   'No catalogs: add some in your AIOStreams configuration.':
     'Aucun catalogue : ajoutez-en dans votre configuration AIOStreams.',
