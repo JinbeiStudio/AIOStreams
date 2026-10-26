@@ -65,29 +65,11 @@ function somethingLeftOf(el: HTMLElement): boolean {
 }
 
 /**
- * A light that runs down the left edge when a page opens, and again when the focus reaches that edge: it says the
- * menu is there without a word or a shape in the way. Pressing Left, or the button beside the pill, opens it.
+ * A glassy light that runs down the left edge when a page opens: it says the menu is there without a word or a
+ * shape in the way. Pressing Left, or the button beside the pill, opens it.
  */
 function EdgeLight({ path }: { path: string }) {
-  const [tick, setTick] = React.useState(0);
-  React.useEffect(() => setTick((t) => t + 1), [path]);
-  React.useEffect(() => {
-    let near = false;
-    const check = () => {
-      const el = document.activeElement;
-      const now =
-        el instanceof HTMLElement &&
-        el !== document.body &&
-        el.getBoundingClientRect().left < window.innerWidth * 0.12;
-      if (now && !near) setTick((t) => t + 1);
-      near = now;
-    };
-    document.addEventListener('focusin', check);
-    return () => document.removeEventListener('focusin', check);
-  }, []);
-  return tick ? (
-    <span key={tick} aria-hidden="true" className="tv-edge-light" />
-  ) : null;
+  return <span key={path} aria-hidden="true" className="tv-edge-light" />;
 }
 
 /**
