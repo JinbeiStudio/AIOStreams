@@ -1,3 +1,4 @@
+import { i18n } from '@lingui/core';
 import { t } from '@lingui/core/macro';
 import { storage } from './storage';
 import { currentHost } from './hosts';
@@ -188,6 +189,8 @@ export class JellyfinClient {
   ): Promise<T> {
     const headers: Record<string, string> = {
       Authorization: this.authorization,
+      // The app's language, which a server variant can pick its metadata language by; CORS lets this header through.
+      'Accept-Language': i18n.locale,
     };
     if (init.body !== undefined) headers['Content-Type'] = 'application/json';
     if (hinted.has(this.base))
