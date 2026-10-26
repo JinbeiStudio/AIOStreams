@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://tv.jinbeistudio.com">Download page</a> ·
+  <a href="https://tv.jinbeistudio.com">Website and downloads</a> ·
   <a href="https://github.com/JinbeiStudio/jinbeistudio-tv/releases/latest">Latest release</a>
 </p>
 
@@ -22,7 +22,9 @@ Jinbei Studio is a fork of [AIOStreams](https://github.com/Viren070/AIOStreams) 
 
 ## Download
 
-Every release has all the files on one page: **[Latest release](https://github.com/JinbeiStudio/jinbeistudio-tv/releases/latest)**.
+The easiest way is the website, **[tv.jinbeistudio.com](https://tv.jinbeistudio.com)**, in English and French. It has the direct download for each device, with pictures and step-by-step install guides.
+
+Every release also has all the files on one page: **[Latest release](https://github.com/JinbeiStudio/jinbeistudio-tv/releases/latest)**.
 
 | Device | File |
 | --- | --- |
@@ -107,6 +109,7 @@ Both addons stay disabled in the base configuration. Other clients, such as Infu
 
 ## About this repository
 
+- The family website, [tv.jinbeistudio.com](https://tv.jinbeistudio.com), has its own small repository, [JinbeiStudio/tv-site](https://github.com/JinbeiStudio/tv-site).
 - `main` is Jinbei Studio. Releases are tagged `tvos-v<version>` and build every platform.
 - `upstream-main` follows AIOStreams, and its releases are merged into `main`.
 - The tvOS style lives in `packages/web/src/components/tvos`, switched in Settings, Theme, Interface.
