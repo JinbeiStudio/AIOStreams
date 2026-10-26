@@ -1,6 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings -- the tvOS style's words go through tr() (./i18n), which this rule doesn't know */
 import React from 'react';
-import { BiMenu } from 'react-icons/bi';
+import { BiMenu, BiSearch } from 'react-icons/bi';
 import { createPortal } from 'react-dom';
 import { currentHost } from '../../lib/hosts';
 import { easeLayers, GLIDE_LAYERS } from '../../lib/input/glide';
@@ -71,6 +71,14 @@ export function TopBar({ hidden }: { hidden?: boolean }) {
             <BiMenu />
           </button>
         )}
+        <button
+          type="button"
+          aria-label={tr('Search')}
+          className="tv-glass tv-menu-button"
+          onClick={() => navigate(to.search())}
+        >
+          <BiSearch />
+        </button>
         <div className="tv-glass tv-pill">
           {now.toLocaleTimeString(formatLocale(), {
             hour: '2-digit',
