@@ -200,13 +200,6 @@ function Hero({
             />
           </>
         )}
-        {hero.length > 1 && (
-          <div className="tv-dots">
-            {hero.map((h, i) => (
-              <i key={h.Id} data-on={i === index ? '' : undefined} />
-            ))}
-          </div>
-        )}
       </div>
     </>
   );
