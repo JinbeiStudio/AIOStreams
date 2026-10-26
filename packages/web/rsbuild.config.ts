@@ -54,7 +54,10 @@ const BUNDLED_ICONS = [
   // The page that shows before any server is connected carries Jinbei Studio's own logo.
   from: name === 'logo.png' ? './branding/logo.png' : `../frontend/public/${name}`,
   to: name,
-}));
+})).concat([
+  // Under a new name, since the app keeps a saved copy of each image by its address.
+  { from: './branding/logo.png', to: 'jinbei-logo.png' },
+]);
 
 /**
  * `--env-mode standalone` builds the app on its own, with a server list,

@@ -10,7 +10,7 @@ export function BrandLogo({ className }: { className?: string }) {
   return (
     <CachedImage
       data-ui="brand-logo"
-      src={logo && !failed ? logo : __STANDALONE__ ? './logo.png' : '/logo.png'}
+      src={logo && !failed ? logo : __STANDALONE__ ? './jinbei-logo.png' : '/logo.png'}
       alt={name ?? 'Jinbei Studio'}
       onError={() => setFailed(true)}
       className={className}
