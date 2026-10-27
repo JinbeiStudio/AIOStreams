@@ -15,7 +15,6 @@ html[data-tvos-build] .UI-Popover__root {
   color: #fff;
   background: rgba(118, 120, 130, 0.36) !important;
   backdrop-filter: blur(40px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
@@ -69,7 +68,6 @@ html[data-tvos-build] .UI-Drawer__content {
   color: #fff;
   background: rgba(118, 120, 130, 0.36) !important;
   backdrop-filter: blur(48px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(48px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
     0 0 4.33vw rgba(0, 0, 0, 0.45) !important;
@@ -116,7 +114,6 @@ html[data-tvos-build] .UI-Modal__content {
   color: #fff;
   background: rgba(118, 120, 130, 0.36) !important;
   backdrop-filter: blur(48px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(48px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
@@ -156,7 +153,6 @@ html[data-tvos-build] [data-sonner-toast] {
   background-image: none !important;
   background-color: rgba(118, 120, 130, 0.38) !important;
   backdrop-filter: blur(36px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(36px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
@@ -184,7 +180,6 @@ html[data-tvos-build] .UI-Tooltip__root {
   color: #fff !important;
   background: rgba(118, 120, 130, 0.41) !important;
   backdrop-filter: blur(24px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
     0 0.65vw 1.52vw rgba(0, 0, 0, 0.4) !important;
@@ -201,7 +196,6 @@ html[data-tvos-build] [data-ui='next-episode-card'] {
   color: #fff;
   background: rgba(118, 120, 130, 0.36) !important;
   backdrop-filter: blur(40px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
@@ -220,7 +214,6 @@ html[data-tvos-build] [data-ui='next-episode-countdown'] {
 html[data-tvos-build] [data-ui='still-watching'] {
   background: rgba(0, 0, 0, 0.4) !important;
   backdrop-filter: blur(30px) brightness(1.18);
-  -webkit-backdrop-filter: blur(30px) brightness(1.18);
 }
 html[data-tvos-build] [data-ui='still-watching'] > div {
   padding: 1.73vw;
@@ -261,7 +254,6 @@ html[data-tvos-build] [data-ui='player-scrub'] > div {
   color: #fff;
   background: rgba(118, 120, 130, 0.32) !important;
   backdrop-filter: blur(30px) saturate(1.8) brightness(1.18);
-  -webkit-backdrop-filter: blur(30px) saturate(1.8) brightness(1.18);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -284,7 +276,6 @@ html[data-tvos-build]:is([data-tv], [data-os='windows'])
   ) {
   background-color: rgba(58, 60, 70, 0.62) !important;
   backdrop-filter: blur(44px) saturate(1.3) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(44px) saturate(1.3) brightness(1.05) !important;
 }
 
 /* The buttons, pills and tags are thicker there too: their blur reads thinner than a Mac's. */

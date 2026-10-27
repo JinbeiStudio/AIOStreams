@@ -72,7 +72,6 @@
   background: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
   color: inherit !important;
   transform: none !important;
 }
@@ -98,7 +97,6 @@
 html[data-tvos-build] [data-ui='player-button'] {
   background: rgba(118, 120, 130, 0.32) !important;
   backdrop-filter: blur(16px) brightness(1.18) !important;
-  -webkit-backdrop-filter: blur(16px) brightness(1.18) !important;
   margin-left: 0.35rem;
 }
 html[data-tvos-build] [data-ui='player-button']:hover {
@@ -142,7 +140,6 @@ html[data-tvos-build] [data-ui='player-time'] > span {
   border-radius: 99px;
   background: rgba(118, 120, 130, 0.3);
   backdrop-filter: blur(16px) brightness(1.18);
-  -webkit-backdrop-filter: blur(16px) brightness(1.18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .tv-home .tv-hero .tv-dots i {
@@ -182,7 +179,6 @@ html[data-tvos-build] {
 .tv-app-action button,
 .tv-links a {
   backdrop-filter: blur(28px) saturate(1.9) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(1.9) brightness(1.05) !important;
 }
 /* The hero's buttons, the top bar, tabs that open something and See all: the same dark glass, as Apple's. */
 .tv-top .tv-glass,
