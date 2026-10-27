@@ -166,78 +166,83 @@ export function ThemeSection() {
           />
         </>
       )}
-      {server.css && (
-        <Switch
-          side="right"
-          label={t`Use this server's CSS`}
-          help={t`This server styles the app for everyone. Your own CSS applies on top of it.`}
-          value={serverCss}
-          onValueChange={setServerCss}
-        />
-      )}
-      <Textarea
-        data-ui="custom-css-editor"
-        label={t`Custom CSS`}
-        help={
-          CUSTOM_CSS_OFF ? (
-            <Trans>
-              Off for this visit, since the address ends in <code>?safe</code>.
-              Fix or clear it here, then open the app without it.
-            </Trans>
-          ) : (
-            <Trans>
-              Applied on top of the theme. Parts of the app carry a{' '}
-              <code>data-ui</code> attribute to style them by, such as{' '}
-              <code>[data-ui=&quot;progress-bar&quot;]</code>. If it ever hides
-              the page, add <code>?safe</code> to the address to turn it off.
-              See the{' '}
-              <Anchor
-                href={CSS_DOCS_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[--brand] hover:underline"
+      {!tvos && (
+        <>
+          {server.css && (
+            <Switch
+              side="right"
+              label={t`Use this server's CSS`}
+              help={t`This server styles the app for everyone. Your own CSS applies on top of it.`}
+              value={serverCss}
+              onValueChange={setServerCss}
+            />
+          )}
+          <Textarea
+            data-ui="custom-css-editor"
+            label={t`Custom CSS`}
+            help={
+              CUSTOM_CSS_OFF ? (
+                <Trans>
+                  Off for this visit, since the address ends in{' '}
+                  <code>?safe</code>. Fix or clear it here, then open the app
+                  without it.
+                </Trans>
+              ) : (
+                <Trans>
+                  Applied on top of the theme. Parts of the app carry a{' '}
+                  <code>data-ui</code> attribute to style them by, such as{' '}
+                  <code>[data-ui=&quot;progress-bar&quot;]</code>. If it ever
+                  hides the page, add <code>?safe</code> to the address to turn
+                  it off. See the{' '}
+                  <Anchor
+                    href={CSS_DOCS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[--brand] hover:underline"
+                  >
+                    guide
+                  </Anchor>{' '}
+                  for every selector and examples.
+                </Trans>
+              )
+            }
+            value={draft}
+            onValueChange={setDraft}
+            maxLength={MAX_CUSTOM_CSS}
+            spellCheck={false}
+            placeholder={
+              // eslint-disable-next-line lingui/no-unlocalized-strings -- CSS
+              '[data-ui="progress-bar-fill"] {\n  background: hotpink;\n}'
+            }
+            className="min-h-60 font-mono text-xs"
+          />
+          <div className="flex flex-wrap gap-2">
+            <Button
+              size="sm"
+              intent="white"
+              className="rounded-full max-sm:w-full"
+              disabled={draft.trim() === css.trim()}
+              onClick={apply}
+            >
+              <Trans>Apply CSS</Trans>
+            </Button>
+            {(colors.accent || colors.background || css) && (
+              <Button
+                size="sm"
+                intent="gray-outline"
+                className="rounded-full max-sm:w-full"
+                onClick={() => {
+                  setColors({});
+                  setCss('');
+                  setDraft('');
+                }}
               >
-                guide
-              </Anchor>{' '}
-              for every selector and examples.
-            </Trans>
-          )
-        }
-        value={draft}
-        onValueChange={setDraft}
-        maxLength={MAX_CUSTOM_CSS}
-        spellCheck={false}
-        placeholder={
-          // eslint-disable-next-line lingui/no-unlocalized-strings -- CSS
-          '[data-ui="progress-bar-fill"] {\n  background: hotpink;\n}'
-        }
-        className="min-h-60 font-mono text-xs"
-      />
-      <div className="flex flex-wrap gap-2">
-        <Button
-          size="sm"
-          intent="white"
-          className="rounded-full max-sm:w-full"
-          disabled={draft.trim() === css.trim()}
-          onClick={apply}
-        >
-          <Trans>Apply CSS</Trans>
-        </Button>
-        {(colors.accent || colors.background || css) && (
-          <Button
-            size="sm"
-            intent="gray-outline"
-            className="rounded-full max-sm:w-full"
-            onClick={() => {
-              setColors({});
-              setCss('');
-              setDraft('');
-            }}
-          >
-            <Trans>Reset theme</Trans>
-          </Button>
-        )}
-      </div>
+                <Trans>Reset theme</Trans>
+              </Button>
+            )}
+          </div>
+        </>
+      )}
     </SettingsCard>
   );
 }
