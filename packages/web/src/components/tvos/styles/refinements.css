@@ -188,19 +188,16 @@ html[data-tvos-build] {
   background: var(--tv-glass);
 }
 
-/*
- * On a TV the bar has no play/skip buttons, so the title shares the buttons'
- * line, left of them, just above the progress bar, as Apple's player.
- */
+/* On a TV the title sits above the buttons, as on a computer: sharing their line, a long title ran under them. */
 html[data-tvos-build][data-tv] [data-ui='player-title'] {
   left: var(--tv-gutter);
-  /* Level with the buttons' foot: the bar's margin, the time line, the bar, then the buttons' gap above it. */
+  /* The bar's margin, the time line, the bar, the buttons' gap, the buttons, then a gap. */
   bottom: calc(
-    2.2rem + 1.5rem + 0.5vw + 1.25rem + 0.9vw + env(safe-area-inset-bottom)
+    2.2rem + 1.5rem + 0.5vw + 1.25rem + 0.9vw + var(--control, 3vw) + 1.2rem +
+      env(safe-area-inset-bottom)
   );
 }
 html[data-tvos-build][data-tv] [data-ui='player-bottom-bar'] > div:last-child {
-  justify-content: flex-end;
   min-height: 3.2rem;
   align-items: flex-end;
 }
