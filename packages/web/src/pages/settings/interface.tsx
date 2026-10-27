@@ -29,6 +29,7 @@ import {
 } from '../../lib/settings';
 import { SettingsCard } from '../../components/settings-card';
 import { onDevice, followsYou } from './common';
+import { useTvosStyle } from '../../lib/tvos-style';
 
 const NOTHING = 'none';
 
@@ -191,6 +192,8 @@ export function InterfaceSection() {
   const [combineSearch, setCombineSearch] = useSetting(
     settings.interface.combineSearch
   );
+  // The tvOS style lays out posters, episodes and navigation itself, so those options would change nothing.
+  const tvos = useTvosStyle();
   const [posterSize, setPosterSize] = useSetting(settings.interface.posterSize);
   const [posterLines, setPosterLines] = useSetting(
     settings.interface.posterLines
@@ -282,46 +285,52 @@ export function InterfaceSection() {
           value={combineSearch}
           onValueChange={setCombineSearch}
         />
-        <Select
-          label={t`Poster size`}
-          help={t`How large cards are in a grid.`}
-          options={[
-            { value: 'small', label: t`Small` },
-            { value: 'medium', label: t`Medium` },
-            { value: 'large', label: t`Large` },
-          ]}
-          value={posterSize}
-          onValueChange={(value) => setPosterSize(value as PosterSize)}
-        />
-        <Combobox
-          multiple
-          label={t`Under posters`}
-          help={t`Left empty, posters stand alone. A poster without artwork still shows its title.`}
-          placeholder={t`Nothing`}
-          emptyMessage={t`Nothing matches.`}
-          options={[option('title', t`Title`), option('year', t`Year`)]}
-          value={posterLines}
-          onValueChange={(value) => setPosterLines(value as PosterLine[])}
-        />
+        {!tvos && (
+          <Select
+            label={t`Poster size`}
+            help={t`How large cards are in a grid.`}
+            options={[
+              { value: 'small', label: t`Small` },
+              { value: 'medium', label: t`Medium` },
+              { value: 'large', label: t`Large` },
+            ]}
+            value={posterSize}
+            onValueChange={(value) => setPosterSize(value as PosterSize)}
+          />
+        )}
+        {!tvos && (
+          <Combobox
+            multiple
+            label={t`Under posters`}
+            help={t`Left empty, posters stand alone. A poster without artwork still shows its title.`}
+            placeholder={t`Nothing`}
+            emptyMessage={t`Nothing matches.`}
+            options={[option('title', t`Title`), option('year', t`Year`)]}
+            value={posterLines}
+            onValueChange={(value) => setPosterLines(value as PosterLine[])}
+          />
+        )}
       </SettingsCard>
-      <SettingsCard
-        name="episodes"
-        title={t`Episodes`}
-        description={onDevice()}
-      >
-        <Select
-          label={t`Episode layout`}
-          help={t`Automatic lists episodes on narrow screens and puts them in a row on wide ones.`}
-          options={[
-            { value: 'auto', label: t`Automatic` },
-            { value: 'row', label: t`Row` },
-            { value: 'list', label: t`List` },
-          ]}
-          value={episodeLayout}
-          onValueChange={(value) => setEpisodeLayout(value as EpisodeLayout)}
-        />
-      </SettingsCard>
-      <NavigationCard />
+      {!tvos && (
+        <SettingsCard
+          name="episodes"
+          title={t`Episodes`}
+          description={onDevice()}
+        >
+          <Select
+            label={t`Episode layout`}
+            help={t`Automatic lists episodes on narrow screens and puts them in a row on wide ones.`}
+            options={[
+              { value: 'auto', label: t`Automatic` },
+              { value: 'row', label: t`Row` },
+              { value: 'list', label: t`List` },
+            ]}
+            value={episodeLayout}
+            onValueChange={(value) => setEpisodeLayout(value as EpisodeLayout)}
+          />
+        </SettingsCard>
+      )}
+      {!tvos && <NavigationCard />}
     </>
   );
 }

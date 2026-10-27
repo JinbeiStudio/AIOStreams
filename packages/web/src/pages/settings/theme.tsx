@@ -24,6 +24,7 @@ import { focusOn, keyboardFocus } from '../../lib/input';
 import { SettingsCard } from '../../components/settings-card';
 import { Anchor } from '../../components/anchor';
 import { followsYou, DOCS_URL } from './common';
+import { useTvosStyle } from '../../lib/tvos-style';
 import { InterfaceStylePicker } from '../../components/tvos/style-picker';
 
 const KEEP_CSS_MS = 15_000;
@@ -45,6 +46,8 @@ const presetName = (name: string) =>
   })[name] ?? name;
 
 export function ThemeSection() {
+  // The tvOS style has its own palette, so the accent and background colours would change nothing.
+  const tvos = useTvosStyle();
   const [colors, setColors] = useSetting(settings.theme.colors);
   const [css, setCss] = useSetting(settings.theme.customCss);
   const [serverCss, setServerCss] = useSetting(settings.theme.serverCss);
@@ -100,65 +103,69 @@ export function ThemeSection() {
   return (
     <SettingsCard name="theme" title={t`Theme`} description={followsYou()}>
       <InterfaceStylePicker />
-      <div className="space-y-2">
-        <p className="text-sm font-semibold">
-          <Trans>Presets</Trans>
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {THEME_PRESETS.map((preset) => {
-            const selected =
-              preset.accent === accent && preset.background === background;
-            return (
-              <button
-                key={preset.name}
-                type="button"
-                data-ui="theme-preset"
-                aria-pressed={selected}
-                onClick={() => pick(preset)}
-                className={cn(
-                  'flex items-center gap-2 rounded-full border py-1 ps-1 pe-3 text-sm transition-colors hover:bg-white/5',
-                  selected
-                    ? 'border-[--brand] ring-1 ring-[--brand]'
-                    : 'border-white/10'
-                )}
-              >
-                <span
-                  className="flex size-6 items-center justify-center rounded-full ring-1 ring-white/15"
-                  style={{ backgroundColor: preset.background }}
-                >
-                  <span
-                    className="size-3 rounded-full"
-                    style={{ backgroundColor: preset.accent }}
-                  />
-                </span>
-                {presetName(preset.name)}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-      <ColorInput
-        picker={!currentHost().tv}
-        swatches={THEME_PRESETS.map((p) => ({
-          value: p.accent,
-          name: presetName(p.name),
-        }))}
-        label={t`Accent`}
-        help={t`Buttons, progress bars and highlights.`}
-        value={accent}
-        onValueChange={(value) => pick({ accent: value, background })}
-      />
-      <ColorInput
-        picker={!currentHost().tv}
-        swatches={THEME_PRESETS.map((p) => ({
-          value: p.background,
-          name: presetName(p.name),
-        }))}
-        label={t`Background`}
-        help={t`Pages and panels take their shades from it. Dark colours read best.`}
-        value={background}
-        onValueChange={(value) => pick({ accent, background: value })}
-      />
+      {!tvos && (
+        <>
+          <div className="space-y-2">
+            <p className="text-sm font-semibold">
+              <Trans>Presets</Trans>
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {THEME_PRESETS.map((preset) => {
+                const selected =
+                  preset.accent === accent && preset.background === background;
+                return (
+                  <button
+                    key={preset.name}
+                    type="button"
+                    data-ui="theme-preset"
+                    aria-pressed={selected}
+                    onClick={() => pick(preset)}
+                    className={cn(
+                      'flex items-center gap-2 rounded-full border py-1 ps-1 pe-3 text-sm transition-colors hover:bg-white/5',
+                      selected
+                        ? 'border-[--brand] ring-1 ring-[--brand]'
+                        : 'border-white/10'
+                    )}
+                  >
+                    <span
+                      className="flex size-6 items-center justify-center rounded-full ring-1 ring-white/15"
+                      style={{ backgroundColor: preset.background }}
+                    >
+                      <span
+                        className="size-3 rounded-full"
+                        style={{ backgroundColor: preset.accent }}
+                      />
+                    </span>
+                    {presetName(preset.name)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <ColorInput
+            picker={!currentHost().tv}
+            swatches={THEME_PRESETS.map((p) => ({
+              value: p.accent,
+              name: presetName(p.name),
+            }))}
+            label={t`Accent`}
+            help={t`Buttons, progress bars and highlights.`}
+            value={accent}
+            onValueChange={(value) => pick({ accent: value, background })}
+          />
+          <ColorInput
+            picker={!currentHost().tv}
+            swatches={THEME_PRESETS.map((p) => ({
+              value: p.background,
+              name: presetName(p.name),
+            }))}
+            label={t`Background`}
+            help={t`Pages and panels take their shades from it. Dark colours read best.`}
+            value={background}
+            onValueChange={(value) => pick({ accent, background: value })}
+          />
+        </>
+      )}
       {server.css && (
         <Switch
           side="right"
