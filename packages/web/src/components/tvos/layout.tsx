@@ -235,7 +235,7 @@ export function TvosLayout() {
       ),
     []
   );
-  // The sidebar closes when the mouse leaves it, or on Right, which heads for the page.
+  // The sidebar closes when the mouse leaves it; on Right it closes itself.
   React.useEffect(() => {
     if (!sidebar) return;
     const bar = document.querySelector('.tv-sidebar');
@@ -264,14 +264,6 @@ export function TvosLayout() {
       window.removeEventListener('pointerdown', away, true);
     };
   }, [sidebar]);
-  useAction(
-    'nav.right',
-    () => {
-      setSidebar(false);
-      return true;
-    },
-    sidebar && !playing
-  );
   // The other pages' code fetched while idle, so a slow TV doesn't fetch it as one opens or playback starts.
   React.useEffect(() => {
     const warm = () => {
