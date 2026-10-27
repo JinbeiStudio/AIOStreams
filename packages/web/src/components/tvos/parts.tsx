@@ -1,7 +1,7 @@
 /* eslint-disable lingui/no-unlocalized-strings -- the tvOS style's words go through tr() (./i18n), which this rule doesn't know */
 import React from 'react';
 import { BiMenu, BiSearch } from 'react-icons/bi';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 import { currentHost } from '../../lib/hosts';
 import { easeLayers, GLIDE_LAYERS } from '../../lib/input/glide';
 import { formatLocale } from '../../lib/i18n';
@@ -157,7 +157,8 @@ export function Scroller({
   const items = React.Children.toArray(children);
   const count = items.length;
   // As the app's long rows: only the cards around the focus are drawn, the rest hold their places empty.
-  const windowed = count > WINDOWED;
+  // Only on a TV, where drawing every card of a long row costs too much; a computer draws them all, so there are no empty places to jump over.
+  const windowed = glide && count > WINDOWED;
   // As the app's window: around the opening card, then only growing, so cards drawn stay drawn.
   const [range, setRange] = React.useState<[number, number]>(() => [
     Math.max(0, start - MARGIN),
@@ -178,13 +179,16 @@ export function Scroller({
         c.contains(e.target as Node)
       );
       if (at < 0) return;
-      setRange((r) =>
-        (at - EDGE < r[0] && r[0] > 0) || at + EDGE > r[1]
-          ? [
-              Math.max(0, Math.min(r[0], at - MARGIN)),
-              Math.max(r[1], at + 2 * MARGIN),
-            ]
-          : r
+      // Drawn before the next key, or a fast run of Rights reaches the empty places and the focus jumps to another row.
+      flushSync(() =>
+        setRange((r) =>
+          (at - EDGE < r[0] && r[0] > 0) || at + EDGE > r[1]
+            ? [
+                Math.max(0, Math.min(r[0], at - MARGIN)),
+                Math.max(r[1], at + 2 * MARGIN),
+              ]
+            : r
+        )
       );
     };
     el.addEventListener('focusin', near);
