@@ -65,6 +65,8 @@ export function TopBar({ hidden }: { hidden?: boolean }) {
           <button
             type="button"
             aria-label={tr('Menu')}
+            data-label={tr('Menu')}
+            data-tip="below"
             className="tv-glass tv-menu-button"
             onClick={openMenu}
           >
@@ -74,6 +76,8 @@ export function TopBar({ hidden }: { hidden?: boolean }) {
         <button
           type="button"
           aria-label={tr('Search')}
+          data-label={tr('Search')}
+          data-tip="below"
           className="tv-glass tv-menu-button"
           onClick={() => navigate(to.search())}
         >

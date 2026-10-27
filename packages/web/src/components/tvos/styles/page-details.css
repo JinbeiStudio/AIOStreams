@@ -141,19 +141,38 @@
   background: rgba(255, 255, 255, 0.18);
 }
 
-/* A round button's name, under it while it is focused. */
-.tv-button.round[data-label]:focus::after {
+/* A round button's name, in a small capsule above it (below, in the top bar) on hover and on focus, as the app's own buttons show theirs. */
+.tv-button.round[data-label],
+.tv-menu-button[data-label] {
+  position: relative;
+}
+:is(.tv-button.round, .tv-menu-button)[data-label]:is(
+    :hover,
+    :focus-visible
+  )::after {
   content: attr(data-label);
   position: absolute;
-  top: calc(100% + 0.7vw);
+  bottom: calc(100% + 0.7vw);
   left: 50%;
-  transform: translateX(-50%) scale(0.93);
+  transform: translateX(-50%);
+  z-index: 6;
   white-space: nowrap;
+  padding: 0.45vw 1vw;
+  border-radius: 99px;
   font-size: 1vw;
   font-weight: 600;
+  line-height: 1.2;
   color: #fff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  background: rgba(70, 72, 82, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
   pointer-events: none;
+}
+:is(.tv-button.round, .tv-menu-button)[data-tip='below']:is(
+    :hover,
+    :focus-visible
+  )::after {
+  bottom: auto;
+  top: calc(100% + 0.7vw);
 }
 /* The app's controls inside the glass row: round icon buttons, glass, white when focused. */
 .tv-app-action {
