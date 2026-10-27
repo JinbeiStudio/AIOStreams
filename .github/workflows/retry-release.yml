@@ -1,0 +1,29 @@
+name: Retry the release
+
+# GitHub's Apple Silicon Mac runners are often out of capacity, and the release's job for them is then
+# cancelled before it starts. This runs it again, twice at most, ten minutes apart.
+on:
+  workflow_run:
+    workflows: ['tvOS Style Release']
+    types: [completed]
+
+permissions:
+  actions: write
+
+jobs:
+  retry:
+    if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.run_attempt < 3
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RUN: ${{ github.event.workflow_run.id }}
+      REPO: ${{ github.repository }}
+    steps:
+      - run: |
+          # Only jobs that never ran a successful step, as one that lacked a runner: a real failure is not repeated.
+          never=$(gh run view "$RUN" -R "$REPO" --json jobs --jq '[.jobs[] | select((.conclusion == "failure" or .conclusion == "cancelled") and ([.steps[] | select(.conclusion == "success")] | length) == 0)] | length')
+          echo "jobs that never started: $never"
+          [ "$never" -gt 0 ] || exit 0
+          sleep 600
+          gh run rerun "$RUN" -R "$REPO" --failed
