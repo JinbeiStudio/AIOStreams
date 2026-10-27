@@ -10,16 +10,22 @@ import { useServerInfo } from '../../lib/server-info';
 import { SettingsCard, SettingsRow } from '../../components/settings-card';
 import { DOCS_URL } from './common';
 
-const REPO_URL = 'https://github.com/Viren070/AIOStreams';
+const REPO_URL = 'https://github.com/JinbeiStudio/jinbeistudio-tv';
+const SITE_URL = 'https://tv.jinbeistudio.com';
 
-/** The desktop app's stable release, whose notes link each download. */
-const DESKTOP_DOWNLOAD_URL = `${REPO_URL}/releases/tag/desktop`;
+/** The website's download page, with every device's file and install steps. */
+const DESKTOP_DOWNLOAD_URL = SITE_URL;
 
 const links = () => [
   {
     name: t`Source code`,
     help: t`Where the app is made, and where to report a problem.`,
     url: REPO_URL,
+  },
+  {
+    name: t`Website`,
+    help: t`Downloads and install guides for every device.`,
+    url: SITE_URL,
   },
   {
     name: t`Documentation`,
@@ -141,6 +147,11 @@ function credits(
 ): { name: string; help: string; url: string }[] {
   const build = shell ? LIBMPV_BUILDS[shell.platform] : undefined;
   return [
+    {
+      name: 'AIOStreams',
+      help: t`The server and the apps this one is a fork of.`,
+      url: 'https://github.com/Viren070/AIOStreams',
+    },
     {
       name: 'Seanime',
       help: t`The interface is built on its components.`,
