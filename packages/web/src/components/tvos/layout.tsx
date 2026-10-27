@@ -220,7 +220,8 @@ export function TvosLayout() {
       ),
     []
   );
-  // Left open and unused, the sidebar closes by itself: only its own pointer, focus and key use keep it.
+  // Left open and unused, the sidebar closes by itself. A pointer resting on it doesn't count, though a browser
+  // repeats its move events when the page moves under it: only a real move, a click, a wheel, a key or a focus does.
   React.useEffect(() => {
     if (!sidebar) return;
     let timer = 0;
@@ -230,12 +231,21 @@ export function TvosLayout() {
     };
     arm();
     const bar = document.querySelector('.tv-sidebar');
-    const own = ['pointermove', 'pointerdown', 'focusin', 'wheel'] as const;
-    own.forEach((type) => bar?.addEventListener(type, arm));
+    let at: [number, number] | null = null;
+    const moved = (e: Event) => {
+      const { clientX: x, clientY: y } = e as PointerEvent;
+      if (at && Math.hypot(x - at[0], y - at[1]) < 6) return;
+      at = [x, y];
+      arm();
+    };
+    const used = ['pointerdown', 'focusin', 'wheel'] as const;
+    bar?.addEventListener('pointermove', moved);
+    used.forEach((type) => bar?.addEventListener(type, arm));
     window.addEventListener('keydown', arm);
     return () => {
       window.clearTimeout(timer);
-      own.forEach((type) => bar?.removeEventListener(type, arm));
+      bar?.removeEventListener('pointermove', moved);
+      used.forEach((type) => bar?.removeEventListener(type, arm));
       window.removeEventListener('keydown', arm);
     };
   }, [sidebar]);
