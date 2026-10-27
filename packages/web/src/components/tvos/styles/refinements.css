@@ -114,10 +114,6 @@ html[data-tvos-build] [data-ui='player-controls'] {
   --control: 2.6rem;
   --icon: 1.1rem;
 }
-/* The bar thin, the elapsed time alone under it (the total is the bar itself). */
-html[data-tvos-build] [data-ui='player-time'] > span {
-  display: none;
-}
 /* The rating framed, as Apple shows "TV-MA". */
 .tv-rating {
   display: inline-block;
