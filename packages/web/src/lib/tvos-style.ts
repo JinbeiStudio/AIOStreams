@@ -7,9 +7,6 @@ export function useTvosStyle(): boolean {
 
 /** Marks the document before anything draws, so screens outside the session (who's watching) take the look too. */
 export function markTvosStyle(): void {
-  // Windows draws the glass thinner than a Mac, so its styles are marked to thicken it.
-  if (/Windows/.test(navigator.userAgent))
-    document.documentElement.dataset.os = 'windows';
   if (settings.theme.interfaceStyle.read() === 'tvos')
     document.documentElement.dataset.tvosBuild = '';
   else delete document.documentElement.dataset.tvosBuild;
