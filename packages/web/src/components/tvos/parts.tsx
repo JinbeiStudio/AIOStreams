@@ -280,12 +280,13 @@ export function Scroller({
       const zone = Math.max(60, box.width * 0.06);
       const left = e.clientX - box.left;
       const right = box.right - e.clientX;
-      speed =
-        left < zone
-          ? -Math.ceil(((zone - left) / zone) * 18)
-          : right < zone
-            ? Math.ceil(((zone - right) / zone) * 18)
-            : 0;
+      // Full speed over the outer 40% of the zone, so a mouse thrown at the edge, whose last move lands anywhere there, runs as fast as one eased in.
+      const full = zone * 0.4;
+      const pace = (distance: number) =>
+        distance <= full
+          ? 18
+          : Math.max(3, Math.ceil(((zone - distance) / (zone - full)) * 18));
+      speed = left < zone ? -pace(left) : right < zone ? pace(right) : 0;
       if (speed && !frame) frame = requestAnimationFrame(step);
     };
     // Reaching the screen's own edge also leaves the row, and the mouse can go no further: scrolling goes on until it moves back.
