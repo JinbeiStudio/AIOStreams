@@ -56,6 +56,9 @@ export function AboutSection() {
     ],
     [t`Address`, serverAddress(client.base)],
     [t`Jellyfin API`, info.data?.Version],
+    ...(__JINBEI_VERSION__
+      ? ([['Jinbei Studio', __JINBEI_VERSION__]] as [string, string][])
+      : []),
     [t`Web app`, __APP_COMMIT__],
     ...(shell
       ? ([

@@ -117,6 +117,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile --filter "@aiostreams/web..."
       - run: pnpm -F @aiostreams/web build
+        env:
+          JINBEI_VERSION: ${{ needs.release.outputs.version }}
       - run: |
           (cd packages/web/dist && zip -qr "$GITHUB_WORKSPACE/jinbei-studio-web.zip" .)
           ls -l jinbei-studio-web.zip

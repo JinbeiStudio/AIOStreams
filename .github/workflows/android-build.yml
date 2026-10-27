@@ -40,6 +40,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile --filter "@aiostreams/web..."
       - run: pnpm -F @aiostreams/web build:standalone
+        env:
+          JINBEI_VERSION: ${{ inputs.version }}
       - uses: actions/setup-java@v6
         with:
           distribution: temurin

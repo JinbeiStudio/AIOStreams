@@ -45,19 +45,19 @@ const ASSET_PREFIX = '/jellyfin-web/';
 const WEB_PAGE = /^\/jellyfin(\/.*)?\/web(\/(index\.html)?)?(\?|$)/i;
 
 /** The icons a server would otherwise serve from its root. */
-const BUNDLED_ICONS = [
-  'logo.png',
-  'favicon.ico',
-  'icon0.svg',
-  'apple-icon.png',
-].map((name) => ({
-  // The page that shows before any server is connected carries Jinbei Studio's own logo.
-  from: name === 'logo.png' ? './branding/logo.png' : `../frontend/public/${name}`,
-  to: name,
-})).concat([
-  // Under a new name, since the app keeps a saved copy of each image by its address.
-  { from: './branding/logo.png', to: 'jinbei-logo.png' },
-]);
+const BUNDLED_ICONS = ['logo.png', 'favicon.ico', 'icon0.svg', 'apple-icon.png']
+  .map((name) => ({
+    // The page that shows before any server is connected carries Jinbei Studio's own logo.
+    from:
+      name === 'logo.png'
+        ? './branding/logo.png'
+        : `../frontend/public/${name}`,
+    to: name,
+  }))
+  .concat([
+    // Under a new name, since the app keeps a saved copy of each image by its address.
+    { from: './branding/logo.png', to: 'jinbei-logo.png' },
+  ]);
 
 /**
  * `--env-mode standalone` builds the app on its own, with a server list,
@@ -70,6 +70,8 @@ export default defineConfig(({ envMode }) => {
     'process.env.NEXT_PUBLIC_PLATFORM': JSON.stringify(''),
     __STANDALONE__: JSON.stringify(standalone),
     __APP_COMMIT__: JSON.stringify(buildCommit()),
+    // The Jinbei Studio release this build is for, set by its release workflow.
+    __JINBEI_VERSION__: JSON.stringify(process.env.JINBEI_VERSION ?? ''),
   };
   const source = {
     entry: { index: './src/main.tsx' },
