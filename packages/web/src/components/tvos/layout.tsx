@@ -209,13 +209,13 @@ export function TvosLayout() {
         .map((el) => el.closest('.tv-scroller'))
         .find(Boolean);
       if (row && row.scrollLeft > 2) return;
-      // Over a row, the mouse that has just scrolled it back to its start must rest a moment, or the menu would open as it arrives.
+      // Over a row, the mouse that has just scrolled it back to its start must rest a moment (a quarter of a second), or the menu would open as it arrives.
       if (!row) return setSidebar(true);
       if (dwell) return;
       dwell = window.setTimeout(() => {
         dwell = 0;
         if (row.scrollLeft <= 2) setSidebar(true);
-      }, 700);
+      }, 250);
     };
     window.addEventListener('pointermove', onMove);
     return () => {
