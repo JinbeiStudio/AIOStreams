@@ -47,6 +47,11 @@ export function AboutSection() {
     staleTime: 5 * 60_000,
   });
   const rows: [string, string | null | undefined][] = [
+    // This app's own release, then the AIOStreams version its code is built on.
+    ...(__JINBEI_VERSION__
+      ? ([['Jinbei Studio', __JINBEI_VERSION__]] as [string, string][])
+      : []),
+    [t`Based on AIOStreams`, __AIOSTREAMS_VERSION__],
     [
       t`Server`,
       info.data?.ServerName &&
@@ -56,17 +61,19 @@ export function AboutSection() {
     ],
     [t`Address`, serverAddress(client.base)],
     [t`Jellyfin API`, info.data?.Version],
-    // The desktop and Android apps already carry the release's number as their own.
-    ...(__JINBEI_VERSION__ && !shell
-      ? ([['Jinbei Studio', __JINBEI_VERSION__]] as [string, string][])
-      : []),
     [t`Web app`, __APP_COMMIT__],
     ...(shell
       ? ([
-          [
-            shell.platform === 'android' ? t`Android app` : t`Desktop app`,
-            shell.app,
-          ],
+          ...(shell.app !== __JINBEI_VERSION__
+            ? [
+                [
+                  shell.platform === 'android'
+                    ? t`Android app`
+                    : t`Desktop app`,
+                  shell.app,
+                ],
+              ]
+            : []),
           ...(shell.player && !shell.mpv
             ? [[t`Player`, shell.player]]
             : [

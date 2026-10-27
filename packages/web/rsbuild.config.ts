@@ -72,6 +72,14 @@ export default defineConfig(({ envMode }) => {
     __APP_COMMIT__: JSON.stringify(buildCommit()),
     // The Jinbei Studio release this build is for, set by its release workflow.
     __JINBEI_VERSION__: JSON.stringify(process.env.JINBEI_VERSION ?? ''),
+    // The AIOStreams release this code is merged up to: the repository's own version.
+    __AIOSTREAMS_VERSION__: JSON.stringify(
+      (
+        JSON.parse(
+          readFileSync(new URL('../../package.json', import.meta.url), 'utf8')
+        ) as { version: string }
+      ).version
+    ),
   };
   const source = {
     entry: { index: './src/main.tsx' },
