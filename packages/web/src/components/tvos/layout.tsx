@@ -233,8 +233,21 @@ export function TvosLayout() {
       if (e.clientX <= box.right) entered = true;
       else if (entered && e.clientX > box.right + 12) setSidebar(false);
     };
+    // A click anywhere else closes it too, which covers a menu opened by its button, where the mouse never was.
+    const away = (e: PointerEvent) => {
+      if (
+        !(e.target as Element | null)?.closest(
+          '.tv-sidebar, .tv-menu-button, .tv-edge-capsule'
+        )
+      )
+        setSidebar(false);
+    };
     window.addEventListener('pointermove', move);
-    return () => window.removeEventListener('pointermove', move);
+    window.addEventListener('pointerdown', away, true);
+    return () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerdown', away, true);
+    };
   }, [sidebar]);
   useAction(
     'nav.right',
