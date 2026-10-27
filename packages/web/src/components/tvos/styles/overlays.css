@@ -270,8 +270,8 @@ html[data-tvos-build] [data-ui='player-scrub'] > div {
   border-radius: 1.52vw !important;
 }
 
-/* On a TV the menus and panels are frosted: a stronger tint and blur, so what is behind never competes with the text. */
-html[data-tvos-build][data-tv]
+/* On a TV and on Windows the menus and panels are frosted: a stronger tint and blur, so what is behind never competes with the text. */
+html[data-tvos-build]:is([data-tv], [data-os='windows'])
   :is(
     .tv-sidebar,
     .UI-ContextMenu__root,
@@ -285,4 +285,13 @@ html[data-tvos-build][data-tv]
   background-color: rgba(58, 60, 70, 0.62) !important;
   backdrop-filter: blur(44px) saturate(1.3) brightness(1.05) !important;
   -webkit-backdrop-filter: blur(44px) saturate(1.3) brightness(1.05) !important;
+}
+
+/* The buttons, pills and tags are thicker there too: their blur reads thinner than a Mac's. */
+html[data-tvos-build]:is([data-tv], [data-os='windows']) {
+  --tv-glass: rgba(104, 106, 118, 0.5);
+}
+html[data-tvos-build]:is([data-tv], [data-os='windows'])
+  :is(.tv-tag, .tv-watched) {
+  background-color: rgba(104, 106, 118, 0.5);
 }
