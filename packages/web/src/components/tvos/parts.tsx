@@ -235,7 +235,13 @@ export function Scroller({
       let card = e.target as HTMLElement | null;
       while (card && card.parentElement !== cards) card = card.parentElement;
       if (!card) return;
-      const left = pad + card.offsetLeft;
+      // On a TV the cards' offsets are the layer's; elsewhere they are measured in the scrolled content, padding included.
+      const at = glide
+        ? pad + card.offsetLeft
+        : card.getBoundingClientRect().left -
+          el.getBoundingClientRect().left +
+          el.scrollLeft;
+      const left = at;
       const right = left + card.offsetWidth;
       const from = el.scrollLeft;
       const max = el.scrollWidth - el.clientWidth;
