@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-router';
 import { cn } from '@aiostreams/ui/core/styling';
 import { currentHost } from '../../lib/hosts';
+import { navigate, to } from '../../lib/paths';
 import { isTextField, runAction, useAction } from '../../lib/input';
 import { usePlaylistsOffered } from '../../lib/playlists';
 import { useServerEvents } from '../../lib/server-events';
@@ -24,7 +25,7 @@ import { VersionPickerProvider } from '../version-picker';
 import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
-import { BiChevronRight } from 'react-icons/bi';
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { MenuOpener, Pinned } from './parts';
 import { tr } from './i18n';
 import { Sidebar } from './sidebar';
@@ -69,6 +70,22 @@ function somethingLeftOf(el: HTMLElement): boolean {
  * A slim glass capsule down the left edge, always there: the menu is that way. Under the pointer it widens and shows
  * an arrow; a click opens the menu. Not focusable, so the remote's Left keeps its own way of opening it.
  */
+/** Back, top left, for a pointer or a touch; a remote has its Back key. */
+function BackButton({ onBack }: { onBack: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label={tr('Back')}
+      data-label={tr('Back')}
+      data-tip="below"
+      className="tv-glass tv-menu-button tv-back"
+      onClick={onBack}
+    >
+      <BiChevronLeft />
+    </button>
+  );
+}
+
 function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
   return (
     <button
@@ -253,48 +270,57 @@ export function TvosLayout() {
             <div inert={sidebar} className="contents">
               {/* As the app's layout: on TVs the page moves in glide layers, fixed things beside them. */}
               <MenuOpener.Provider value={openSidebar}>
-              <PinnedTargets.Provider value={pinned}>
-                <div ref={setUnder} className="contents" />
-                {/* Drawn once the places for fixed things exist, so none starts a frame inside the moving page. */}
-                {under && over && (
-                  <GlideLayers name="page">
-                    {/* As the app's: home stays, hidden, under other pages, so going back shows it as it was. */}
-                    {/* Each in its own boundary: a page loading must not hide and redraw the kept home. */}
-                    {kept && (
-                      <div
-                        key={kept}
-                        data-page="home"
-                        inert={!onHome}
-                        className={cn(
-                          !onHome &&
-                            'invisible absolute inset-x-0 top-0 [content-visibility:hidden]'
-                        )}
-                      >
-                        <React.Suspense fallback={null}>
-                          <PageShown.Provider value={onHome}>
-                            <TvosHome />
-                          </PageShown.Provider>
-                        </React.Suspense>
-                        {onHome && <PageScroll />}
-                      </div>
-                    )}
-                    {!onHome && !playing && (
-                      <div key={pathname} data-page={pageName(pathname)}>
-                        <React.Suspense fallback={null}>
-                          <TvosOutlet />
-                        </React.Suspense>
-                        <PageScroll />
-                      </div>
-                    )}
-                  </GlideLayers>
-                )}
-                {over && !playing && !sidebar && (
-                  <Pinned>
-                    <EdgeCapsule onOpen={openSidebar} />
-                  </Pinned>
-                )}
-                <div ref={setOver} className="contents" />
-              </PinnedTargets.Provider>
+                <PinnedTargets.Provider value={pinned}>
+                  <div ref={setUnder} className="contents" />
+                  {/* Drawn once the places for fixed things exist, so none starts a frame inside the moving page. */}
+                  {under && over && (
+                    <GlideLayers name="page">
+                      {/* As the app's: home stays, hidden, under other pages, so going back shows it as it was. */}
+                      {/* Each in its own boundary: a page loading must not hide and redraw the kept home. */}
+                      {kept && (
+                        <div
+                          key={kept}
+                          data-page="home"
+                          inert={!onHome}
+                          className={cn(
+                            !onHome &&
+                              'invisible absolute inset-x-0 top-0 [content-visibility:hidden]'
+                          )}
+                        >
+                          <React.Suspense fallback={null}>
+                            <PageShown.Provider value={onHome}>
+                              <TvosHome />
+                            </PageShown.Provider>
+                          </React.Suspense>
+                          {onHome && <PageScroll />}
+                        </div>
+                      )}
+                      {!onHome && !playing && (
+                        <div key={pathname} data-page={pageName(pathname)}>
+                          <React.Suspense fallback={null}>
+                            <TvosOutlet />
+                          </React.Suspense>
+                          <PageScroll />
+                        </div>
+                      )}
+                    </GlideLayers>
+                  )}
+                  {over && !playing && !sidebar && (
+                    <Pinned>
+                      <EdgeCapsule onOpen={openSidebar} />
+                      {!onHome && (
+                        <BackButton
+                          onBack={() =>
+                            router.history.canGoBack()
+                              ? router.history.back()
+                              : navigate(to.home, { replace: true })
+                          }
+                        />
+                      )}
+                    </Pinned>
+                  )}
+                  <div ref={setOver} className="contents" />
+                </PinnedTargets.Provider>
               </MenuOpener.Provider>
             </div>
           </ItemMenuHost>
