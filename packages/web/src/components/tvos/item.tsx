@@ -282,6 +282,7 @@ export function TvosItem({
                     type="button"
                     className="tv-glass tv-button round"
                     aria-label={tr(played ? 'Mark unwatched' : 'Mark watched')}
+                    data-label={tr(played ? 'Mark unwatched' : 'Mark watched')}
                     data-on={played ? '' : undefined}
                     onClick={() =>
                       setPlayed.mutate({ itemId: item.Id!, played: !played })
