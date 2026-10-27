@@ -9,6 +9,8 @@ import {
 import { cn } from '@aiostreams/ui/core/styling';
 import { currentHost } from '../../lib/hosts';
 import { navigate, to } from '../../lib/paths';
+import { toast } from 'sonner';
+import { watchForNewPage } from '../../lib/web-update';
 import { isTextField, runAction, useAction } from '../../lib/input';
 import { usePlaylistsOffered } from '../../lib/playlists';
 import { useServerEvents } from '../../lib/server-events';
@@ -206,6 +208,18 @@ export function TvosLayout() {
       window.removeEventListener('pointermove', onMove);
     };
   }, [playing, sidebar]);
+  // A server that hosts the app offers its new release to the tab left open on the old one.
+  React.useEffect(
+    () =>
+      watchForNewPage(() =>
+        toast(tr('A new version is available'), {
+          id: 'new-page',
+          duration: Infinity,
+          action: { label: tr('Reload'), onClick: () => location.reload() },
+        })
+      ),
+    []
+  );
   // Left open and unused, the sidebar closes by itself: only its own pointer, focus and key use keep it.
   React.useEffect(() => {
     if (!sidebar) return;
