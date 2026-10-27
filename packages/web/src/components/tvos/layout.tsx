@@ -72,7 +72,7 @@ function somethingLeftOf(el: HTMLElement): boolean {
  * A slim glass capsule down the left edge, always there: the menu is that way. Under the pointer it widens and shows
  * an arrow; a click opens the menu. Not focusable, so the remote's Left keeps its own way of opening it.
  */
-/** Back, top left, for a pointer or a touch; a remote has its Back key. */
+/** Back, top left, for a pointer or a touch; a TV's remote has its own Back key, so it shows no button. */
 function BackButton({ onBack }: { onBack: () => void }) {
   return (
     <button
@@ -365,7 +365,7 @@ export function TvosLayout() {
                   {over && !playing && !sidebar && (
                     <Pinned>
                       <EdgeCapsule onOpen={openSidebar} />
-                      {!onHome && (
+                      {!onHome && !currentHost().tv && (
                         <BackButton
                           onBack={() =>
                             router.history.canGoBack()
