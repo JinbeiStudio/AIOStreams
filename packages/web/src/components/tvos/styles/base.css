@@ -105,7 +105,8 @@
     color 0.2s ease;
 }
 /* In the left margin, so it never covers a page's title. */
-.tv-back {
+/* More specific than the name capsule's position: relative, which would put it back in the page's flow. */
+.tv-glass.tv-menu-button.tv-back {
   position: fixed;
   top: 3.7vw;
   left: 1.5vw;
