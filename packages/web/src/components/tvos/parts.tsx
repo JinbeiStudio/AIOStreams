@@ -130,6 +130,83 @@ const MARGIN = 12;
 /** How near the drawn edge the focus comes before the window moves. */
 const EDGE = 6;
 
+/** Every row a mouse can scroll at its edge, with one listener for them all, so a move is measured once. */
+const edgeRows = new Set<HTMLElement>();
+const edge = { row: null as HTMLElement | null, speed: 0, frame: 0 };
+
+/** Scrolls the row the mouse is at the edge of; it rests once the row can go no further. */
+function edgeStep() {
+  const { row, speed } = edge;
+  if (!row || !speed) {
+    edge.frame = 0;
+    return;
+  }
+  const before = row.scrollLeft;
+  row.scrollLeft += speed;
+  edge.frame = row.scrollLeft !== before ? requestAnimationFrame(edgeStep) : 0;
+}
+
+function edgeMove(e: PointerEvent) {
+  if (e.pointerType !== 'mouse') return;
+  const target = e.target instanceof Element ? e.target : null;
+  // The edge capsule sits above the rows along the left edge: the row under it counts.
+  const row = (target?.closest('.tv-scroller') ??
+    (target?.closest('.tv-edge-capsule')
+      ? document
+          .elementsFromPoint(e.clientX, e.clientY)
+          .map((el) => el.closest('.tv-scroller'))
+          .find(Boolean)
+      : null)) as HTMLElement | null;
+  if (!row || !edgeRows.has(row)) {
+    edge.speed = 0;
+    return;
+  }
+  const box = row.getBoundingClientRect();
+  const zone = Math.max(60, box.width * 0.06);
+  // Full speed over the outer 40% of the zone, so a mouse thrown at the edge runs as fast as one eased in.
+  const full = zone * 0.4;
+  const pace = (distance: number) =>
+    distance <= full
+      ? 18
+      : Math.max(3, Math.ceil(((zone - distance) / (zone - full)) * 18));
+  const left = e.clientX - box.left;
+  const right = box.right - e.clientX;
+  edge.row = row;
+  edge.speed = left < zone ? -pace(left) : right < zone ? pace(right) : 0;
+  if (edge.speed && !edge.frame) edge.frame = requestAnimationFrame(edgeStep);
+}
+
+const edgeStop = () => {
+  edge.speed = 0;
+};
+
+// Leaving the window stops it; pushed against a full screen's edge, the mouse never leaves.
+const edgeOut = (e: PointerEvent) => {
+  if (!e.relatedTarget) edgeStop();
+};
+
+function scrollAtEdge(el: HTMLElement): () => void {
+  if (!edgeRows.size) {
+    window.addEventListener('pointermove', edgeMove);
+    document.addEventListener('pointerout', edgeOut);
+    window.addEventListener('blur', edgeStop);
+  }
+  edgeRows.add(el);
+  return () => {
+    edgeRows.delete(el);
+    if (edge.row === el) {
+      edgeStop();
+      edge.row = null;
+    }
+    if (edgeRows.size) return;
+    cancelAnimationFrame(edge.frame);
+    edge.frame = 0;
+    window.removeEventListener('pointermove', edgeMove);
+    document.removeEventListener('pointerout', edgeOut);
+    window.removeEventListener('blur', edgeStop);
+  };
+}
+
 /**
  * A sideways row of cards. On TVs it jumps to the focused card and eases its
  * layers there on the compositor, as the app's rows do, rather than scrolling frame by frame.
@@ -263,51 +340,7 @@ export function Scroller({
   React.useEffect(() => {
     const el = outer.current;
     if (glide || !el) return;
-    let speed = 0;
-    let frame = 0;
-    const step = () => {
-      el.scrollLeft += speed;
-      frame = speed ? requestAnimationFrame(step) : 0;
-    };
-    const move = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return;
-      const box = el.getBoundingClientRect();
-      // Another row, or the page above or below, is not this one's edge.
-      if (e.clientY < box.top || e.clientY > box.bottom) {
-        speed = 0;
-        return;
-      }
-      const zone = Math.max(60, box.width * 0.06);
-      const left = e.clientX - box.left;
-      const right = box.right - e.clientX;
-      // Full speed over the outer 40% of the zone, so a mouse thrown at the edge, whose last move lands anywhere there, runs as fast as one eased in.
-      const full = zone * 0.4;
-      const pace = (distance: number) =>
-        distance <= full
-          ? 18
-          : Math.max(3, Math.ceil(((zone - distance) / (zone - full)) * 18));
-      speed = left < zone ? -pace(left) : right < zone ? pace(right) : 0;
-      if (speed && !frame) frame = requestAnimationFrame(step);
-    };
-    // Reaching the screen's own edge also leaves the row, and the mouse can go no further: scrolling goes on until it moves back.
-    const leave = (e: PointerEvent) => {
-      const box = el.getBoundingClientRect();
-      if (e.clientX >= box.right - 3 || e.clientX <= box.left + 3) return;
-      speed = 0;
-    };
-    const stop = () => {
-      speed = 0;
-    };
-    window.addEventListener('pointermove', move);
-    el.addEventListener('pointerleave', leave);
-    window.addEventListener('blur', stop);
-    return () => {
-      stop();
-      cancelAnimationFrame(frame);
-      window.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerleave', leave);
-      window.removeEventListener('blur', stop);
-    };
+    return scrollAtEdge(el);
   }, [glide]);
   // Cards' artwork measured against the row, as in the app, so those off to the side wait.
   const inside = (
