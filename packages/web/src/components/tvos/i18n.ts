@@ -16,6 +16,8 @@ const FR: Record<string, string> = {
   Home: 'Accueil',
   Menu: 'Menu',
   Back: 'Retour',
+  'A new version is available': 'Une nouvelle version est disponible',
+  Reload: 'Recharger',
   Discover: 'Découvrir',
   Search: 'Rechercher',
   Library: 'Bibliothèque',
