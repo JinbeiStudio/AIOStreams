@@ -194,17 +194,30 @@ export function TvosLayout() {
   );
   React.useEffect(() => {
     if (playing) return;
+    let dwell = 0;
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse' || e.clientX > 4) return;
+      if (e.pointerType !== 'mouse') return;
+      if (e.clientX > 4) {
+        window.clearTimeout(dwell);
+        dwell = 0;
+        return;
+      }
       // As the Left key: only off the first cover. A row scrolled along first scrolls back to its start.
       const row = document
         .elementFromPoint(e.clientX, e.clientY)
         ?.closest('.tv-scroller');
       if (row && row.scrollLeft > 2) return;
-      setSidebar(true);
+      // Over a row, the mouse that has just scrolled it back to its start must rest a moment, or the menu would open as it arrives.
+      if (!row) return setSidebar(true);
+      if (dwell) return;
+      dwell = window.setTimeout(() => {
+        dwell = 0;
+        if (row.scrollLeft <= 2) setSidebar(true);
+      }, 700);
     };
     window.addEventListener('pointermove', onMove);
     return () => {
+      window.clearTimeout(dwell);
       window.removeEventListener('pointermove', onMove);
     };
   }, [playing, sidebar]);
