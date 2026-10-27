@@ -217,10 +217,11 @@ export function Scroller({
     );
     return () => stops.forEach((stop) => stop());
   }, [glide, count, range]);
+  // The row follows the focus along its cards, on a TV by easing its layers and elsewhere by plain scrolling.
   React.useEffect(() => {
     const el = outer.current;
-    const cards = row.current;
-    if (!glide || !el || !cards) return;
+    const cards = (glide ? row : outer).current;
+    if (!el || !cards) return;
     const pad = parseFloat(getComputedStyle(el).paddingLeft) || 0;
     const follow = (e: FocusEvent) => {
       let card = e.target as HTMLElement | null;
@@ -238,11 +239,47 @@ export function Scroller({
             : from;
       const was = el.scrollLeft;
       el.scrollLeft = Math.max(0, Math.min(to, max));
-      if (layer.current && el.scrollLeft !== was)
+      if (glide && layer.current && el.scrollLeft !== was)
         easeLayers(layer.current, 'X', el.scrollLeft - was);
     };
     el.addEventListener('focusin', follow);
     return () => el.removeEventListener('focusin', follow);
+  }, [glide]);
+  // A mouse resting at a row's edge scrolls it that way, as a pointer has no arrow keys to do it with.
+  React.useEffect(() => {
+    const el = outer.current;
+    if (glide || !el) return;
+    let speed = 0;
+    let frame = 0;
+    const step = () => {
+      el.scrollLeft += speed;
+      frame = speed ? requestAnimationFrame(step) : 0;
+    };
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      const box = el.getBoundingClientRect();
+      const zone = Math.max(60, box.width * 0.06);
+      const left = e.clientX - box.left;
+      const right = box.right - e.clientX;
+      speed =
+        left < zone
+          ? -Math.ceil(((zone - left) / zone) * 18)
+          : right < zone
+            ? Math.ceil(((zone - right) / zone) * 18)
+            : 0;
+      if (speed && !frame) frame = requestAnimationFrame(step);
+    };
+    const stop = () => {
+      speed = 0;
+    };
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', stop);
+    return () => {
+      stop();
+      cancelAnimationFrame(frame);
+      el.removeEventListener('pointermove', move);
+      el.removeEventListener('pointerleave', stop);
+    };
   }, [glide]);
   // Cards' artwork measured against the row, as in the app, so those off to the side wait.
   const inside = (
