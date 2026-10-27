@@ -51,6 +51,8 @@ export function AboutSection() {
     ...(__JINBEI_VERSION__
       ? ([['Jinbei Studio', __JINBEI_VERSION__]] as [string, string][])
       : []),
+    // The commit of this repository the build comes from, under the release it belongs to.
+    ['Commit', __APP_COMMIT__],
     ['AIOStreams', __AIOSTREAMS_VERSION__],
     [
       t`Server`,
@@ -61,7 +63,6 @@ export function AboutSection() {
     ],
     [t`Address`, serverAddress(client.base)],
     [t`Jellyfin API`, info.data?.Version],
-    [t`Web app`, __APP_COMMIT__],
     ...(shell
       ? ([
           ...(shell.player && !shell.mpv
