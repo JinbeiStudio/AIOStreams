@@ -193,13 +193,38 @@ export function TvosLayout() {
   React.useEffect(() => {
     if (playing) return;
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === 'mouse' && e.clientX <= 4) setSidebar(true);
+      if (e.pointerType !== 'mouse' || e.clientX > 4) return;
+      // As the Left key: only off the first cover. A row scrolled along first scrolls back to its start.
+      const row = document
+        .elementFromPoint(e.clientX, e.clientY)
+        ?.closest('.tv-scroller');
+      if (row && row.scrollLeft > 2) return;
+      setSidebar(true);
     };
     window.addEventListener('pointermove', onMove);
     return () => {
       window.removeEventListener('pointermove', onMove);
     };
   }, [playing, sidebar]);
+  // Left open and unused, the sidebar closes by itself: only its own pointer, focus and key use keep it.
+  React.useEffect(() => {
+    if (!sidebar) return;
+    let timer = 0;
+    const arm = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setSidebar(false), 7000);
+    };
+    arm();
+    const bar = document.querySelector('.tv-sidebar');
+    const own = ['pointermove', 'pointerdown', 'focusin', 'wheel'] as const;
+    own.forEach((type) => bar?.addEventListener(type, arm));
+    window.addEventListener('keydown', arm);
+    return () => {
+      window.clearTimeout(timer);
+      own.forEach((type) => bar?.removeEventListener(type, arm));
+      window.removeEventListener('keydown', arm);
+    };
+  }, [sidebar]);
   // The other pages' code fetched while idle, so a slow TV doesn't fetch it as one opens or playback starts.
   React.useEffect(() => {
     const warm = () => {
