@@ -522,12 +522,6 @@ html[data-tvos-build] [data-ui='player-title'] [data-name='detail'] {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);
 }
-/* On a TV the remote plays, so the bar drops Play; Previous and Next episode stay as buttons. */
-html[data-tvos-build][data-tv]
-  [data-ui='player-bottom-bar']
-  [data-ui='player-button'][data-name='play'] {
-  display: none;
-}
 /* Skip intro / credits: Apple's single glass button at the bottom right. */
 html[data-tvos-build] [data-ui='skip-segment'] button {
   height: 2.8rem;

@@ -282,27 +282,24 @@ export function PlayerControls({
       icon: loadingEpisode === 'previous' ? spinner : <LuSkipBack />,
       onClick: onPrevious,
     },
-    // A remote's arrows skip with the controls hidden, and the seek bar's with them up.
-    back: !touch &&
-      !tv && {
-        name: 'back',
-        label: plural(stepSeconds, {
-          one: 'Back # second',
-          other: 'Back # seconds',
-        }),
-        icon: <LuRotateCcw />,
-        onClick: () => seekBy(-seekStep * 1000),
-      },
-    forward: !touch &&
-      !tv && {
-        name: 'forward',
-        label: plural(stepSeconds, {
-          one: 'Forward # second',
-          other: 'Forward # seconds',
-        }),
-        icon: <LuRotateCw />,
-        onClick: () => seekBy(seekStep * 1000),
-      },
+    back: !touch && {
+      name: 'back',
+      label: plural(stepSeconds, {
+        one: 'Back # second',
+        other: 'Back # seconds',
+      }),
+      icon: <LuRotateCcw />,
+      onClick: () => seekBy(-seekStep * 1000),
+    },
+    forward: !touch && {
+      name: 'forward',
+      label: plural(stepSeconds, {
+        one: 'Forward # second',
+        other: 'Forward # seconds',
+      }),
+      icon: <LuRotateCw />,
+      onClick: () => seekBy(seekStep * 1000),
+    },
     next: !!stepping && {
       name: 'next',
       label: stepLabels[stepping][1],
@@ -583,7 +580,7 @@ export function PlayerControls({
             {barButton(buttons.previous)}
             {barButton(buttons.next)}
           </div>
-          {!touch && !tv && <Volume player={player} />}
+          {!touch && <Volume player={player} />}
           <OptionButtons
             player={player}
             onMenu={onMenu}
