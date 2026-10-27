@@ -148,20 +148,21 @@ function edgeStep() {
 
 function edgeMove(e: PointerEvent) {
   if (e.pointerType !== 'mouse') return;
-  const target = e.target instanceof Element ? e.target : null;
-  // The edge capsule sits above the rows along the left edge: the row under it counts.
-  const row = (target?.closest('.tv-scroller') ??
-    (target?.closest('.tv-edge-capsule')
-      ? document
-          .elementsFromPoint(e.clientX, e.clientY)
-          .map((el) => el.closest('.tv-scroller'))
-          .find(Boolean)
-      : null)) as HTMLElement | null;
-  if (!row || !edgeRows.has(row)) {
+  // The row under the pointer by its place on screen, as the edge capsule and other layers can sit above it.
+  let row: HTMLElement | null = null;
+  let box: DOMRect | null = null;
+  for (const el of edgeRows) {
+    const r = el.getBoundingClientRect();
+    if (e.clientY >= r.top && e.clientY <= r.bottom && r.width) {
+      row = el;
+      box = r;
+      break;
+    }
+  }
+  if (!row || !box) {
     edge.speed = 0;
     return;
   }
-  const box = row.getBoundingClientRect();
   const zone = Math.max(60, box.width * 0.06);
   // Full speed over the outer 40% of the zone, so a mouse thrown at the edge runs as fast as one eased in.
   const full = zone * 0.4;
@@ -180,15 +181,16 @@ const edgeStop = () => {
   edge.speed = 0;
 };
 
-// Leaving the window stops it; pushed against a full screen's edge, the mouse never leaves.
-const edgeOut = (e: PointerEvent) => {
-  if (!e.relatedTarget) edgeStop();
+// Out through the top or bottom stops it. Out through a side is the mouse reaching the screen's edge or the
+// page's scrollbar, still meaning "scroll this way": it goes on, resting at the row's end.
+const edgeLeave = (e: MouseEvent) => {
+  if (e.clientY <= 0 || e.clientY >= window.innerHeight - 1) edgeStop();
 };
 
 function scrollAtEdge(el: HTMLElement): () => void {
   if (!edgeRows.size) {
     window.addEventListener('pointermove', edgeMove);
-    document.addEventListener('pointerout', edgeOut);
+    document.documentElement.addEventListener('mouseleave', edgeLeave);
     window.addEventListener('blur', edgeStop);
   }
   edgeRows.add(el);
@@ -202,7 +204,7 @@ function scrollAtEdge(el: HTMLElement): () => void {
     cancelAnimationFrame(edge.frame);
     edge.frame = 0;
     window.removeEventListener('pointermove', edgeMove);
-    document.removeEventListener('pointerout', edgeOut);
+    document.documentElement.removeEventListener('mouseleave', edgeLeave);
     window.removeEventListener('blur', edgeStop);
   };
 }
