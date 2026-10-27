@@ -272,6 +272,11 @@ export function Scroller({
     const move = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
       const box = el.getBoundingClientRect();
+      // Another row, or the page above or below, is not this one's edge.
+      if (e.clientY < box.top || e.clientY > box.bottom) {
+        speed = 0;
+        return;
+      }
       const zone = Math.max(60, box.width * 0.06);
       const left = e.clientX - box.left;
       const right = box.right - e.clientX;
@@ -283,16 +288,24 @@ export function Scroller({
             : 0;
       if (speed && !frame) frame = requestAnimationFrame(step);
     };
+    // Reaching the screen's own edge also leaves the row, and the mouse can go no further: scrolling goes on until it moves back.
+    const leave = (e: PointerEvent) => {
+      const box = el.getBoundingClientRect();
+      if (e.clientX >= box.right - 3 || e.clientX <= box.left + 3) return;
+      speed = 0;
+    };
     const stop = () => {
       speed = 0;
     };
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerleave', stop);
+    window.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', leave);
+    window.addEventListener('blur', stop);
     return () => {
       stop();
       cancelAnimationFrame(frame);
-      el.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerleave', stop);
+      window.removeEventListener('pointermove', move);
+      el.removeEventListener('pointerleave', leave);
+      window.removeEventListener('blur', stop);
     };
   }, [glide]);
   // Cards' artwork measured against the row, as in the app, so those off to the side wait.
