@@ -56,7 +56,8 @@ export function AboutSection() {
     ],
     [t`Address`, serverAddress(client.base)],
     [t`Jellyfin API`, info.data?.Version],
-    ...(__JINBEI_VERSION__
+    // The desktop and Android apps already carry the release's number as their own.
+    ...(__JINBEI_VERSION__ && !shell
       ? ([['Jinbei Studio', __JINBEI_VERSION__]] as [string, string][])
       : []),
     [t`Web app`, __APP_COMMIT__],
