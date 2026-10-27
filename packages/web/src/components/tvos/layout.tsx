@@ -203,9 +203,11 @@ export function TvosLayout() {
         return;
       }
       // As the Left key: only off the first cover. A row scrolled along first scrolls back to its start.
+      // Whatever is stacked there counts, the edge capsule included, which sits above the rows along the edge.
       const row = document
-        .elementFromPoint(e.clientX, e.clientY)
-        ?.closest('.tv-scroller');
+        .elementsFromPoint(e.clientX, e.clientY)
+        .map((el) => el.closest('.tv-scroller'))
+        .find(Boolean);
       if (row && row.scrollLeft > 2) return;
       // Over a row, the mouse that has just scrolled it back to its start must rest a moment, or the menu would open as it arrives.
       if (!row) return setSidebar(true);
