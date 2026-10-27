@@ -220,35 +220,30 @@ export function TvosLayout() {
       ),
     []
   );
-  // Left open and unused, the sidebar closes by itself. A pointer resting on it doesn't count, though a browser
-  // repeats its move events when the page moves under it: only a real move, a click, a wheel, a key or a focus does.
+  // The sidebar closes when the mouse leaves it, or on Right, which heads for the page.
   React.useEffect(() => {
     if (!sidebar) return;
-    let timer = 0;
-    const arm = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => setSidebar(false), 7000);
-    };
-    arm();
     const bar = document.querySelector('.tv-sidebar');
-    let at: [number, number] | null = null;
-    const moved = (e: Event) => {
-      const { clientX: x, clientY: y } = e as PointerEvent;
-      if (at && Math.hypot(x - at[0], y - at[1]) < 6) return;
-      at = [x, y];
-      arm();
+    if (!bar) return;
+    // Opened from the screen's left edge or by a button far away, the mouse is not in it yet: it counts once it is.
+    let entered = false;
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      const box = bar.getBoundingClientRect();
+      if (e.clientX <= box.right) entered = true;
+      else if (entered && e.clientX > box.right + 12) setSidebar(false);
     };
-    const used = ['pointerdown', 'focusin', 'wheel'] as const;
-    bar?.addEventListener('pointermove', moved);
-    used.forEach((type) => bar?.addEventListener(type, arm));
-    window.addEventListener('keydown', arm);
-    return () => {
-      window.clearTimeout(timer);
-      bar?.removeEventListener('pointermove', moved);
-      used.forEach((type) => bar?.removeEventListener(type, arm));
-      window.removeEventListener('keydown', arm);
-    };
+    window.addEventListener('pointermove', move);
+    return () => window.removeEventListener('pointermove', move);
   }, [sidebar]);
+  useAction(
+    'nav.right',
+    () => {
+      setSidebar(false);
+      return true;
+    },
+    sidebar && !playing
+  );
   // The other pages' code fetched while idle, so a slow TV doesn't fetch it as one opens or playback starts.
   React.useEffect(() => {
     const warm = () => {
