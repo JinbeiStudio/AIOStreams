@@ -104,6 +104,13 @@
     background 0.2s ease,
     color 0.2s ease;
 }
+/* In the left margin, so it never covers a page's title. */
+.tv-back {
+  position: fixed;
+  top: 3.7vw;
+  left: 1.5vw;
+  z-index: 5;
+}
 .tv-menu-button:is(:focus, :hover) {
   /* Brighter glass with the icon kept white, not a white fill. */
   background: rgba(255, 255, 255, 0.28);

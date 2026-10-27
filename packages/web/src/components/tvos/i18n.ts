@@ -15,6 +15,7 @@ const FR: Record<string, string> = {
   // Sidebar and pages
   Home: 'Accueil',
   Menu: 'Menu',
+  Back: 'Retour',
   Discover: 'Découvrir',
   Search: 'Rechercher',
   Library: 'Bibliothèque',
@@ -210,7 +211,8 @@ const IDS: Record<string, string> = {
   'mdblist.88307': 'trending-kids',
   'mdblist.88309': 'trending-kids',
   'mal.airing': 'mal-airing-now',
-  'custom.org_stremio_animecatalogs.anime.anidb_latest_ended': 'anidb-latest-ended',
+  'custom.org_stremio_animecatalogs.anime.anidb_latest_ended':
+    'anidb-latest-ended',
   'mal.top_series': 'mal-top-series',
   'mal.top_movies': 'mal-top-movies',
   'mal.top_anime': 'mal-top-all-time',
@@ -294,7 +296,8 @@ export function isServiceLibrary(view: CatalogView): boolean {
 }
 
 /** The "– Films" / "– Séries" a server's names may end with, so other apps can tell two lists apart; this one has its tag. */
-const KIND_SUFFIX = /\s+[–-]\s+(?:Films?|Séries?|Series|Movies?|Shows?|Anime)$/i;
+const KIND_SUFFIX =
+  /\s+[–-]\s+(?:Films?|Séries?|Series|Movies?|Shows?|Anime)$/i;
 
 /** The kind a server's name ends with ("– Films", "– Séries"), for a view that does not say it otherwise. */
 export function nameKind(
