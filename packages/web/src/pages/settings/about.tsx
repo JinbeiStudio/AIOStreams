@@ -47,11 +47,11 @@ export function AboutSection() {
     staleTime: 5 * 60_000,
   });
   const rows: [string, string | null | undefined][] = [
-    // This app's own release, then the AIOStreams version its code is built on.
+    // This app's own release, then the AIOStreams release its code is built on.
     ...(__JINBEI_VERSION__
       ? ([['Jinbei Studio', __JINBEI_VERSION__]] as [string, string][])
       : []),
-    [t`Based on AIOStreams`, __AIOSTREAMS_VERSION__],
+    ['AIOStreams', __AIOSTREAMS_VERSION__],
     [
       t`Server`,
       info.data?.ServerName &&
@@ -64,16 +64,6 @@ export function AboutSection() {
     [t`Web app`, __APP_COMMIT__],
     ...(shell
       ? ([
-          ...(shell.app !== __JINBEI_VERSION__
-            ? [
-                [
-                  shell.platform === 'android'
-                    ? t`Android app`
-                    : t`Desktop app`,
-                  shell.app,
-                ],
-              ]
-            : []),
           ...(shell.player && !shell.mpv
             ? [[t`Player`, shell.player]]
             : [
