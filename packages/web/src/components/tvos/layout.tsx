@@ -72,10 +72,60 @@ function somethingLeftOf(el: HTMLElement): boolean {
  * A slim glass capsule down the left edge, always there: the menu is that way. Under the pointer it widens and shows
  * an arrow; a click opens the menu. Not focusable, so the remote's Left keeps its own way of opening it.
  */
+// A page's first line: its title, search field or tabs.
+const PAGE_HEADER = '.tv-page-title, .tv-field, .tv-tab, h1';
+
+function pageHeader(): DOMRect | undefined {
+  let found: DOMRect | undefined;
+  for (const el of document.querySelectorAll<HTMLElement>(PAGE_HEADER)) {
+    if (el.closest('.tv-sidebar, [data-sonner-toast], [inert]')) continue;
+    const r = el.getBoundingClientRect();
+    if (!r.height || r.top + window.scrollY > window.innerHeight / 4) continue;
+    if (!found || r.top < found.top) found = r;
+  }
+  return found;
+}
+
 /** Back, top left, for a pointer or a touch; a TV's remote has its own Back key, so it shows no button. */
-function BackButton({ onBack }: { onBack: () => void }) {
+function BackButton({
+  pathname,
+  onBack,
+}: {
+  pathname: string;
+  onBack: () => void;
+}) {
+  const ref = React.useRef<HTMLButtonElement>(null);
+  // Level with the page's first line, which sits lower on some pages than others.
+  React.useLayoutEffect(() => {
+    const button = ref.current;
+    if (!button) return;
+    let frame = 0;
+    let tries = 0;
+    const align = () => {
+      const header = pageHeader();
+      if (!header) {
+        // A page fills in after it mounts.
+        if (++tries < 60) frame = requestAnimationFrame(align);
+        return;
+      }
+      const top = header.top + window.scrollY + header.height / 2;
+      button.style.top = `${top - button.offsetHeight / 2}px`;
+    };
+    button.style.top = '';
+    align();
+    const again = () => {
+      tries = 0;
+      align();
+    };
+    window.addEventListener('resize', again);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', again);
+    };
+  }, [pathname]);
   return (
     <button
+      ref={ref}
       type="button"
       aria-label={tr('Back')}
       data-label={tr('Back')}
@@ -374,6 +424,7 @@ export function TvosLayout() {
                       <EdgeCapsule onOpen={openSidebar} />
                       {!onHome && !currentHost().tv && (
                         <BackButton
+                          pathname={pathname}
                           onBack={() =>
                             router.history.canGoBack()
                               ? router.history.back()
