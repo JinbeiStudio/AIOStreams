@@ -108,6 +108,10 @@ html[data-tvos-build] .UI-Modal__overlay {
   background: rgba(0, 0, 0, 0.45) !important;
   backdrop-filter: none !important;
 }
+/* Chromium blurs only up to a will-change: opacity ancestor, so the open panels blurred the dark overlay, not the page; kept for the closing fade. */
+html[data-tvos-build] .UI-Modal__overlay[data-state='open'] {
+  will-change: auto;
+}
 html[data-tvos-build] .UI-Modal__content {
   border: 0 !important;
   border-radius: 2.17vw !important;
