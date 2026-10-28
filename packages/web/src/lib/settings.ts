@@ -661,11 +661,11 @@ export type InterfaceStyle = (typeof INTERFACE_STYLES)[number];
  */
 export const settings = {
   interface: {
-    /** A catalog's locale, or `auto` for the system's language. */
+    /** A catalog's locale, or `auto` for the system's language; French unless chosen. */
     language: synced<string>(
       'language',
-      (raw) => raw ?? 'auto',
-      (value) => (value === 'auto' ? undefined : value),
+      (raw) => raw ?? 'fr',
+      (value) => (value === 'fr' ? undefined : value),
       ['aiostreams-web-interface-language']
     ),
     featured: synced<Featured>(
@@ -772,7 +772,7 @@ export const settings = {
     ),
   },
   playback: {
-    autoPlayFirst: syncedFlag('autoPlayFirst', false, [
+    autoPlayFirst: syncedFlag('autoPlayFirst', true, [
       'aiostreams-web-skip-versions',
     ]),
     chapterSkips: syncedFlag('chapterSkips', true, [

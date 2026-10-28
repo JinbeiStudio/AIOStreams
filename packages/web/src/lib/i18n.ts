@@ -173,11 +173,11 @@ const LAST_LANGUAGE = 'aiostreams-web-last-language';
  * last showed, so the next start opens in it before the user's settings load.
  */
 function choice(): string {
-  const last = storage.get<string>(LAST_LANGUAGE) ?? 'auto';
+  const last = storage.get<string>(LAST_LANGUAGE) ?? 'fr';
   if (!signedIn()) return last;
   const mine = settings.interface.language.read();
   if (mine !== last) {
-    if (mine === 'auto') storage.remove(LAST_LANGUAGE);
+    if (mine === 'fr') storage.remove(LAST_LANGUAGE);
     else storage.set(LAST_LANGUAGE, mine);
   }
   return mine;
