@@ -104,14 +104,17 @@ function BackButton({
     const align = () => {
       const header = pageHeader();
       if (!header) {
-        // A page fills in after it mounts.
+        // A page fills in after it mounts; hidden meanwhile, so it never shows in one place and then moves.
         if (++tries < 60) frame = requestAnimationFrame(align);
+        else button.style.visibility = '';
         return;
       }
       const top = header.top + window.scrollY + header.height / 2;
       button.style.top = `${top - button.offsetHeight / 2}px`;
+      button.style.visibility = '';
     };
     button.style.top = '';
+    button.style.visibility = 'hidden';
     align();
     const again = () => {
       tries = 0;
