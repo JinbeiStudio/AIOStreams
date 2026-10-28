@@ -179,6 +179,7 @@ const CATALOGS: Record<string, [string, string]> = {
   'top-nature': ['Nature', 'Nature'],
   'top-reality-tv': ['Reality TV', 'Télé-réalité'],
   'top-standup-comedy': ['Comedy stand-up', 'Comédie stand-up'],
+  'for-you': ['For you', 'Pour vous'],
 };
 
 /** "Apple+  Latest" -> "apple-plus-latest". */
@@ -257,6 +258,9 @@ const IDS: Record<string, string> = {
   'mdblist.84487': 'top-nature',
   'mdblist.84401': 'top-reality-tv',
   'mdblist.83497': 'top-standup-comedy',
+  'recommendations.movies': 'for-you',
+  'recommendations.series': 'for-you',
+  'recommendations.anime': 'for-you',
 };
 
 interface CatalogView {
