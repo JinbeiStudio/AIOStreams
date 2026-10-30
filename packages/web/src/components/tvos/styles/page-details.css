@@ -269,3 +269,19 @@
   padding: 0 1.5vw !important;
   font-size: 1.1vw !important;
 }
+/* A page with nothing to show yet: its loader in the middle of the screen, as the title page's. */
+.tv-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+/* More of a list loading: under it, in the middle. */
+.tv-more {
+  display: flex;
+  justify-content: center;
+}
+/* The home's hero loading: in the middle of the screen, not at the foot of its text. */
+.tv-hero > .tv-spinner {
+  margin: auto;
+}

@@ -182,7 +182,7 @@ export function TvosHistory() {
           </section>
         ))}
       {history.isLoading && (
-        <div className="tv-gutter">
+        <div className="tv-loading">
           <Spinner />
         </div>
       )}
