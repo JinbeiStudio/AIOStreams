@@ -38,14 +38,13 @@
     'display:flex;align-items:center;justify-content:center;transition:opacity .4s;pointer-events:none';
   var style = document.createElement('style');
   style.textContent =
-    '@keyframes studio-pulse{0%{transform:scale3d(1,1,1);opacity:.75}' +
-    '100%{transform:scale3d(1.08,1.08,1);opacity:1}}';
+    '@keyframes studio-glow{0%{opacity:.75}100%{opacity:1}}';
   var logo = document.createElement('img');
   logo.src = 'loader-logo.png';
-  // On its own GPU layer, so a busy main thread doesn't stall the pulse.
+  // A slow glow, on its own GPU layer: the TV's GPU is busy drawing the app underneath, and a slow fade hides the frames it drops where a bounce showed each one.
   logo.style.cssText =
-    'height:42.6vh;will-change:transform,opacity;backface-visibility:hidden;' +
-    'animation:studio-pulse 1s ease-in-out infinite alternate';
+    'height:42.6vh;will-change:opacity;backface-visibility:hidden;' +
+    'animation:studio-glow 1.25s ease-in-out infinite alternate';
   cover.appendChild(style);
   cover.appendChild(logo);
   document.documentElement.appendChild(cover);
