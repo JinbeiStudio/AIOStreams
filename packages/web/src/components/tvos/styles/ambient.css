@@ -203,3 +203,7 @@ html[data-tvos-build][data-tv][data-sidebar]
   ) {
   backdrop-filter: none !important;
 }
+/* A settings tab comes in by its slide only: while it fades, its glass can't see the sea and shows grey, then turns blue once the fade ends. */
+html[data-tvos-build] [data-ui='settings-panel'] {
+  opacity: 1 !important;
+}
