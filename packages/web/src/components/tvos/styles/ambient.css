@@ -1,0 +1,113 @@
+/*
+ * Jinbei's ambient background, behind settings, sign-in, who's watching and home below the hero: a deep navy sea
+ * turning cyan, as Apple's wallpapers, with two slow currents of light drifting over it. The currents are only
+ * moved (transform), never redrawn, so a TV composites them cheaply.
+ */
+
+html[data-tvos-build] {
+  /* The still water: a faint grain keeps the TV from drawing the gradient in bands. */
+  --tv-ambient:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(70vw 60vh at 50% 110%, rgba(12, 120, 150, 0.35), transparent 70%),
+    linear-gradient(170deg, #02060f 0%, #061433 40%, #0a2b55 72%, #0d4a66 100%);
+  /* Deep current: ultramarine and cyan swells. */
+  --tv-current-a:
+    radial-gradient(38% 22% at 32% 58%, rgba(34, 211, 238, 0.3), transparent 70%),
+    radial-gradient(42% 26% at 70% 34%, rgba(37, 99, 235, 0.42), transparent 70%),
+    radial-gradient(30% 18% at 58% 82%, rgba(14, 165, 233, 0.26), transparent 70%);
+  /* Surface swell: lighter, wider, crossing the other way. */
+  --tv-current-b:
+    radial-gradient(46% 16% at 40% 30%, rgba(56, 189, 248, 0.2), transparent 70%),
+    radial-gradient(40% 20% at 78% 70%, rgba(45, 212, 191, 0.22), transparent 70%),
+    radial-gradient(34% 18% at 18% 76%, rgba(29, 78, 216, 0.3), transparent 70%);
+}
+
+/* Hosts: the still water, and room for the two currents above it but under the page. */
+[data-tvos]:has([data-ui='settings-tabs']),
+html[data-tvos-build] [data-page='sign-in'],
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered] {
+  background: var(--tv-ambient) !important;
+  isolation: isolate;
+}
+[data-tvos]:has([data-ui='settings-tabs'])::before,
+[data-tvos]:has([data-ui='settings-tabs'])::after,
+html[data-tvos-build] [data-page='sign-in']::before,
+html[data-tvos-build] [data-page='sign-in']::after,
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered]::before,
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered]::after {
+  content: '';
+  position: fixed;
+  /* Larger than the window, so the drift never shows an edge. */
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1 !important;
+  visibility: visible !important;
+  will-change: transform;
+}
+[data-tvos]:has([data-ui='settings-tabs'])::before,
+html[data-tvos-build] [data-page='sign-in']::before,
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered]::before {
+  background: var(--tv-current-a) !important;
+  animation: tv-current-a 56s ease-in-out infinite alternate;
+}
+[data-tvos]:has([data-ui='settings-tabs'])::after,
+html[data-tvos-build] [data-page='sign-in']::after,
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered]::after {
+  background: var(--tv-current-b) !important;
+  animation: tv-current-b 72s ease-in-out infinite alternate;
+}
+@keyframes tv-current-a {
+  0% {
+    transform: translate3d(-6%, 3%, 0) rotate(-3deg) scale(1.05, 1);
+  }
+  50% {
+    transform: translate3d(2%, -2%, 0) rotate(1deg) scale(1.12, 0.94);
+  }
+  100% {
+    transform: translate3d(7%, 2%, 0) rotate(4deg) scale(1, 1.08);
+  }
+}
+@keyframes tv-current-b {
+  0% {
+    transform: translate3d(6%, -3%, 0) rotate(2deg) scale(1.1, 0.95);
+  }
+  50% {
+    transform: translate3d(-3%, 2%, 0) rotate(-2deg) scale(1, 1.06);
+  }
+  100% {
+    transform: translate3d(-7%, -1%, 0) rotate(-4deg) scale(1.08, 1);
+  }
+}
+/* On a TV the currents hold still for the instant focus changes rows, leaving it all to the move. */
+html[data-tvos-build][data-tv][data-row-move] :is(
+    [data-tvos],
+    [data-page='sign-in'],
+    .tv-backdrop
+  )::before,
+html[data-tvos-build][data-tv][data-row-move] :is(
+    [data-tvos],
+    [data-page='sign-in'],
+    .tv-backdrop
+  )::after {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-tvos-build] :is([data-tvos], [data-page='sign-in'], .tv-backdrop)::before,
+  html[data-tvos-build] :is([data-tvos], [data-page='sign-in'], .tv-backdrop)::after {
+    animation: none;
+  }
+}
+
+/* Home below the hero: the artwork fades out over the sea, with no blur to redo each frame. */
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered] {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+html[data-tvos-build] .tv-backdrop[data-ambient] > * {
+  transition: opacity 0.6s ease;
+}
+html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered] > * {
+  opacity: 0 !important;
+}
