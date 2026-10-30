@@ -31,7 +31,10 @@
   var shown = Date.now();
   var cover = document.createElement('div');
   cover.style.cssText =
-    'position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;background:#070707;' +
+    'position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;' +
+    // The app's sea (tvos ambient.css), as splash.png has it.
+    'background:radial-gradient(70vw 60vh at 50% 110%,rgba(12,110,140,.17),transparent 70%),' +
+    'linear-gradient(170deg,#010208 0%,#020818 40%,#04132a 72%,#062436 100%);' +
     'display:flex;align-items:center;justify-content:center;transition:opacity .4s;pointer-events:none';
   var style = document.createElement('style');
   style.textContent =
