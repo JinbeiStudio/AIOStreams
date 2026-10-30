@@ -28,7 +28,7 @@ import { WatchNextSync } from '../watch-next';
 import { GlideLayers } from '../glide-layers';
 import { PinnedTargets } from './parts';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
-import { MenuOpener, Pinned } from './parts';
+import { MenuOpener, Pinned, Sea } from './parts';
 import { tr } from './i18n';
 import { Sidebar } from './sidebar';
 import { TvosOutlet } from './routes';
@@ -429,6 +429,7 @@ export function TvosLayout() {
               {/* As the app's layout: on TVs the page moves in glide layers, fixed things beside them. */}
               <MenuOpener.Provider value={openSidebar}>
                 <PinnedTargets.Provider value={pinned}>
+                  {!playing && <Sea />}
                   <div ref={setUnder} className="contents" />
                   {/* Drawn once the places for fixed things exist, so none starts a frame inside the moving page. */}
                   {under && over && (

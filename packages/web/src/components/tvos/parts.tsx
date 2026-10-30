@@ -475,6 +475,17 @@ function SeaCurrent({
   );
 }
 
+/** Jinbei's sea, under every page of the layout: drawn once, only its currents move. */
+export function Sea() {
+  return (
+    <div className="tv-sea-layer" aria-hidden>
+      <SeaWater />
+      <SeaCurrent spots={CURRENT_A} className="tv-current-a" />
+      <SeaCurrent spots={CURRENT_B} className="tv-current-b" />
+    </div>
+  );
+}
+
 /** The artwork behind a page; `lowered` fades it out to the plain background. */
 export function Backdrop({
   item,
@@ -498,13 +509,13 @@ export function Backdrop({
   React.useEffect(() => {
     if (none) onReady?.();
   }, [none, onReady]);
-  // Marks the page while the sea shows, for its glass (ambient.css): a :has() rule there restyled the whole page on each lowering.
-  const sea = !!ambient && lowered;
+  // Marks the page while artwork covers the sea (ambient.css): the currents rest, the glass keeps its blur.
+  const art = !!ambient && !lowered && !waiting && !!url;
   React.useEffect(() => {
-    if (!sea) return;
-    document.documentElement.setAttribute('data-sea', '');
-    return () => document.documentElement.removeAttribute('data-sea');
-  }, [sea]);
+    if (!art) return;
+    document.documentElement.setAttribute('data-art', '');
+    return () => document.documentElement.removeAttribute('data-art');
+  }, [art]);
   // The app's saved-image cache, so artwork seen before shows at once.
   return (
     <Pinned under>
@@ -514,10 +525,6 @@ export function Backdrop({
         data-waiting={waiting ? '' : undefined}
         data-ambient={ambient ? '' : undefined}
       >
-        {/* The sea's two currents, under the artwork until it fades out. */}
-        {ambient && <SeaWater />}
-        {ambient && <SeaCurrent spots={CURRENT_A} className="tv-current-a" />}
-        {ambient && <SeaCurrent spots={CURRENT_B} className="tv-current-b" />}
         <Layers url={url ?? undefined} onReady={onReady} />
         {item && currentHost().tv && !ambient && (
           <BlurredCopy
