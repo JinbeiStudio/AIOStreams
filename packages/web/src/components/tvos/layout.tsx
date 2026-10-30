@@ -157,26 +157,42 @@ function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
   );
 }
 
-/**
- * Marks the page while focus moves up or down (`data-row-move`), so a TV lifts
- * cards at once there: an animated lift makes the cards after it layers of
- * their own, redrawn as the move starts and ends. Along a row it still eases.
- */
+/** How long the page counts as gliding after an Up or Down, past its 250 ms glide. */
+const GLIDING_MS = 400;
+
+// On Up and Down, for TVs: `data-row-move` lifts cards at once (an eased lift re-layers the rows),
+// `data-gliding` drops the glass's blur until the page settles (a TV redoes it every frame).
 function useRowMoveMark() {
   React.useEffect(() => {
     if (!currentHost().tv) return;
     const html = document.documentElement;
+    let settle = 0;
     // A key listener, as the app's own move handles the arrow actions and stops there.
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         html.setAttribute('data-row-move', '');
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
+        // A menu or dialog moves its own list, not the page, and keeps its glass.
+        if (
+          document.activeElement?.closest(
+            '[role=dialog], [role=menu], [role=listbox], .tv-sidebar'
+          )
+        )
+          return;
+        html.setAttribute('data-gliding', '');
+        window.clearTimeout(settle);
+        settle = window.setTimeout(
+          () => html.removeAttribute('data-gliding'),
+          GLIDING_MS
+        );
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
         html.removeAttribute('data-row-move');
     };
     window.addEventListener('keydown', onKey, true);
     return () => {
       window.removeEventListener('keydown', onKey, true);
+      window.clearTimeout(settle);
       html.removeAttribute('data-row-move');
+      html.removeAttribute('data-gliding');
     };
   }, []);
 }

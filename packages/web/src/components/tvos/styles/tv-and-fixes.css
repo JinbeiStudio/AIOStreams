@@ -18,6 +18,10 @@ html[data-tvos-build][data-tv] :is(.tv-caption, .tv-button) {
 html[data-tvos-build][data-tv][data-row-move] :is(.tv-art, .tv-caption) {
   transition: none;
 }
+/* While the page glides, its glass shows its tint only: a TV redoes each blur on every frame, past its frame time. */
+html[data-tvos-build][data-tv][data-gliding] .tv-glass {
+  backdrop-filter: none !important;
+}
 html[data-tvos-build][data-tv] .tv-art::after,
 html[data-tvos-build][data-tv] .tv-dots i {
   transition: none;
