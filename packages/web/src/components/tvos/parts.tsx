@@ -377,6 +377,53 @@ export function Scroller({
   );
 }
 
+/** A light spot: radii and centre as shares of the box, then its colour (rgba). */
+type Spot = [number, number, number, number, [number, number, number, number]];
+
+// ambient.css's --tv-current-a and -b, as each spot's radial-gradient(rx ry at x y, colour, transparent 70%).
+const CURRENT_A: Spot[] = [
+  [0.4, 0.24, 0.32, 0.58, [34, 211, 238, 0.26]],
+  [0.44, 0.28, 0.7, 0.34, [37, 99, 235, 0.35]],
+  [0.32, 0.2, 0.58, 0.82, [14, 165, 233, 0.23]],
+];
+const CURRENT_B: Spot[] = [
+  [0.48, 0.17, 0.4, 0.3, [56, 189, 248, 0.18]],
+  [0.42, 0.21, 0.78, 0.7, [45, 212, 191, 0.2]],
+  [0.36, 0.19, 0.18, 0.76, [29, 78, 216, 0.28]],
+];
+
+/** One of the sea's currents, drawn once into a small canvas the GPU stretches: as CSS
+ * gradients 1.7 screens wide, a TV took half a second to draw them as the hero lowered. */
+function SeaCurrent({
+  spots,
+  className,
+}: {
+  spots: Spot[];
+  className: string;
+}) {
+  const ref = React.useRef<HTMLCanvasElement>(null);
+  React.useEffect(() => {
+    const ctx = ref.current?.getContext('2d');
+    if (!ctx) return;
+    const { width, height } = ctx.canvas;
+    // CSS paints the first gradient on top.
+    for (const [rx, ry, x, y, [r, g, b, a]] of [...spots].reverse()) {
+      ctx.setTransform(rx * width, 0, 0, ry * height, x * width, y * height);
+      const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      // Fading to the same colour, as CSS's transparent does, rather than to black.
+      glow.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${a})`);
+      glow.addColorStop(0.7, `rgba(${r}, ${g}, ${b}, 0)`);
+      ctx.fillStyle = glow;
+      ctx.fillRect(-x / rx, -y / ry, 1 / rx, 1 / ry);
+    }
+  }, [spots]);
+  return (
+    <div className={`tv-current ${className}`}>
+      <canvas ref={ref} width={408} height={230} />
+    </div>
+  );
+}
+
 /** The artwork behind a page; `lowered` fades it out to the plain background. */
 export function Backdrop({
   item,
@@ -410,8 +457,8 @@ export function Backdrop({
         data-ambient={ambient ? '' : undefined}
       >
         {/* The sea's two currents, under the artwork until it fades out. */}
-        {ambient && <div className="tv-current tv-current-a" />}
-        {ambient && <div className="tv-current tv-current-b" />}
+        {ambient && <SeaCurrent spots={CURRENT_A} className="tv-current-a" />}
+        {ambient && <SeaCurrent spots={CURRENT_B} className="tv-current-b" />}
         <Layers url={url ?? undefined} onReady={onReady} />
         {item && currentHost().tv && !ambient && (
           <BlurredCopy
