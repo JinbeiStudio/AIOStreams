@@ -152,6 +152,8 @@ function edgeMove(e: PointerEvent) {
   let row: HTMLElement | null = null;
   let box: DOMRect | null = null;
   for (const el of edgeRows) {
+    // Home stays laid out, hidden and inert, under other pages: its rows would take the pointer first.
+    if (el.closest('[inert]')) continue;
     const r = el.getBoundingClientRect();
     if (e.clientY >= r.top && e.clientY <= r.bottom && r.width) {
       row = el;
