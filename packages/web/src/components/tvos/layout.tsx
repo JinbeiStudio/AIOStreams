@@ -240,6 +240,12 @@ export function TvosLayout() {
   const closeSidebar = React.useCallback(() => setSidebar(false), []);
   const openSidebar = React.useCallback(() => setSidebar(true), []);
   React.useEffect(() => setSidebar(false), [pathname, playing]);
+  // Marks the page while the sidebar is open: the glass behind it goes flat on TVs (ambient.css), redone each frame otherwise.
+  React.useEffect(() => {
+    if (!sidebar) return;
+    document.documentElement.setAttribute('data-sidebar', '');
+    return () => document.documentElement.removeAttribute('data-sidebar');
+  }, [sidebar]);
   const router = useRouter();
   const [under, setUnder] = React.useState<HTMLDivElement | null>(null);
   const [over, setOver] = React.useState<HTMLDivElement | null>(null);

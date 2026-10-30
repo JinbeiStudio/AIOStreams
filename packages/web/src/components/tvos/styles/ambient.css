@@ -188,3 +188,18 @@ html[data-tvos-build] #root > div > div > .UI-LoadingOverlay__overlay {
   background: var(--tv-ambient);
   backdrop-filter: none;
 }
+/* On TVs the page's glass behind an open sidebar shows its tint only: each change in the menu made the TV redo every blur under it. */
+html[data-tvos-build][data-tv][data-sidebar]
+  :is(
+    [data-glide-layer='page'] .tv-glass,
+    .tv-top .tv-glass,
+    .tv-edge-capsule,
+    .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
+    .tv-links a,
+    .tv-dots,
+    [data-ui='settings-card-body'],
+    [data-ui='settings-tab-group'],
+    [data-ui='calendar-grid']
+  ) {
+  backdrop-filter: none !important;
+}
