@@ -176,7 +176,13 @@ html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered]::after {
   transform: scale(1.06);
 }
 /* On TVs the glass over the sea shows its tint only: blurring the smooth sea changes nothing, yet the TV redoes it each frame the currents move. */
-html[data-tvos-build][data-tv][data-sea] .tv-glass {
+html[data-tvos-build][data-tv][data-sea]
+  :is(
+    .tv-glass,
+    .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
+    .tv-links a,
+    .tv-dots
+  ) {
   backdrop-filter: none !important;
 }
 /* On TVs the artwork is a hair see-through at rest, so the sea under it stays drawn and going down only fades the artwork off it. */

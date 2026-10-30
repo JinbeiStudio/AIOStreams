@@ -15,11 +15,24 @@ html[data-tvos-build][data-tv] :is(.tv-caption, .tv-button) {
   transition: transform 0.25s ease-out;
 }
 /* Moving up or down, the lift is at once: easing it there redraws the rows as the page glides. */
-html[data-tvos-build][data-tv][data-row-move] :is(.tv-art, .tv-caption) {
+html[data-tvos-build][data-tv][data-row-move]
+  :is(
+    .tv-art,
+    .tv-caption,
+    .tv-episode small,
+    .tv-episode strong,
+    .tv-episode p
+  ) {
   transition: none;
 }
-/* While the page glides, its glass shows its tint only: a TV redoes each blur on every frame, past its frame time. */
-html[data-tvos-build][data-tv][data-gliding] .tv-glass {
+/* While the page glides, its glass (the title page's buttons and links too) shows its tint only: a TV redoes each blur on every frame, past its frame time. */
+html[data-tvos-build][data-tv][data-gliding]
+  :is(
+    .tv-glass,
+    .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
+    .tv-links a,
+    .tv-dots
+  ) {
   backdrop-filter: none !important;
 }
 html[data-tvos-build][data-tv] .tv-art::after,
