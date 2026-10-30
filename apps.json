@@ -1,0 +1,23 @@
+{
+  "packages": [
+    {
+      "id": "com.jinbeistudio.aiostreams.webos",
+      "title": "Jinbei Studio",
+      "iconUri": "https://raw.githubusercontent.com/JinbeiStudio/jinbeistudio-tv/main/packages/smart-tv/webos/largeIcon.png",
+      "shortDescription": "The AIOStreams app for LG TVs.",
+      "manifest": {
+        "id": "com.jinbeistudio.aiostreams.webos",
+        "version": "1.0.18",
+        "type": "web",
+        "title": "Jinbei Studio",
+        "iconUri": "https://raw.githubusercontent.com/JinbeiStudio/jinbeistudio-tv/main/packages/smart-tv/webos/largeIcon.png",
+        "sourceUrl": "https://github.com/JinbeiStudio/jinbeistudio-tv",
+        "rootRequired": false,
+        "ipkUrl": "https://github.com/JinbeiStudio/jinbeistudio-tv/releases/download/tvos-v1.0.18/jinbei-studio-webos-1.0.18.ipk",
+        "ipkHash": {
+          "sha256": "523e0a66a03e7a9136fc431b2a14b89d53d6d022c89ba6d50137569baf094f38"
+        }
+      }
+    }
+  ]
+}
