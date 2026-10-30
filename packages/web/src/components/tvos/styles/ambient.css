@@ -197,3 +197,13 @@ html[data-tvos-build] #root > div > div > .UI-LoadingOverlay__overlay {
   background: var(--tv-ambient);
   backdrop-filter: none;
 }
+/* A title page loading shows the sea instead of the bare background; its artwork and shade come in once it is ready. */
+html[data-tvos-build] .tv-backdrop[data-ambient][data-waiting] {
+  opacity: 1;
+}
+html[data-tvos-build]
+  .tv-backdrop[data-ambient][data-waiting]:not([data-lowered])
+  > img[data-shown],
+html[data-tvos-build] .tv-backdrop[data-ambient][data-waiting]::after {
+  opacity: 0 !important;
+}
