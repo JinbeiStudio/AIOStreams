@@ -131,3 +131,18 @@ html[data-tvos-build][data-tv] :is(.tv-tag, .tv-watched) {
 .tv-failed .tv-button {
   margin-top: 1vw;
 }
+
+/* TVs: while the video plays, the player's buttons and tooltips are a flat tint, as each blur over the moving picture was redone every frame (~60 ms of GPU a frame on an LG C4); paused, they keep their glass. */
+html[data-tvos-build][data-tv]
+  [data-ui='player-controls']:not([data-paused])
+  [data-ui='player-button'] {
+  backdrop-filter: none !important;
+}
+html[data-tvos-build][data-tv]
+  [data-ui='player-controls']:not([data-paused])
+  [data-ui='player-button']:not(:focus-visible) {
+  background: rgba(118, 120, 130, 0.42) !important;
+}
+html[data-tvos-build][data-tv].playing .UI-Tooltip__root {
+  backdrop-filter: none !important;
+}

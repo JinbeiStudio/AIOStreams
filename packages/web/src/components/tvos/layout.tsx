@@ -211,6 +211,28 @@ function useRowMoveMark() {
   }, []);
 }
 
+/** On a TV, Up from the player controls' top row hides them, as Back does: nothing lies above to move to. */
+function usePlayerUpHides() {
+  React.useEffect(() => {
+    if (!currentHost().tv) return;
+    const onKey = (e: KeyboardEvent) => {
+      const from = e.target;
+      if (
+        e.key !== 'ArrowUp' ||
+        !(from instanceof HTMLElement) ||
+        !from.closest("[data-ui='player-controls']")
+      )
+        return;
+      // After the app's own move, which leaves the focus where it was when nothing is above.
+      window.setTimeout(() => {
+        if (document.activeElement === from) runAction('back', 'Escape');
+      }, 0);
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, []);
+}
+
 /**
  * The tvOS style's frame: Apple TV's sidebar instead of the app's, its own
  * home, and every other page (settings, the player…) as the app has it.
@@ -378,6 +400,7 @@ export function TvosLayout() {
     };
   }, [sidebar]);
   useRowMoveMark();
+  usePlayerUpHides();
   // The other pages' code fetched while idle, so a slow TV doesn't fetch it as one opens or playback starts.
   React.useEffect(() => {
     const warm = () => {
