@@ -169,3 +169,9 @@ html[data-tvos-build][data-tv]:has(.tv-backdrop[data-ambient][data-lowered])
   .tv-glass {
   backdrop-filter: none !important;
 }
+/* On TVs the artwork is a hair see-through at rest, so the sea under it stays drawn and going down only fades the artwork off it. */
+html[data-tvos-build][data-tv]
+  .tv-backdrop[data-ambient]:not([data-lowered])
+  > img[data-shown] {
+  opacity: 0.999 !important;
+}
