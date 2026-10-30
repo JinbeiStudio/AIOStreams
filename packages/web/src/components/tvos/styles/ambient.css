@@ -74,6 +74,10 @@ html[data-tvos-build] [data-page='sign-in']::after {
 }
 
 /* Every page in the layout: one sea under them all, its water and currents drawn once into canvases a TV only moves. */
+/* The shell's own grey (base.css) would cover it. */
+html[data-tvos-build] [data-tvos][data-ui='shell'] {
+  background: transparent;
+}
 html[data-tvos-build] .tv-sea-layer {
   position: fixed;
   inset: 0;
