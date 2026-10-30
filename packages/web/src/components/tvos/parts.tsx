@@ -447,6 +447,13 @@ export function Backdrop({
   React.useEffect(() => {
     if (none) onReady?.();
   }, [none, onReady]);
+  // Marks the page while the sea shows, for its glass (ambient.css): a :has() rule there restyled the whole page on each lowering.
+  const sea = !!ambient && lowered;
+  React.useEffect(() => {
+    if (!sea) return;
+    document.documentElement.setAttribute('data-sea', '');
+    return () => document.documentElement.removeAttribute('data-sea');
+  }, [sea]);
   // The app's saved-image cache, so artwork seen before shows at once.
   return (
     <Pinned under>
