@@ -106,12 +106,12 @@ html[data-tvos-build] .tv-backdrop[data-ambient] .tv-current-b {
     transform: translate3d(-15%, -3%, 0) rotate(-8deg) scale(1.15, 0.95);
   }
 }
-/* On a TV the currents hold still for the instant focus changes rows, leaving it all to the move. */
-html[data-tvos-build][data-tv][data-row-move]
+/* On a TV the currents hold still while the page glides (data-gliding, layout.tsx), leaving it all to the move. */
+html[data-tvos-build][data-tv][data-gliding]
   :is([data-tvos], [data-page='sign-in'])::before,
-html[data-tvos-build][data-tv][data-row-move]
+html[data-tvos-build][data-tv][data-gliding]
   :is([data-tvos], [data-page='sign-in'])::after,
-html[data-tvos-build][data-tv][data-row-move] .tv-current,
+html[data-tvos-build][data-tv][data-gliding] .tv-current,
 html[data-tvos-build] .tv-backdrop:not([data-lowered]) .tv-current {
   animation-play-state: paused;
 }
@@ -163,4 +163,9 @@ html[data-tvos-build]
 html[data-tvos-build] .tv-backdrop[data-ambient][data-lowered]::after {
   opacity: 0 !important;
   transform: scale(1.06);
+}
+/* On TVs the glass over the sea shows its tint only: blurring the smooth sea changes nothing, yet the TV redoes it each frame the currents move. */
+html[data-tvos-build][data-tv]:has(.tv-backdrop[data-ambient][data-lowered])
+  .tv-glass {
+  backdrop-filter: none !important;
 }
