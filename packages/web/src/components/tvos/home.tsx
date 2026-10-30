@@ -107,8 +107,8 @@ function useCatalogs() {
   };
 }
 
-/** The hero and its artwork, apart from the rows so its turning doesn't redraw them. */
-function Hero({
+/** The hero and its artwork, apart from the rows and memoised, so its turning and the page's scrolling don't redraw each other. */
+const Hero = React.memo(function Hero({
   lowered,
   shown,
   followed,
@@ -203,7 +203,7 @@ function Hero({
       </div>
     </>
   );
-}
+});
 
 const HomeRows = React.memo(function HomeRows() {
   const resume = useResume();

@@ -14,6 +14,10 @@
 html[data-tvos-build][data-tv] :is(.tv-caption, .tv-button) {
   transition: transform 0.25s ease-out;
 }
+/* Moving up or down, the lift is at once: easing it there redraws the rows as the page glides. */
+html[data-tvos-build][data-tv][data-row-move] :is(.tv-art, .tv-caption) {
+  transition: none;
+}
 html[data-tvos-build][data-tv] .tv-art::after,
 html[data-tvos-build][data-tv] .tv-dots i {
   transition: none;

@@ -158,6 +158,30 @@ function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
 }
 
 /**
+ * Marks the page while focus moves up or down (`data-row-move`), so a TV lifts
+ * cards at once there: an animated lift makes the cards after it layers of
+ * their own, redrawn as the move starts and ends. Along a row it still eases.
+ */
+function useRowMoveMark() {
+  React.useEffect(() => {
+    if (!currentHost().tv) return;
+    const html = document.documentElement;
+    // A key listener, as the app's own move handles the arrow actions and stops there.
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
+        html.setAttribute('data-row-move', '');
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
+        html.removeAttribute('data-row-move');
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => {
+      window.removeEventListener('keydown', onKey, true);
+      html.removeAttribute('data-row-move');
+    };
+  }, []);
+}
+
+/**
  * The tvOS style's frame: Apple TV's sidebar instead of the app's, its own
  * home, and every other page (settings, the player…) as the app has it.
  */
@@ -317,6 +341,7 @@ export function TvosLayout() {
       window.removeEventListener('pointerdown', away, true);
     };
   }, [sidebar]);
+  useRowMoveMark();
   // The other pages' code fetched while idle, so a slow TV doesn't fetch it as one opens or playback starts.
   React.useEffect(() => {
     const warm = () => {

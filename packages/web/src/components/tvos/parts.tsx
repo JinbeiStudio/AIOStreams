@@ -49,7 +49,12 @@ export function Later({
 /** What opens the sidebar, for the button beside the pill; the layout provides it. */
 export const MenuOpener = React.createContext<(() => void) | null>(null);
 
-export function TopBar({ hidden }: { hidden?: boolean }) {
+// Memoised, so a page re-rendering as it scrolls doesn't redraw it.
+export const TopBar = React.memo(function TopBar({
+  hidden,
+}: {
+  hidden?: boolean;
+}) {
   const openMenu = React.useContext(MenuOpener);
   const { user } = useSession();
   const avatar = useOwnAvatar();
@@ -99,7 +104,7 @@ export function TopBar({ hidden }: { hidden?: boolean }) {
       </div>
     </Pinned>
   );
-}
+});
 
 /**
  * Where fixed things go: on TVs the page moves in transformed glide layers,
