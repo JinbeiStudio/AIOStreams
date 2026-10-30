@@ -313,18 +313,7 @@ html[data-tvos-build] [data-ui='downloads-section'] h2 {
  * Settings the way Apple TV draws them: a tinted backdrop, a glass list of sections at the left, and each setting a
  * translucent bar of its own, the label at the left and its control at the right, the focused bar white.
  */
-/* The element that paints the page's background is [data-tvos], above the document's own. */
-[data-tvos]:has([data-ui='settings-tabs']),
-html[data-tvos-build] [data-page='sign-in'] {
-  /* Fixed to the window, so the colour stays where it is while the tabs and the page scroll. */
-  background:
-    radial-gradient(60vw 50vh at 78% 12%, rgba(10, 100, 255, 0.55), transparent 70%) fixed,
-    radial-gradient(55vw 50vh at 18% 92%, rgba(100, 210, 255, 0.4), transparent 70%) fixed,
-    radial-gradient(45vw 40vh at 96% 92%, rgba(0, 122, 255, 0.32), transparent 70%) fixed,
-    radial-gradient(40vw 35vh at 4% 8%, rgba(90, 200, 250, 0.18), transparent 70%) fixed,
-    /* Sign-in is outside [data-tvos], where --tv-bg is undefined and would void the whole background. */
-    var(--tv-bg, #141416) !important;
-}
+/* Their background is the ambient, in ambient.css. */
 html[data-tvos-build] [data-ui='settings-tab-group'] {
   background: rgba(118, 120, 130, 0.3) !important;
   backdrop-filter: blur(40px) saturate(1.8) brightness(1.18);

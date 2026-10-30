@@ -383,9 +383,12 @@ export function Backdrop({
   lowered,
   waiting,
   onReady,
+  ambient,
 }: {
   item: BaseItemDto | undefined;
   lowered: boolean;
+  /** Lowered, shows Jinbei's ambient background instead of the blurred artwork. */
+  ambient?: boolean;
   /** Kept hidden while the page loads. */
   waiting?: boolean;
   /** Told once the artwork has loaded, failed, or there is none. */
@@ -404,9 +407,13 @@ export function Backdrop({
         className="tv-backdrop"
         data-lowered={lowered ? '' : undefined}
         data-waiting={waiting ? '' : undefined}
+        data-ambient={ambient ? '' : undefined}
       >
+        {/* The sea's two currents, under the artwork until it fades out. */}
+        {ambient && <div className="tv-current tv-current-a" />}
+        {ambient && <div className="tv-current tv-current-b" />}
         <Layers url={url ?? undefined} onReady={onReady} />
-        {item && currentHost().tv && (
+        {item && currentHost().tv && !ambient && (
           <BlurredCopy
             src={backdropUrl(client, item, { maxWidth: 480 })}
             active={lowered}

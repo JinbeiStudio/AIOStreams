@@ -177,7 +177,9 @@ const Hero = React.memo(function Hero({
 
   return (
     <>
-      {shown && <Backdrop item={followed ?? current} lowered={lowered} />}
+      {shown && (
+        <Backdrop item={followed ?? current} lowered={lowered} ambient />
+      )}
       <div ref={heroRef} className="tv-hero">
         {!current && (views.isLoading || heads.some((h) => h.isLoading)) && (
           <Spinner />
