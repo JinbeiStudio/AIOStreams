@@ -409,6 +409,9 @@ export function Backdrop({
         data-waiting={waiting ? '' : undefined}
         data-ambient={ambient ? '' : undefined}
       >
+        {/* The sea's two currents, under the artwork until it fades out. */}
+        {ambient && <div className="tv-current tv-current-a" />}
+        {ambient && <div className="tv-current tv-current-b" />}
         <Layers url={url ?? undefined} onReady={onReady} />
         {item && currentHost().tv && !ambient && (
           <BlurredCopy
