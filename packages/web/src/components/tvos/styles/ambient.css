@@ -124,8 +124,9 @@ html[data-tvos-build] .tv-sea-layer .tv-current-b {
     transform: translate3d(-15%, -3%, 0) rotate(-8deg) scale(1.15, 0.95);
   }
 }
-/* The currents hold still under a page's artwork (data-art, parts.tsx) and, on TVs, while the page glides. */
+/* The currents hold still under a page's artwork (data-art, parts.tsx) and, on TVs, while the remote moves focus (data-moving, layout.tsx). */
 html[data-tvos-build][data-art] .tv-current,
+html[data-tvos-build][data-tv][data-moving] .tv-current,
 html[data-tvos-build][data-tv][data-gliding] .tv-current,
 html[data-tvos-build][data-tv][data-gliding] [data-page='sign-in']::before,
 html[data-tvos-build][data-tv][data-gliding] [data-page='sign-in']::after {

@@ -159,6 +159,8 @@ function EdgeCapsule({ onOpen }: { onOpen: () => void }) {
 
 /** How long the page counts as gliding after an Up or Down, past its 250 ms glide. */
 const GLIDING_MS = 400;
+/** How long after the last arrow the sea's currents start drifting again. */
+const MOVING_MS = 1500;
 
 // On Up and Down, for TVs: `data-row-move` lifts cards at once (an eased lift re-layers the rows),
 // `data-gliding` drops the glass's blur until the page settles (a TV redoes it every frame).
@@ -167,8 +169,18 @@ function useRowMoveMark() {
     if (!currentHost().tv) return;
     const html = document.documentElement;
     let settle = 0;
+    let rest = 0;
     // A key listener, as the app's own move handles the arrow actions and stops there.
     const onKey = (e: KeyboardEvent) => {
+      // The sea's currents hold still while the remote moves focus, leaving the TV's GPU to the move (ambient.css).
+      if (e.key.startsWith('Arrow')) {
+        html.setAttribute('data-moving', '');
+        window.clearTimeout(rest);
+        rest = window.setTimeout(
+          () => html.removeAttribute('data-moving'),
+          MOVING_MS
+        );
+      }
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         html.setAttribute('data-row-move', '');
         // A menu or dialog moves its own list, not the page, and keeps its glass.
@@ -191,8 +203,10 @@ function useRowMoveMark() {
     return () => {
       window.removeEventListener('keydown', onKey, true);
       window.clearTimeout(settle);
+      window.clearTimeout(rest);
       html.removeAttribute('data-row-move');
       html.removeAttribute('data-gliding');
+      html.removeAttribute('data-moving');
     };
   }, []);
 }
