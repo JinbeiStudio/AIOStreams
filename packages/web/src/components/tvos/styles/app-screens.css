@@ -135,10 +135,7 @@ html[data-tvos-build] .UI-Checkbox__root[data-state='checked'] {
   color: #000 !important;
 }
 
-/* Sign-in, unreachable, quick connect and add server: one glass panel on the dark screen, no purple glow. */
-html[data-tvos-build] [data-page='sign-in'] {
-  background: var(--tv-bg) !important;
-}
+/* Sign-in, unreachable, quick connect and add server: one glass panel on Settings' blue-lit screen. */
 html[data-tvos-build] [data-ui='auth-card'] {
   border: 0 !important;
   border-radius: 1.8vw !important;
@@ -159,14 +156,6 @@ html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] {
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     0 1.73vw 3.47vw rgba(0, 0, 0, 0.5) !important;
-}
-/* Colour behind the glass, so the blur has something to show, as tvOS's dialogs have its artwork. */
-html[data-tvos-build] [data-page='sign-in'] {
-  background:
-    radial-gradient(circle at 18% 22%, rgba(10, 132, 255, 0.42), transparent 42%),
-    radial-gradient(circle at 82% 74%, rgba(100, 210, 255, 0.3), transparent 45%),
-    radial-gradient(circle at 62% 8%, rgba(90, 200, 250, 0.16), transparent 38%),
-    var(--tv-bg) !important;
 }
 html[data-tvos-build] [data-page='sign-in'] [data-ui='page-title'] {
   font-size: max(24px, 2.4vw);
@@ -216,6 +205,9 @@ html[data-tvos-build] [data-page='sign-in'] [data-ui='auth-card'] .UI-Button__ro
 html[data-tvos-build] [data-page='sign-in'] [data-ui='brand-logo'] {
   width: max(88px, 9vw);
   height: auto;
+  /* Jinbei Studio's logo on every sign-in screen: before sign-in the server only offers AIOStreams' own. */
+  /* Relative to tvos.css, which inlines this file. */
+  content: url('../../../branding/logo.png');
 }
 
 html[data-tvos-build] [data-ui='quick-connect-code'] {
@@ -322,14 +314,16 @@ html[data-tvos-build] [data-ui='downloads-section'] h2 {
  * translucent bar of its own, the label at the left and its control at the right, the focused bar white.
  */
 /* The element that paints the page's background is [data-tvos], above the document's own. */
-[data-tvos]:has([data-ui='settings-tabs']) {
+[data-tvos]:has([data-ui='settings-tabs']),
+html[data-tvos-build] [data-page='sign-in'] {
   /* Fixed to the window, so the colour stays where it is while the tabs and the page scroll. */
   background:
     radial-gradient(60vw 50vh at 78% 12%, rgba(10, 100, 255, 0.55), transparent 70%) fixed,
     radial-gradient(55vw 50vh at 18% 92%, rgba(100, 210, 255, 0.4), transparent 70%) fixed,
     radial-gradient(45vw 40vh at 96% 92%, rgba(0, 122, 255, 0.32), transparent 70%) fixed,
     radial-gradient(40vw 35vh at 4% 8%, rgba(90, 200, 250, 0.18), transparent 70%) fixed,
-    var(--tv-bg) !important;
+    /* Sign-in is outside [data-tvos], where --tv-bg is undefined and would void the whole background. */
+    var(--tv-bg, #141416) !important;
 }
 html[data-tvos-build] [data-ui='settings-tab-group'] {
   background: rgba(118, 120, 130, 0.3) !important;
