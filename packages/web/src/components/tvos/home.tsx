@@ -352,7 +352,7 @@ function CatalogRow({ view, first }: { view: BaseItemDto; first: boolean }) {
         ) : (
           // Keeps the row's room while it loads, so the rows below don't all come near at once.
           <div className="tv-card tv-poster" aria-hidden>
-            <div className="tv-art" />
+            <div className="tv-art" data-loading="" />
           </div>
         )}
       </Row>

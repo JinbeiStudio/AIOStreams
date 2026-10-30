@@ -72,6 +72,7 @@ import {
   useScrolledDown,
   Failed,
   Later,
+  ArtTile,
   Pinned,
   Scroller,
 } from './parts';
@@ -531,7 +532,7 @@ function EpisodeCard({
         // An episode not out yet, or missing, has nothing to play.
         onClick={unavailable ? undefined : onClick}
       >
-        <div className="tv-art">
+        <ArtTile>
           <Artwork
             src={(width) => landscapeUrls(client, episode, { maxWidth: width })}
             alt=""
@@ -561,7 +562,7 @@ function EpisodeCard({
               </div>
             </div>
           )}
-        </div>
+        </ArtTile>
         <small>
           {kicker}
           {episode.CommunityRating

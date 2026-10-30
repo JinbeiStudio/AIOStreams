@@ -798,6 +798,30 @@ export function Row({
   );
 }
 
+/** How long a card breathes at most while its picture loads: one with none to load stops. */
+const ART_WAIT_MS = 8000;
+
+/** A card's artwork tile: a slow breath of light (styles: .tv-art[data-loading]) until its picture has loaded. */
+export function ArtTile({ children }: { children?: React.ReactNode }) {
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    if (!loading) return;
+    const stop = window.setTimeout(() => setLoading(false), ART_WAIT_MS);
+    return () => window.clearTimeout(stop);
+  }, [loading]);
+  const done = () => setLoading(false);
+  return (
+    <div
+      className="tv-art"
+      data-loading={loading ? '' : undefined}
+      onLoadCapture={done}
+      onErrorCapture={done}
+    >
+      {children}
+    </div>
+  );
+}
+
 /** Told which title a card's focus rests on, for a page whose artwork follows it (the hero setting's "follows"). */
 export const FollowCard = React.createContext<
   ((item: BaseItemDto) => void) | null
@@ -822,7 +846,7 @@ export const PosterCard = React.memo(function PosterCard({
         data-focus="own"
         onClick={onClick ?? (() => navigate(itemPath(item)))}
       >
-        <div className="tv-art">
+        <ArtTile>
           {/* The app's own artwork: sized to the card, decoded off the main thread, loaded near the screen. */}
           <Artwork
             src={(width) => posterUrl(client, item, { maxWidth: width })}
@@ -833,7 +857,7 @@ export const PosterCard = React.memo(function PosterCard({
               ✓
             </span>
           )}
-        </div>
+        </ArtTile>
         <span className="tv-caption">{itemTitle(item)}</span>
       </button>
     </ItemMenu>
@@ -868,7 +892,7 @@ export function WideCard({
       data-focus="own"
       onClick={onClick}
     >
-      <div className="tv-art">
+      <ArtTile>
         <Artwork
           src={(width) => landscapeUrls(client, item, { maxWidth: width })}
           alt=""
@@ -883,7 +907,7 @@ export function WideCard({
             </div>
           )}
         </div>
-      </div>
+      </ArtTile>
     </button>
   );
   return menu ? (

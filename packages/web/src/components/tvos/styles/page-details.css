@@ -285,3 +285,35 @@
 .tv-hero > .tv-spinner {
   margin: auto;
 }
+/* A card waiting for its picture: a glass tile with a slow breath of light across it, which goes once the picture is in (ArtTile). Opacity only, which a TV animates without redrawing. */
+.tv-art[data-loading] {
+  background: rgba(255, 255, 255, 0.1);
+}
+.tv-art[data-loading]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.13) 50%,
+    transparent 70%
+  );
+  animation: tv-breath 1.6s ease-in-out infinite alternate;
+}
+@keyframes tv-breath {
+  from {
+    opacity: 0.15;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tv-art[data-loading]::before {
+    animation: none;
+    opacity: 0.5;
+  }
+}
