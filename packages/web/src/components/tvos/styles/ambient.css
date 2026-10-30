@@ -145,6 +145,9 @@ html[data-tvos-build][data-tv][data-gliding] [data-page='sign-in']::after {
 html[data-tvos-build][data-tv]:not([data-art])
   :is(
     .tv-glass,
+    [data-ui='settings-card-body'],
+    [data-ui='settings-tab-group'],
+    [data-ui='calendar-grid'],
     .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
     .tv-links a,
     .tv-dots
