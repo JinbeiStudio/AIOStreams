@@ -185,3 +185,9 @@ html[data-tvos-build][data-tv]
   > img[data-shown] {
   opacity: 0.999 !important;
 }
+/* The spinner shown while the app opens (app.tsx's loading screen, right under #root): over the sea's still water, not the plain grey. */
+html[data-tvos-build] #root > div > div > .UI-LoadingOverlay__overlay {
+  position: fixed;
+  background: var(--tv-ambient);
+  backdrop-filter: none;
+}
