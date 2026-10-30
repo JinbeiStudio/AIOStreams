@@ -149,8 +149,8 @@ html[data-tvos-build][data-tv]:not([data-art])
     [data-ui='settings-card-body'],
     [data-ui='settings-tab-group'],
     [data-ui='calendar-grid'],
-    .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
-    .tv-links a,
+    [data-ui='item-action'],
+    .tv-app-action .UI-Button__root,
     .tv-dots
   ) {
   backdrop-filter: none !important;
@@ -194,8 +194,8 @@ html[data-tvos-build][data-tv][data-sidebar]
     [data-glide-layer='page'] .tv-glass,
     .tv-top .tv-glass,
     .tv-edge-capsule,
-    .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
-    .tv-links a,
+    [data-ui='item-action'],
+    .tv-app-action .UI-Button__root,
     .tv-dots,
     [data-ui='settings-card-body'],
     [data-ui='settings-tab-group'],
