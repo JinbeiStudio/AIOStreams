@@ -29,7 +29,13 @@ import {
 import './tvos.css';
 import { tr } from './i18n';
 
-/** Draws its children only once they near the screen, keeping their room until then, as the app's rows do. */
+/** How long after the page opens its later parts draw anyway, once it is idle. */
+const LATER_IDLE_MS = 1500;
+
+/**
+ * Draws its children once they near the screen or the page is idle, keeping their room until then.
+ * Drawn as a transition, which yields to keys: drawn on a TV's first Down it held the page ~110 ms.
+ */
 export function Later({
   room,
   children,
@@ -38,9 +44,22 @@ export function Later({
   children: React.ReactNode;
 }) {
   const [ref, near] = useNear<HTMLDivElement>('400px');
+  const [shown, setShown] = React.useState(false);
+  React.useEffect(() => {
+    if (shown) return;
+    const show = () => React.startTransition(() => setShown(true));
+    if (near) return show();
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(show, { timeout: LATER_IDLE_MS * 2 })
+      : window.setTimeout(show, LATER_IDLE_MS);
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
+    };
+  }, [near, shown]);
   return (
-    <div ref={ref} style={near ? undefined : { minHeight: room }}>
-      {near && children}
+    <div ref={ref} style={shown ? undefined : { minHeight: room }}>
+      {shown && children}
     </div>
   );
 }
