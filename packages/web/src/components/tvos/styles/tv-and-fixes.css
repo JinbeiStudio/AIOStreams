@@ -143,7 +143,7 @@ html[data-tvos-build][data-tv]
 html[data-tvos-build][data-tv].playing .UI-Tooltip__root {
   backdrop-filter: none !important;
 }
-/* TVs: focus changes colour and shadow at once; only lifts and fades ease, which the GPU does. An eased background, colour or shadow made the TV restyle, repaint and commit on every frame (calendar presses paused 80–130 ms). */
+/* TVs: focus changes colour and shadow at once; only lifts and fades ease, which the GPU does. An eased background, colour or shadow made the TV restyle, repaint and commit on every frame (calendar presses paused 80–130 ms; the player's buttons cost ~100 ms of main thread a press). */
 html[data-tvos-build][data-tv]
   :is(
     .tv-button,
@@ -154,7 +154,9 @@ html[data-tvos-build][data-tv]
     [data-ui='calendar-day'],
     [data-ui='auth-card'] input,
     .tv-links a,
-    .tv-app-action :is(button, [data-ui='item-action'], [role='button'])
+    .tv-app-action :is(button, [data-ui='item-action'], [role='button']),
+    [data-ui='player-button'],
+    [data-ui='player-middle-button']
   ) {
   transition-property: transform, opacity !important;
 }
