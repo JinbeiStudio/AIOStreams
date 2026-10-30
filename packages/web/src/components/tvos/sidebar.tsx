@@ -133,10 +133,10 @@ export function Sidebar({
     if (!open) return;
     before.current = document.activeElement as HTMLElement | null;
     setNow(new Date());
-    // Focus lands on the section showing, as Apple's sidebar opens on it.
+    // Focus lands on the section showing, as Apple's sidebar opens on it; else the first section, not the profile.
     const current =
       panel.current?.querySelector<HTMLElement>('[data-current]') ??
-      panel.current?.querySelector('button');
+      panel.current?.querySelector<HTMLElement>('.tv-sidebar-item');
     current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
