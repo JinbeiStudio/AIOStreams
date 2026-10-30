@@ -48,13 +48,13 @@ html[data-tvos-build] .tv-backdrop[data-ambient] .tv-current {
 html[data-tvos-build] [data-page='sign-in']::before,
 html[data-tvos-build] .tv-backdrop[data-ambient] .tv-current-a {
   background: var(--tv-current-a) !important;
-  animation: tv-current-a 28s ease-in-out infinite alternate;
+  animation: tv-current-a 18s ease-in-out infinite alternate;
 }
 [data-tvos]:has([data-ui='settings-tabs'])::after,
 html[data-tvos-build] [data-page='sign-in']::after,
 html[data-tvos-build] .tv-backdrop[data-ambient] .tv-current-b {
   background: var(--tv-current-b) !important;
-  animation: tv-current-b 36s ease-in-out infinite alternate;
+  animation: tv-current-b 24s ease-in-out infinite alternate;
 }
 @keyframes tv-current-a {
   0% {
