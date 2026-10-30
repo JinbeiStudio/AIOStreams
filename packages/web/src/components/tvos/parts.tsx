@@ -394,6 +394,57 @@ const CURRENT_B: Spot[] = [
 
 /** One of the sea's currents, drawn once into a small canvas the GPU stretches: as CSS
  * gradients 1.7 screens wide, a TV took half a second to draw them as the hero lowered. */
+// ambient.css's grain over --tv-ambient, the same image.
+const GRAIN =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E";
+
+/** The sea's still water (--tv-ambient), drawn once into a canvas: as a CSS background
+ * a TV redrew it whole each time the hero lowered, freezing the move for ~200 ms. */
+function SeaWater() {
+  const ref = React.useRef<HTMLCanvasElement>(null);
+  React.useEffect(() => {
+    const ctx = ref.current?.getContext('2d', { alpha: false });
+    if (!ctx) return;
+    const { width: w, height: h } = ctx.canvas;
+    // linear-gradient(170deg, …): CSS's gradient line through the centre, as long as the box needs.
+    const angle = (170 * Math.PI) / 180;
+    const [dx, dy] = [Math.sin(angle), -Math.cos(angle)];
+    const half = (Math.abs(w * dx) + Math.abs(h * dy)) / 2;
+    const deep = ctx.createLinearGradient(
+      w / 2 - dx * half,
+      h / 2 - dy * half,
+      w / 2 + dx * half,
+      h / 2 + dy * half
+    );
+    deep.addColorStop(0, '#010208');
+    deep.addColorStop(0.4, '#020818');
+    deep.addColorStop(0.72, '#04132a');
+    deep.addColorStop(1, '#062436');
+    ctx.fillStyle = deep;
+    ctx.fillRect(0, 0, w, h);
+    // radial-gradient(70vw 60vh at 50% 110%, rgba(12, 110, 140, 0.17), transparent 70%).
+    ctx.setTransform(0.7 * w, 0, 0, 0.6 * h, 0.5 * w, 1.1 * h);
+    const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    glow.addColorStop(0, 'rgba(12, 110, 140, 0.17)');
+    glow.addColorStop(0.7, 'rgba(12, 110, 140, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(-0.5 / 0.7, -1.1 / 0.6, 1 / 0.7, 1 / 0.6);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const grain = new Image();
+    grain.onload = () => {
+      const pattern = ctx.createPattern(grain, 'repeat');
+      if (!pattern) return;
+      ctx.fillStyle = pattern;
+      ctx.fillRect(0, 0, w, h);
+    };
+    grain.src = GRAIN;
+    return () => {
+      grain.onload = null;
+    };
+  }, []);
+  return <canvas ref={ref} className="tv-sea" width={1920} height={1080} />;
+}
+
 function SeaCurrent({
   spots,
   className,
@@ -464,6 +515,7 @@ export function Backdrop({
         data-ambient={ambient ? '' : undefined}
       >
         {/* The sea's two currents, under the artwork until it fades out. */}
+        {ambient && <SeaWater />}
         {ambient && <SeaCurrent spots={CURRENT_A} className="tv-current-a" />}
         {ambient && <SeaCurrent spots={CURRENT_B} className="tv-current-b" />}
         <Layers url={url ?? undefined} onReady={onReady} />
